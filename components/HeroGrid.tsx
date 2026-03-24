@@ -8,7 +8,7 @@ const GLITCH_NUMS = new Set(["01", "07", "10", "14"]);
 
 const IMAGES = Array.from({ length: 15 }, (_, i) => {
   const n = String(i + 1).padStart(2, "0");
-  return { num: n, src: `/images/${n}.jpg` };
+  return { num: n, src: `/images/${n}.webp` };
 });
 
 export default function HeroGrid() {
