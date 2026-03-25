@@ -52,8 +52,8 @@ export default function GlitchNumber({ label, glitch = false }: GlitchNumberProp
 
   return (
     <span
-      className="font-hubot text-[11px] tracking-wider uppercase"
-      style={{ opacity, color: "var(--text)" }}
+      className="font-mono-frag"
+      style={{ opacity, color: "var(--text)", fontSize: 10, letterSpacing: "0.04em" }}
     >
       {label}
     </span>
