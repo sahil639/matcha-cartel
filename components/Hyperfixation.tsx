@@ -13,7 +13,7 @@ const LIME = "#8dff00";
 
 const VIDEOS = [
   {
-    src: "/videos/hyperfixation-01.mp4",
+    src: "/videos/05_15L.mp4",
     counter: "(01/05)",
     coords: "°14'3.6'S  106°48'2.4 E",
     title: "15L OF MATCHA LATTE",
@@ -23,7 +23,7 @@ const VIDEOS = [
       "Moku Matcha is a coffee shop in South Jakarta known for producing matcha at an unusually large scale. The shop offers a 15-liter matcha latte batch, prepared using Oku matcha and traditional chawan-based brewing methods. A single batch can yield up to 22 servings, with each chawan producing approximately four portions.",
   },
   {
-    src: "/videos/hyperfixation-02.mp4",
+    src: "/videos/04_MatchaBurger.mp4",
     counter: "(02/05)",
     coords: "22.3593° N,  114.1694° E",
     title: "MATCHA BURGER",
@@ -33,7 +33,7 @@ const VIDEOS = [
       "A matcha burger assembled by Hong Kong-based food content creator Charles of @bumbulistine_cook. Matcha is pressed into bread, cream, and fillings to form a compact, handheld form. The burger emphasizes visual impact and cohesion rather than flavor balance or traditional preparation.",
   },
   {
-    src: "/videos/hyperfixation-03.mp4",
+    src: "/videos/03_infus.mp4",
     counter: "(03/05)",
     coords: "8°39'27.0\"S  115°10'25.5\"E",
     title: "MATCHA IV DRIP",
@@ -43,7 +43,7 @@ const VIDEOS = [
       "An IV drip-styled matcha drink served at Buba Tea, a Bali based beverage shop. Matcha is poured into transparent infusion bags and released through tubing directly into a glass, borrowing the visual language of medical treatment and emphasizing ritualized consumption.",
   },
   {
-    src: "/videos/hyperfixation-04.mp4",
+    src: "/videos/02_Table.mp4",
     counter: "(04/05)",
     coords: "40.7° N,  111.9° W",
     title: "GIANT MATCHA LATTE TABLE",
@@ -53,7 +53,7 @@ const VIDEOS = [
       "Created by Kamberland Creations, known for building furniture inspired by food. The Matcha Latte Table turns matcha into an object you can sit with, and serve from. What is usually a single drink becomes installation, scaling matcha into something excessive, communal, and impossible to ignore.",
   },
   {
-    src: "/videos/hyperfixation-05.mp4",
+    src: "/videos/01_MATCHA LIQUER.mp4",
     counter: "(05/05)",
     coords: "40.7128° N,  74.0060° W",
     title: "THE FIRST MATCHA LIQUEUR",
@@ -64,16 +64,30 @@ const VIDEOS = [
   },
 ];
 
-// Images that burst from center to edges on scroll
-// tx/ty are GSAP-compatible viewport units (vw/vh)
+// Images burst one-by-one from center, fly to a corner and exit off-screen.
+// No rotation. tx/ty are the final off-screen positions in vw/vh.
 const BURST = [
-  { src: "/images/02.webp", w: 240, h: 170, tx: "-42vw", ty: "-28vh", r: -8 },
-  { src: "/images/07.webp", w: 290, h: 200, tx: "38vw",  ty: "-33vh", r:  6 },
-  { src: "/images/04.webp", w: 215, h: 150, tx: "-37vw", ty:  "25vh", r: -4 },
-  { src: "/images/12.webp", w: 255, h: 182, tx: "41vw",  ty:  "30vh", r: 10 },
-  { src: "/images/09.webp", w: 185, h: 130, tx: "-3vw",  ty:  "40vh", r:  2 },
-  { src: "/images/14.webp", w: 165, h: 115, tx:  "8vw",  ty: "-40vh", r: -3 },
+  { src: "/images/bigmatachcup.png",    w: 260, h: 185, tx: "-68vw", ty: "-55vh" }, // top-left
+  { src: "/images/catmatcha.png",       w: 200, h: 200, tx:   "5vw", ty: "-72vh" }, // top-center
+  { src: "/images/matchahand.png",      w: 240, h: 170, tx:  "65vw", ty: "-52vh" }, // top-right
+  { src: "/images/matchaburger.png",    w: 250, h: 180, tx:  "72vw", ty:   "4vh" }, // right
+  { src: "/images/matchalvbag.png",     w: 220, h: 155, tx:  "63vw", ty:  "55vh" }, // bottom-right
+  { src: "/images/sppilled matcha.png", w: 230, h: 160, tx:   "4vw", ty:  "72vh" }, // bottom
+  { src: "/images/matchagirldinner.png",w: 245, h: 175, tx: "-65vw", ty:  "54vh" }, // bottom-left
+  { src: "/images/matchammee.png",      w: 215, h: 155, tx: "-72vw", ty:   "3vh" }, // left
 ];
+
+// ─── Timeline plan (30 total units) ───────────────────────────────────────────
+// Stage 1 — image burst:      t=0  → 13   (8 images, stagger 1.5, dur 2 each)
+// Stage 2 — transition:       t=13 → 16.5 (fade title, grow video layout)
+// Stage 3 — text panels:      t=16.5 → 20 (slide in left+right, hold)
+// Stage 4 — video sequence:   t=20 → 30   (4 transitions × 2.5 units)
+//
+// Progress thresholds for setActiveVideo:
+//   vid 1 → p ≥ 0.667 (t=20)
+//   vid 2 → p ≥ 0.75  (t=22.5)
+//   vid 3 → p ≥ 0.833 (t=25)
+//   vid 4 → p ≥ 0.917 (t=27.5)
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
@@ -96,18 +110,6 @@ export default function Hyperfixation() {
     if (!section) return;
 
     const ctx = gsap.context(() => {
-      // Total timeline = 20 units. Scroll progress 0→1 maps to timeline 0→20.
-      // Stage 1 image burst: t=0→5
-      // Stage 2 transition : t=5→7.3
-      // Stage 3 text panels: t=7.3→10
-      // Stage 4 video seq  : t=10→20
-      //
-      // Video-active thresholds (position / 20):
-      //   vid 1 → p ≥ 0.50  (t=10)
-      //   vid 2 → p ≥ 0.625 (t=12.5)
-      //   vid 3 → p ≥ 0.75  (t=15)
-      //   vid 4 → p ≥ 0.875 (t=17.5)
-
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
@@ -120,10 +122,10 @@ export default function Hyperfixation() {
           onUpdate(self) {
             const p = self.progress;
             const vIdx =
-              p >= 0.875 ? 4 :
-              p >= 0.75  ? 3 :
-              p >= 0.625 ? 2 :
-              p >= 0.5   ? 1 : 0;
+              p >= 0.917 ? 4 :
+              p >= 0.833 ? 3 :
+              p >= 0.75  ? 2 :
+              p >= 0.667 ? 1 : 0;
             if (vIdx !== activeVideoRef.current) {
               activeVideoRef.current = vIdx;
               setActiveVideo(vIdx);
@@ -132,47 +134,44 @@ export default function Hyperfixation() {
         },
       });
 
-      // ── Stage 1: Images burst from center → edges ──────────────────────────
-      // Each image starts at (0,0) = centered, opacity 0 → flies to edge position
+      // ── Stage 1: Images burst one-by-one, grow from 0, fly off-screen ─────
+      // Each image: scale 0+opacity 0 at center → scale 1+opacity 1 at exit corner.
+      // Stagger: 1.5 units between starts (minimal overlap = "one by one" feel).
       BURST.forEach((conf, i) => {
         const el = imageRefs.current[i];
         if (!el) return;
         tl.fromTo(
           el,
-          { opacity: 0, x: 0, y: 0, rotate: 0, scale: 0.5 },
-          { opacity: 1, x: conf.tx, y: conf.ty, rotate: conf.r, scale: 1, duration: 2, ease: "power2.out" },
-          i * 0.25 // stagger start time
+          { opacity: 0, x: 0, y: 0, scale: 0 },
+          { opacity: 1, x: conf.tx, y: conf.ty, scale: 1, duration: 2, ease: "power2.inOut" },
+          i * 1.5 // absolute start position in timeline
         );
       });
+      // After last image (starts at 10.5, ends at 12.5), hold briefly to t=13
+      tl.to({}, { duration: 0.5 }); // playhead → 13
 
-      // Hold with all images visible (last image finishes at 3.25, hold to 5)
-      tl.to({}, { duration: 1.75 }); // playhead → 5
-
-      // ── Stage 2: Transition ─────────────────────────────────────────────────
-      // Fade images + title, video layout scales up from center
-      const imgs = imageRefs.current.filter(Boolean);
-      tl.to(imgs,              { opacity: 0, duration: 1 },         5);
-      tl.to(titleRef.current,  { opacity: 0, y: -40, duration: 0.8 }, 5);
-      tl.to(scrollHintRef.current, { opacity: 0, duration: 0.5 },   5);
-
-      // The entire video-layout grid scales up from near-zero (left/right panels
-      // are still opacity:0, so only the center video column is visible at small scale)
+      // ── Stage 2: Transition — title fades, video layout scales from center ─
+      tl.to(titleRef.current,      { opacity: 0, y: -40, duration: 1 },   13);
+      tl.to(scrollHintRef.current, { opacity: 0, duration: 0.5 },          13);
+      // Video layout grows from near-zero (left+right panels still opacity:0,
+      // so only the center column is visible as it expands — looks like the
+      // center video growing from the middle of the screen)
       tl.fromTo(
         videoLayoutRef.current,
         { opacity: 0, scale: 0.05 },
         { opacity: 1, scale: 1, duration: 2, ease: "power3.inOut" },
-        5.3 // starts 0.3s after fade begins; ends at 7.3
+        13.3 // ends at 15.3
       );
 
-      // ── Stage 3: Left + right panels slide in ──────────────────────────────
-      tl.fromTo(leftPanelRef.current,  { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 1.2 }, 7.3);
-      tl.fromTo(rightPanelRef.current, { opacity: 0, x:  30 }, { opacity: 1, x: 0, duration: 1.2 }, 7.3);
-      // playhead at 7.3+1.2=8.5; hold to t=10
-      tl.to({}, { duration: 1.5 }); // playhead → 10
+      // ── Stage 3: Left + right panels slide in, hold on first video ─────────
+      tl.fromTo(leftPanelRef.current,  { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 1.2 }, 15.3);
+      tl.fromTo(rightPanelRef.current, { opacity: 0, x:  30 }, { opacity: 1, x: 0, duration: 1.2 }, 15.3);
+      // Panels finish at 16.5. Hold to t=20 before video transitions begin.
+      tl.to({}, { duration: 3.5 }); // playhead → 20
 
-      // ── Stage 4: Stacked video sequence ────────────────────────────────────
-      // Each of the 4 transitions spans 2.5 units: prev fades while next grows
-      let cursor = 10;
+      // ── Stage 4: Stacked video transitions (t=20 → 30) ────────────────────
+      // 4 transitions × 2.5 units each. Previous fades while next grows from center.
+      let cursor = 20;
       for (let i = 1; i < VIDEOS.length; i++) {
         const prev = videoWrapRefs.current[i - 1];
         const curr = videoWrapRefs.current[i];
@@ -184,11 +183,10 @@ export default function Hyperfixation() {
           { opacity: 1, scale: 1, duration: 1.2, ease: "power2.out" },
           cursor + 0.3
         );
-        cursor += 2.5; // next transition starts 2.5 units later
+        cursor += 2.5;
       }
-
-      // Extend timeline to exactly t=20 so progress thresholds are accurate
-      tl.to({}, { duration: 1 }, 19);
+      // Ensure timeline reaches exactly t=30 so progress thresholds are correct
+      tl.to({}, { duration: 1 }, 29);
     }, section);
 
     return () => ctx.revert();
@@ -204,7 +202,8 @@ export default function Hyperfixation() {
         <NavDots total={7} active={4} />
       </div>
 
-      {/* ── Burst images (start centered, fly outward) ── */}
+      {/* ── Burst images ── */}
+      {/* Each starts centered at (0,0) with scale=0, flies to its corner exit */}
       {BURST.map((img, i) => (
         <div
           key={i}
@@ -223,11 +222,15 @@ export default function Hyperfixation() {
           }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={img.src} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+          <img
+            src={img.src}
+            alt=""
+            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+          />
         </div>
       ))}
 
-      {/* ── Main title ── */}
+      {/* ── Main title (always on top during Stage 1) ── */}
       <div
         ref={titleRef}
         style={{
@@ -267,14 +270,21 @@ export default function Hyperfixation() {
         </div>
         <div
           className="font-mono-frag"
-          style={{ position: "absolute", bottom: -4, left: 20, fontSize: 10, color: "rgba(255,255,255,0.22)", lineHeight: 1.6 }}
+          style={{
+            position: "absolute",
+            bottom: -4,
+            left: 20,
+            fontSize: 10,
+            color: "rgba(255,255,255,0.22)",
+            lineHeight: 1.6,
+          }}
         >
           Images sourced from Instagram and Pinterest.<br />
           Rights belong to respective owners.
         </div>
       </div>
 
-      {/* ── Video layout — 3-col grid, scales up from center ── */}
+      {/* ── Video layout (3-col grid, scales up from center in Stage 2) ── */}
       <div
         ref={videoLayoutRef}
         style={{
@@ -311,7 +321,7 @@ export default function Hyperfixation() {
             A record of unconventional uses and excess consumption, reflecting matcha&apos;s fixation beyond tradition.
           </p>
 
-          {/* Thumbnail strip (active highlighted, others B&W) */}
+          {/* Thumbnail strip */}
           <div style={{ marginTop: "auto", display: "flex", flexDirection: "column", gap: 6 }}>
             {VIDEOS.map((v, i) => (
               <div
@@ -371,17 +381,26 @@ export default function Hyperfixation() {
             </div>
           ))}
 
-          {/* Scroll cue inside video area */}
           <div
-            style={{ position: "absolute", bottom: 20, left: "50%", transform: "translateX(-50%)", zIndex: 5, pointerEvents: "none" }}
+            style={{
+              position: "absolute",
+              bottom: 20,
+              left: "50%",
+              transform: "translateX(-50%)",
+              zIndex: 5,
+              pointerEvents: "none",
+            }}
           >
-            <span className="font-mono-frag" style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", letterSpacing: "0.15em", whiteSpace: "nowrap" }}>
+            <span
+              className="font-mono-frag"
+              style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", letterSpacing: "0.15em", whiteSpace: "nowrap" }}
+            >
               (scroll down)
             </span>
           </div>
         </div>
 
-        {/* Right panel — content driven by activeVideo state */}
+        {/* Right panel — driven by activeVideo state */}
         <div
           ref={rightPanelRef}
           style={{
@@ -395,7 +414,10 @@ export default function Hyperfixation() {
           <div className="font-mono-frag" style={{ fontSize: 12, color: "rgba(255,255,255,0.38)", marginBottom: 6 }}>
             {vid.counter}
           </div>
-          <div className="font-mono-frag" style={{ fontSize: 10, color: "rgba(255,255,255,0.22)", marginBottom: 28, letterSpacing: "0.06em" }}>
+          <div
+            className="font-mono-frag"
+            style={{ fontSize: 10, color: "rgba(255,255,255,0.22)", marginBottom: 28, letterSpacing: "0.06em" }}
+          >
             {vid.coords}
           </div>
 
