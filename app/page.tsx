@@ -4,6 +4,7 @@ import ScrollDownText from "@/components/ScrollDownText";
 import OriginLog from "@/components/OriginLog";
 import ProductionChain from "@/components/ProductionChain";
 import EffectsOfMatcha from "@/components/EffectsOfMatcha";
+import Hyperfixation from "@/components/Hyperfixation";
 
 export default function Home() {
   return (
@@ -30,6 +31,7 @@ export default function Home() {
           </div>
         </div>
       </main>
+      
 
       {/* ── Section 2: Origin Log ── */}
       <OriginLog />
@@ -39,6 +41,9 @@ export default function Home() {
 
       {/* ── Section 4: Effects of Matcha ── */}
       <EffectsOfMatcha />
+
+      {/* ── Section 5: Hyperfixation ── */}
+      <Hyperfixation />
     </>
   );
 }
