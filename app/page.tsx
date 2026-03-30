@@ -6,6 +6,7 @@ import ProductionChain from "@/components/ProductionChain";
 import EffectsOfMatcha from "@/components/EffectsOfMatcha";
 import Hyperfixation from "@/components/Hyperfixation";
 import PreparationProcedures from "@/components/PreparationProcedures";
+import TheVault from "@/components/TheVault";
 
 export default function Home() {
   return (
@@ -48,6 +49,9 @@ export default function Home() {
 
       {/* ── Section 6: Preparation Procedures ── */}
       <PreparationProcedures />
+
+      {/* ── Section 7: The Vault ── */}
+      <TheVault />
     </>
   );
 }
