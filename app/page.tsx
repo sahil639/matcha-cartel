@@ -5,6 +5,7 @@ import OriginLog from "@/components/OriginLog";
 import ProductionChain from "@/components/ProductionChain";
 import EffectsOfMatcha from "@/components/EffectsOfMatcha";
 import Hyperfixation from "@/components/Hyperfixation";
+import ConfiscatedGoods from "@/components/ConfiscatedGoods";
 import PreparationProcedures from "@/components/PreparationProcedures";
 import TheVault from "@/components/TheVault";
 import Footer from "@/components/Footer";
@@ -48,7 +49,10 @@ export default function Home() {
       {/* ── Section 5: Hyperfixation ── */}
       <Hyperfixation />
 
-      {/* ── Section 6: Preparation Procedures ── */}
+      {/* ── Section 6: Confiscated Goods ── */}
+      <ConfiscatedGoods />
+
+      {/* ── Section 7: Preparation Procedures ── */}
       <PreparationProcedures />
 
       {/* ── Section 7: The Vault ── */}
