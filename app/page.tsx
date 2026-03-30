@@ -7,6 +7,7 @@ import EffectsOfMatcha from "@/components/EffectsOfMatcha";
 import Hyperfixation from "@/components/Hyperfixation";
 import PreparationProcedures from "@/components/PreparationProcedures";
 import TheVault from "@/components/TheVault";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
@@ -52,6 +53,9 @@ export default function Home() {
 
       {/* ── Section 7: The Vault ── */}
       <TheVault />
+
+      {/* ── Footer ── */}
+      <Footer />
     </>
   );
 }
