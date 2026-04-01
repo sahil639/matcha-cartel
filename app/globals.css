@@ -30,3 +30,9 @@ body {
 .font-mono-frag {
   font-family: 'Fragment Mono', monospace;
 }
+
+/* LockScreen input placeholder */
+.lockscreen-input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.08em;
+}
