@@ -3,6 +3,61 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import NavDots from "./NavDots";
 
+const LIME = "#8dff00";
+
+// ─── Per-letter glitch (same pattern as ScrollDownText) ───────────────────────
+
+function GlitchChar({ char, delay, color }: { char: string; delay: number; color: string }) {
+  const [opacity, setOpacity] = useState(1);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    if (char === " ") return;
+    let running = true;
+
+    function flicker() {
+      if (!running) return;
+      let count = 0;
+      const burstCount = Math.floor(Math.random() * 5) + 3;
+      function burst() {
+        if (!running || count >= burstCount) {
+          setOpacity(1);
+          timerRef.current = setTimeout(flicker, 1200 + Math.random() * 2000);
+          return;
+        }
+        setOpacity(Math.random() > 0.5 ? 0.05 + Math.random() * 0.2 : 1);
+        count++;
+        timerRef.current = setTimeout(burst, 35 + Math.random() * 55);
+      }
+      burst();
+    }
+
+    timerRef.current = setTimeout(flicker, delay + Math.random() * 800);
+    return () => {
+      running = false;
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, [char, delay]);
+
+  return (
+    <span style={{ opacity, display: "inline-block", color }}>
+      {char === " " ? "\u00A0" : char}
+    </span>
+  );
+}
+
+function GlitchLabel({ text, color }: { text: string; color: string }) {
+  return (
+    <span className="font-mono-frag" style={{ fontSize: 11, letterSpacing: "0.04em" }}>
+      {text.split("").map((ch, i) => (
+        <GlitchChar key={i} char={ch} delay={i * 110} color={color} />
+      ))}
+    </span>
+  );
+}
+
+// ─── Card data ────────────────────────────────────────────────────────────────
+
 interface CardData {
   id: string;
   era: string;
@@ -20,6 +75,7 @@ interface CardData {
   rotation: number;
   initialZ: number;
   landscape?: boolean;
+  horizontalImage?: string; // card 01: right-side image path
 }
 
 const CARDS: CardData[] = [
@@ -34,7 +90,7 @@ const CARDS: CardData[] = [
       "This form predates matcha.",
     ],
     fig: "FIG. 01",
-    figLabel: "DRIED TEA LEAF",
+    figLabel: "DRIED\nTEA LEAF",
     bg: "#3c4a1a",
     color: "#a8c050",
     width: 380,
@@ -43,6 +99,7 @@ const CARDS: CardData[] = [
     initialY: 70,
     rotation: 0,
     initialZ: 5,
+    horizontalImage: "/images/matcha-dust-sketch.png",
   },
   {
     id: "02",
@@ -88,7 +145,7 @@ const CARDS: CardData[] = [
     title: "",
     subtitle: "",
     body: [],
-    fig: "04",
+    fig: "FIG. 04",
     figLabel: "CHASEN (MATCHA WHISK)",
     bg: "#7a8c9e",
     color: "#d0dce8",
@@ -104,7 +161,7 @@ const CARDS: CardData[] = [
     id: "05",
     era: "Early Modern Japan",
     title: "CONTROLLED\nCULTIVATION",
-    subtitle: "",
+    subtitle: "Early Modern Japan",
     body: [
       "Production consolidated into specific regions.",
       "Uji established long-term quality standards.",
@@ -123,23 +180,204 @@ const CARDS: CardData[] = [
   },
 ];
 
+// ─── Card content ─────────────────────────────────────────────────────────────
+
+function CardContent({ card }: { card: CardData }) {
+  const mono = "font-mono-frag";
+
+  // ── Card 01: horizontal layout — text left, sketch image right ──
+  if (card.horizontalImage) {
+    return (
+      <div
+        style={{
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          flexDirection: "row",
+          overflow: "hidden",
+          boxSizing: "border-box",
+        }}
+      >
+        {/* Left: text */}
+        <div
+          style={{
+            flex: "0 0 52%",
+            padding: "16px 12px 12px 16px",
+            display: "flex",
+            flexDirection: "column",
+            overflow: "hidden",
+          }}
+        >
+          {/* Number */}
+          <div className={mono} style={{ fontSize: 13, color: card.color, marginBottom: 4 }}>
+            {card.id}.
+          </div>
+
+          {/* Title — mono, not hubot */}
+          <div
+            className={mono}
+            style={{
+              fontSize: 18,
+              lineHeight: 1.1,
+              color: card.color,
+              marginBottom: 10,
+              letterSpacing: "0.01em",
+              textTransform: "uppercase",
+            }}
+          >
+            {card.title}
+          </div>
+
+          {/* Rule */}
+          <div style={{ height: "0.5px", backgroundColor: card.color, opacity: 0.4, marginBottom: 10, flexShrink: 0 }} />
+
+          {/* Subtitle */}
+          {card.subtitle && (
+            <div className={mono} style={{ fontSize: 9, color: card.color, marginBottom: 14, lineHeight: 1.5 }}>
+              {card.subtitle}
+            </div>
+          )}
+
+          {/* Body */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {card.body.map((line, i) => (
+              <p key={i} className={mono} style={{ fontSize: 9, lineHeight: 1.65, color: card.color }}>
+                {line}
+              </p>
+            ))}
+          </div>
+
+          {/* Fig label — bottom */}
+          <div style={{ marginTop: "auto", display: "flex", flexDirection: "column", gap: 2 }}>
+            <span className={mono} style={{ fontSize: 8, color: card.color, opacity: 0.7 }}>
+              {card.fig}
+            </span>
+            <span className={mono} style={{ fontSize: 8, color: card.color, opacity: 0.7, whiteSpace: "pre-line" }}>
+              {card.figLabel}
+            </span>
+          </div>
+        </div>
+
+        {/* Right: sketch image with overlay blend */}
+        <div
+          style={{
+            flex: "0 0 48%",
+            position: "relative",
+            overflow: "hidden",
+          }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={card.horizontalImage}
+            alt=""
+            style={{
+              position: "absolute",
+              inset: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              objectPosition: "center",
+              mixBlendMode: "overlay",
+              display: "block",
+            }}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  // ── Landscape card (card 04) ──
+  if (card.landscape) {
+    return (
+      <div style={{ width: "100%", height: "100%", position: "relative" }}>
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            backgroundColor: `color-mix(in srgb, ${card.color} 12%, transparent)`,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <span className={mono} style={{ fontSize: 9, color: card.color, opacity: 0.35, letterSpacing: "0.15em" }}>
+            [ IMAGE PLACEHOLDER ]
+          </span>
+        </div>
+        <div style={{ position: "absolute", bottom: 12, left: 14, right: 14, display: "flex", justifyContent: "space-between" }}>
+          <span className={mono} style={{ fontSize: 10, color: card.color }}>{card.fig}</span>
+          <span className={mono} style={{ fontSize: 10, color: card.color }}>{card.figLabel}</span>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Default portrait card ──
+  return (
+    <div
+      style={{
+        padding: "18px 18px 14px",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden",
+        boxSizing: "border-box",
+      }}
+    >
+      <div className={mono} style={{ fontSize: 13, color: card.color, marginBottom: 3 }}>
+        {card.id}.
+      </div>
+      <div
+        className="font-hubot uppercase"
+        style={{ fontSize: 28, lineHeight: 1.05, color: card.color, marginBottom: 10, letterSpacing: "0.01em", whiteSpace: "pre-line" }}
+      >
+        {card.title}
+      </div>
+      <div style={{ height: "0.5px", backgroundColor: card.color, opacity: 0.4, marginBottom: 10, flexShrink: 0 }} />
+      {card.subtitle && (
+        <div className={mono} style={{ fontSize: 10, color: card.color, marginBottom: 14 }}>{card.subtitle}</div>
+      )}
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {card.body.map((line, i) => (
+          <p key={i} className={mono} style={{ fontSize: 10, lineHeight: 1.65, color: card.color }}>{line}</p>
+        ))}
+      </div>
+      <div
+        style={{
+          marginTop: "auto",
+          paddingTop: 14,
+          flexShrink: 0,
+          height: card.body.length > 0 ? "32%" : "55%",
+          backgroundColor: `color-mix(in srgb, ${card.color} 10%, transparent)`,
+          border: `0.5px solid color-mix(in srgb, ${card.color} 30%, transparent)`,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <span className={mono} style={{ fontSize: 8, color: card.color, opacity: 0.5, letterSpacing: "0.1em" }}>
+          [ {card.figLabel || card.fig} ]
+        </span>
+      </div>
+      <div style={{ marginTop: 6, display: "flex", justifyContent: "space-between", flexShrink: 0 }}>
+        <span className={mono} style={{ fontSize: 8, color: card.color, opacity: 0.7 }}>{card.fig}</span>
+        {card.figLabel && (
+          <span className={mono} style={{ fontSize: 8, color: card.color, opacity: 0.7 }}>{card.figLabel}</span>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ─── Draggable card ───────────────────────────────────────────────────────────
 
-function DraggableCard({
-  card,
-  zIndex,
-  onFocus,
-}: {
-  card: CardData;
-  zIndex: number;
-  onFocus: () => void;
-}) {
+function DraggableCard({ card, zIndex, onFocus }: { card: CardData; zIndex: number; onFocus: () => void }) {
   const cardRef = useRef<HTMLDivElement>(null);
-  const posRef = useRef({ x: card.initialX, y: card.initialY });
-  const velRef = useRef({ x: 0, y: 0 });
+  const posRef  = useRef({ x: card.initialX, y: card.initialY });
+  const velRef  = useRef({ x: 0, y: 0 });
   const dragging = useRef(false);
-  const lastPtr = useRef({ x: 0, y: 0, t: 0 });
-  const rafRef = useRef<number | null>(null);
+  const lastPtr  = useRef({ x: 0, y: 0, t: 0 });
+  const rafRef   = useRef<number | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
   const applyTransform = useCallback(() => {
@@ -151,42 +389,32 @@ function DraggableCard({
 
   useEffect(() => {
     applyTransform();
-    return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
+    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
   }, [applyTransform]);
 
-  const onPointerDown = useCallback(
-    (e: React.PointerEvent) => {
-      e.preventDefault();
-      (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
-      dragging.current = true;
-      setIsDragging(true);
-      lastPtr.current = { x: e.clientX, y: e.clientY, t: performance.now() };
-      velRef.current = { x: 0, y: 0 };
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      onFocus();
-    },
-    [onFocus]
-  );
+  const onPointerDown = useCallback((e: React.PointerEvent) => {
+    e.preventDefault();
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    dragging.current = true;
+    setIsDragging(true);
+    lastPtr.current = { x: e.clientX, y: e.clientY, t: performance.now() };
+    velRef.current = { x: 0, y: 0 };
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    onFocus();
+  }, [onFocus]);
 
-  const onPointerMove = useCallback(
-    (e: React.PointerEvent) => {
-      if (!dragging.current) return;
-      const now = performance.now();
-      const dt = now - lastPtr.current.t;
-      const dx = e.clientX - lastPtr.current.x;
-      const dy = e.clientY - lastPtr.current.y;
-      if (dt > 0) {
-        velRef.current = { x: (dx / dt) * 16, y: (dy / dt) * 16 };
-      }
-      posRef.current.x += dx;
-      posRef.current.y += dy;
-      applyTransform();
-      lastPtr.current = { x: e.clientX, y: e.clientY, t: now };
-    },
-    [applyTransform]
-  );
+  const onPointerMove = useCallback((e: React.PointerEvent) => {
+    if (!dragging.current) return;
+    const now = performance.now();
+    const dt = now - lastPtr.current.t;
+    const dx = e.clientX - lastPtr.current.x;
+    const dy = e.clientY - lastPtr.current.y;
+    if (dt > 0) velRef.current = { x: (dx / dt) * 16, y: (dy / dt) * 16 };
+    posRef.current.x += dx;
+    posRef.current.y += dy;
+    applyTransform();
+    lastPtr.current = { x: e.clientX, y: e.clientY, t: now };
+  }, [applyTransform]);
 
   const onPointerUp = useCallback(() => {
     dragging.current = false;
@@ -208,8 +436,7 @@ function DraggableCard({
       ref={cardRef}
       style={{
         position: "absolute",
-        top: 0,
-        left: 0,
+        top: 0, left: 0,
         width: card.width,
         height: card.height,
         backgroundColor: card.bg,
@@ -228,154 +455,6 @@ function DraggableCard({
   );
 }
 
-// ─── Card content ─────────────────────────────────────────────────────────────
-
-function CardContent({ card }: { card: CardData }) {
-  const mono = "font-mono-frag";
-  const hubot = "font-hubot";
-
-  if (card.landscape) {
-    return (
-      <div style={{ width: "100%", height: "100%", position: "relative" }}>
-        {/* Image placeholder — full bleed */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            backgroundColor: `color-mix(in srgb, ${card.color} 12%, transparent)`,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <span
-            className={mono}
-            style={{ fontSize: 9, color: card.color, opacity: 0.35, letterSpacing: "0.15em" }}
-          >
-            [ IMAGE PLACEHOLDER ]
-          </span>
-        </div>
-        {/* Labels */}
-        <div
-          style={{
-            position: "absolute",
-            bottom: 12,
-            left: 14,
-            right: 14,
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <span className={mono} style={{ fontSize: 10, color: card.color }}>
-            {card.fig}
-          </span>
-          <span className={mono} style={{ fontSize: 10, color: card.color }}>
-            {card.figLabel}
-          </span>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div
-      style={{
-        padding: "18px 18px 14px",
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        overflow: "hidden",
-        boxSizing: "border-box",
-      }}
-    >
-      {/* Number */}
-      <div className={mono} style={{ fontSize: 13, color: card.color, marginBottom: 3 }}>
-        {card.id}.
-      </div>
-
-      {/* Title */}
-      <div
-        className={`${hubot} uppercase`}
-        style={{
-          fontSize: 28,
-          lineHeight: 1.05,
-          color: card.color,
-          marginBottom: 10,
-          letterSpacing: "0.01em",
-          whiteSpace: "pre-line",
-        }}
-      >
-        {card.title}
-      </div>
-
-      {/* Rule */}
-      <div
-        style={{
-          height: "0.5px",
-          backgroundColor: card.color,
-          opacity: 0.4,
-          marginBottom: 10,
-          flexShrink: 0,
-        }}
-      />
-
-      {/* Subtitle */}
-      {card.subtitle && (
-        <div className={mono} style={{ fontSize: 10, color: card.color, marginBottom: 14 }}>
-          {card.subtitle}
-        </div>
-      )}
-
-      {/* Body */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-        {card.body.map((line, i) => (
-          <p key={i} className={mono} style={{ fontSize: 10, lineHeight: 1.65, color: card.color }}>
-            {line}
-          </p>
-        ))}
-      </div>
-
-      {/* Image placeholder */}
-      <div
-        style={{
-          marginTop: "auto",
-          paddingTop: 14,
-          flexShrink: 0,
-          height: card.body.length > 0 ? "32%" : "55%",
-          backgroundColor: `color-mix(in srgb, ${card.color} 10%, transparent)`,
-          border: `0.5px solid color-mix(in srgb, ${card.color} 30%, transparent)`,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <span className={mono} style={{ fontSize: 8, color: card.color, opacity: 0.5, letterSpacing: "0.1em" }}>
-          [ {card.figLabel || card.fig} ]
-        </span>
-      </div>
-
-      {/* Figure label */}
-      <div
-        style={{
-          marginTop: 6,
-          display: "flex",
-          justifyContent: "space-between",
-          flexShrink: 0,
-        }}
-      >
-        <span className={mono} style={{ fontSize: 8, color: card.color, opacity: 0.7 }}>
-          {card.fig}
-        </span>
-        {card.figLabel && (
-          <span className={mono} style={{ fontSize: 8, color: card.color, opacity: 0.7 }}>
-            {card.figLabel}
-          </span>
-        )}
-      </div>
-    </div>
-  );
-}
-
 // ─── Main section ─────────────────────────────────────────────────────────────
 
 export default function OriginLog() {
@@ -386,8 +465,7 @@ export default function OriginLog() {
 
   const bringToFront = useCallback((id: string) => {
     maxZRef.current += 1;
-    const z = maxZRef.current;
-    setZIndexes((prev) => ({ ...prev, [id]: z }));
+    setZIndexes((prev) => ({ ...prev, [id]: maxZRef.current }));
   }, []);
 
   return (
@@ -410,23 +488,19 @@ export default function OriginLog() {
           overflow: "hidden",
         }}
       >
-        {/* Drag hint */}
+        {/* Drag hint — green + glitch */}
         <div
-          className="font-mono-frag"
           style={{
             position: "absolute",
             top: 16,
             left: "50%",
             transform: "translateX(-50%)",
-            fontSize: 11,
-            color: "rgba(200,215,225,0.45)",
             zIndex: 300,
             pointerEvents: "none",
-            letterSpacing: "0.04em",
             whiteSpace: "nowrap",
           }}
         >
-          (drag around to view)
+          <GlitchLabel text="(drag around to view)" color={LIME} />
         </div>
 
         {/* Cards */}
@@ -439,31 +513,27 @@ export default function OriginLog() {
           />
         ))}
 
-        {/* Bottom nav */}
+        {/* Bottom nav — green, no dividers */}
         <div
           style={{
             position: "absolute",
             bottom: 0,
             left: 0,
             right: 0,
-            borderTop: "0.5px solid rgba(200,215,225,0.15)",
             display: "flex",
             backgroundColor: "#000",
             zIndex: 200,
+            borderTop: "0.5px solid rgba(255,255,255,0.06)",
           }}
         >
-          {CARDS.map((card, i) => (
+          {CARDS.map((card) => (
             <div
               key={card.id}
               className="font-mono-frag"
               style={{
                 flex: 1,
                 padding: "10px 14px",
-                borderRight:
-                  i < CARDS.length - 1
-                    ? "0.5px solid rgba(200,215,225,0.12)"
-                    : undefined,
-                color: "rgba(200,215,225,0.45)",
+                color: LIME,
                 fontSize: 10,
                 lineHeight: 1.5,
                 cursor: "default",
@@ -476,59 +546,57 @@ export default function OriginLog() {
         </div>
       </div>
 
-      {/* ── Right panel ── */}
+      {/* ── Right panel — white bg, dark text ── */}
       <div
         style={{
           flex: "0 0 22%",
           height: "100%",
-          backgroundColor: "var(--bg)",
+          backgroundColor: "#ffffff",
           position: "relative",
-          borderLeft: "0.5px solid rgba(100,120,130,0.3)",
+          borderLeft: "0.5px solid rgba(0,0,0,0.1)",
           display: "flex",
           flexDirection: "column",
+          padding: "14px 16px 20px",
         }}
       >
         {/* Nav dots */}
-        <div style={{ position: "absolute", top: 8, right: 8 }}>
+        <div style={{ alignSelf: "flex-end", marginBottom: 10 }}>
           <NavDots total={7} active={1} />
         </div>
 
-        {/* Text content */}
+        {/* ORIGIN LOG: MATCHA — top */}
         <div
+          className="font-hubot uppercase"
           style={{
-            padding: "18px 14px",
-            display: "flex",
-            flexDirection: "column",
-            height: "100%",
+            fontSize: "clamp(32px, 3.6vw, 58px)",
+            lineHeight: 1.0,
+            color: "#111111",
+            letterSpacing: "0.01em",
           }}
         >
-          {/* Large heading */}
-          <div
-            className="font-hubot uppercase"
-            style={{
-              fontSize: "clamp(36px, 3.8vw, 62px)",
-              lineHeight: 1.0,
-              color: "var(--logo-color)",
-              letterSpacing: "0.02em",
-              marginBottom: "clamp(20px, 3vh, 40px)",
-            }}
-          >
-            ORIGIN<br />LOG:<br />MATCHA
-          </div>
+          ORIGIN<br />LOG:<br />MATCHA
+        </div>
 
-          {/* Section title */}
+        {/* Push bottom content to bottom */}
+        <div style={{ flex: 1 }} />
+
+        {/* Bottom content block */}
+        <div>
+          {/* "DOCUMENTED HISTORY OF THE GREEN POWDER" */}
           <div
             className="font-hubot uppercase"
             style={{
-              fontSize: "clamp(14px, 1.6vw, 22px)",
-              lineHeight: 1.2,
-              color: "var(--logo-color)",
-              letterSpacing: "0.05em",
-              marginBottom: "clamp(14px, 2.5vh, 28px)",
+              fontSize: "clamp(12px, 1.4vw, 20px)",
+              lineHeight: 1.25,
+              color: "#111111",
+              letterSpacing: "0.04em",
             }}
           >
             DOCUMENTED<br />HISTORY OF<br />THE GREEN<br />POWDER
           </div>
+
+          {/* 42px gap */}
+          <div style={{ height: 42 }} />
 
           {/* Description */}
           <p
@@ -536,9 +604,7 @@ export default function OriginLog() {
             style={{
               fontSize: 11,
               lineHeight: 1.75,
-              color: "var(--text)",
-              marginTop: "auto",
-              paddingBottom: 16,
+              color: "#555555",
             }}
           >
             An overview of matcha&apos;s early development, including changes
