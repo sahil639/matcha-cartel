@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { useState } from "react";
 import GlitchNumber from "./GlitchNumber";
-import NavDots from "./NavDots";
 
 const GLITCH_NUMS = new Set(["01", "07", "10", "14"]);
 
@@ -173,9 +172,6 @@ export default function HeroGrid() {
         >
           THE WORLD&apos;S MOST<br />DESIRED GREEN POWDER.
         </p>
-        <div style={{ position: "absolute", top: 0, right: 0 }}>
-          <NavDots total={7} active={0} />
-        </div>
       </div>
 
       {/* Row 2: empty */}

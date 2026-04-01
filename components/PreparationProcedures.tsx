@@ -3,7 +3,6 @@
 import { useLayoutEffect, useRef, useState, useCallback } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import NavDots from "./NavDots";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -116,11 +115,6 @@ export default function PreparationProcedures() {
         >
           PREPARATION PROCEDURES
         </h2>
-      </div>
-
-      {/* ── Nav dots ── */}
-      <div style={{ position: "absolute", top: 16, right: 16, zIndex: 50 }}>
-        <NavDots total={7} active={5} />
       </div>
 
       {/* ── Center images (all stacked, one visible at a time) ── */}

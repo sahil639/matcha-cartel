@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef, useCallback, useEffect } from "react";
-import NavDots from "./NavDots";
 
 const LIME = "#8dff00";
 
@@ -559,11 +558,6 @@ export default function OriginLog() {
           padding: "14px 16px 20px",
         }}
       >
-        {/* Nav dots */}
-        <div style={{ alignSelf: "flex-end", marginBottom: 10 }}>
-          <NavDots total={7} active={1} />
-        </div>
-
         {/* ORIGIN LOG: MATCHA — top */}
         <div
           className="font-hubot uppercase"

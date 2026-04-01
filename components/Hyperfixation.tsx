@@ -3,7 +3,6 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import NavDots from "./NavDots";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -197,11 +196,6 @@ export default function Hyperfixation() {
       ref={sectionRef}
       style={{ width: "100%", height: "100vh", backgroundColor: "#000", overflow: "hidden", position: "relative" }}
     >
-      {/* ── Nav dots ── */}
-      <div style={{ position: "absolute", top: 16, right: 16, zIndex: 100 }}>
-        <NavDots total={7} active={4} />
-      </div>
-
       {/* ── Burst images ── */}
       {/* Each starts centered at (0,0) with scale=0, flies to its corner exit */}
       {BURST.map((img, i) => (

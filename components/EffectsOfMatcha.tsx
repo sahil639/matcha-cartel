@@ -3,7 +3,6 @@
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import NavDots from "./NavDots";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -149,10 +148,6 @@ export default function EffectsOfMatcha() {
           </div>
         ))}
 
-        {/* Nav dots — absolute top right */}
-        <div style={{ position: "absolute", top: 8, right: 8, zIndex: 20 }}>
-          <NavDots total={7} active={3} />
-        </div>
       </div>
 
       {/* ── Bottom content row — 3 effect columns ── */}

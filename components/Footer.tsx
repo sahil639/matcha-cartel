@@ -1,6 +1,5 @@
 "use client";
 
-import NavDots from "./NavDots";
 
 const GREEN  = "#8dff00";
 const INK    = "#111111";
@@ -84,11 +83,6 @@ export default function Footer() {
             minWidth: "clamp(180px, 18vw, 280px)",
           }}
         >
-          {/* Nav dots — all inactive */}
-          <div style={{ alignSelf: "flex-end" }}>
-            <NavDots total={7} active={-1} />
-          </div>
-
           <div
             className="font-mono-frag"
             style={{

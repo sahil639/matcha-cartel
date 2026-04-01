@@ -1,6 +1,5 @@
 "use client";
 
-import NavDots from "./NavDots";
 
 // Each item: position as % of the left panel, z-index, sizes.
 // All coordinates are the item CENTER point, then we translate(-50%,-50%).
@@ -256,11 +255,6 @@ export default function ConfiscatedGoods() {
           flexShrink: 0,
         }}
       >
-        {/* Nav dots */}
-        <div style={{ alignSelf: "flex-end", marginBottom: 20 }}>
-          <NavDots total={7} active={4} />
-        </div>
-
         {/* "ASSEMBLY PROTOCOL" heading */}
         <h2
           className="font-hubot"

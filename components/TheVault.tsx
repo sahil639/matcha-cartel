@@ -3,7 +3,6 @@
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import NavDots from "./NavDots";
 import ScrollDownText from "./ScrollDownText";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -98,11 +97,6 @@ export default function TheVault() {
         >
           Vault
         </span>
-      </div>
-
-      {/* ── Nav dots ── */}
-      <div style={{ position: "absolute", top: 16, right: 16, zIndex: 30 }}>
-        <NavDots total={7} active={6} />
       </div>
 
       {/* ── Scroll-scrubbed video — centered ── */}

@@ -10,7 +10,6 @@ import {
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ScrollDownText from "./ScrollDownText";
-import NavDots from "./NavDots";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -383,11 +382,6 @@ export default function ProductionChain() {
           minHeight: 0,
         }}
       >
-        {/* Nav dots */}
-        <div style={{ position: "absolute", top: 8, right: 8, zIndex: 10 }}>
-          <NavDots total={7} active={2} />
-        </div>
-
         {/* Phase title (typewriter) */}
         <div
           style={{ marginTop: "auto", marginBottom: 0 }}
