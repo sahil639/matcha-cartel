@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-const TOTAL = 7;
+const TOTAL = 9;
 
 export default function GlobalNavDots() {
   const [active, setActive] = useState(0);
