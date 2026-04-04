@@ -26,13 +26,11 @@ export default function Home() {
           <HeroGrid />
         </div>
         <div
-          className="relative w-full"
-          style={{ borderTop: "0.5px solid var(--text)" }}
+          className="relative w-full flex items-center"
+          style={{ borderTop: "0.5px solid var(--text)", gap: 12, paddingRight: 24 }}
         >
           <LogoSwap />
-          <div className="absolute bottom-4 right-6 z-10">
-            <ScrollDownText />
-          </div>
+          <ScrollDownText />
         </div>
       </main>
       

@@ -67,7 +67,7 @@ function ImageCell({
             style={{
               position: "absolute",
               inset: 0,
-              transform: hovered ? "scale(1.65)" : "scale(1)",
+              transform: hovered ? "scale(2.4)" : "scale(1)",
               filter: hovered ? "none" : "grayscale(100%)",
               transition: "transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94), filter 0.3s ease",
               transformOrigin: "center center",
@@ -162,6 +162,7 @@ export default function HeroGrid() {
           borderRight: BORDER, borderBottom: BORDER, borderTop: BORDER,
         }}
       >
+        {/* Font: font-hubot = Hubot Sans Variable (wdth:75, weight:800) */}
         <p
           className="font-hubot uppercase"
           style={{
@@ -229,8 +230,7 @@ function CrossMarkers({ rows, cols }: { rows: number; cols: number }) {
         >
           <div
             style={{
-              background: "var(--bg)",
-              padding: "2px 4px",
+              padding: "4px 5px",
               lineHeight: 1,
               color: "rgba(30,40,50,0.6)",
               fontSize: 11,

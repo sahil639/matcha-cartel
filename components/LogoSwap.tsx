@@ -8,7 +8,7 @@ export default function LogoSwap() {
   return (
     <div
       className="relative w-full overflow-hidden cursor-default select-none"
-      style={{ height: "clamp(90px, 17vw, 215px)" }}
+      style={{ height: "clamp(48px, 8vw, 100px)" }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >

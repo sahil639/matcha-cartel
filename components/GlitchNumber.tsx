@@ -2,60 +2,71 @@
 
 import { useEffect, useRef, useState } from "react";
 
-interface GlitchNumberProps {
-  label: string;
-  glitch?: boolean;
-}
-
-export default function GlitchNumber({ label, glitch = false }: GlitchNumberProps) {
+// Each character gets its own independent flicker timer so the
+// glitch effect applies per-character at random intervals.
+function GlitchChar({ char, active }: { char: string; active: boolean }) {
   const [opacity, setOpacity] = useState(1);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    if (!glitch) return;
+    if (!active) return;
 
     let running = true;
 
     function flicker() {
       if (!running) return;
 
-      // rapid flicker burst
       let count = 0;
-      const burstCount = Math.floor(Math.random() * 6) + 4;
+      const burstCount = Math.floor(Math.random() * 5) + 3;
 
       function burst() {
         if (!running || count >= burstCount) {
           setOpacity(1);
-          // rest 0.8–1.8 seconds
-          const rest = 800 + Math.random() * 1000;
+          // Each character rests for a different random duration
+          const rest = 500 + Math.random() * 2500;
           timerRef.current = setTimeout(flicker, rest);
           return;
         }
-        const o = Math.random() > 0.5 ? 0.08 + Math.random() * 0.15 : 1;
+        const o = Math.random() > 0.5 ? 0.05 + Math.random() * 0.2 : 1;
         setOpacity(o);
         count++;
-        timerRef.current = setTimeout(burst, 40 + Math.random() * 60);
+        timerRef.current = setTimeout(burst, 30 + Math.random() * 70);
       }
 
       burst();
     }
 
-    // stagger start per element
-    const delay = Math.random() * 1500;
+    // Stagger start per character
+    const delay = Math.random() * 2500;
     timerRef.current = setTimeout(flicker, delay);
 
     return () => {
       running = false;
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [glitch]);
+  }, [active]);
 
+  return (
+    <span style={{ opacity, display: "inline-block" }}>
+      {char}
+    </span>
+  );
+}
+
+interface GlitchNumberProps {
+  label: string;
+  glitch?: boolean;
+}
+
+export default function GlitchNumber({ label, glitch = false }: GlitchNumberProps) {
   return (
     <span
       className="font-mono-frag"
-      style={{ opacity, color: "var(--text)", fontSize: 10, letterSpacing: "0.04em" }}
+      style={{ color: "var(--text)", fontSize: 10, letterSpacing: "0.04em" }}
     >
-      {label}
+      {label.split("").map((char, i) => (
+        <GlitchChar key={i} char={char} active={glitch} />
+      ))}
     </span>
   );
 }
