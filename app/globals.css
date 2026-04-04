@@ -1,4 +1,16 @@
 @import "tailwindcss";
+
+@font-face {
+  font-family: 'LockScreenFont';
+  src: url('/fonts/78wPss3wDcm038Pbi4wdFX6Utkk.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-lockscreen {
+  font-family: 'LockScreenFont', monospace;
+}
 @import "@fontsource-variable/hubot-sans";
 @import "@fontsource/fragment-mono";
 

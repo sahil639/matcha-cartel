@@ -66,14 +66,18 @@ export default function LockScreen() {
   // ── Passcode logic ────────────────────────────────────────────────────────
   const submit = useCallback(() => {
     const val = passcode.trim().toUpperCase();
-    if (val === CORRECT) setStatus("correct");
-    else if (val.length > 0) setStatus("wrong");
+    if (val.length > 0 && val !== CORRECT) setStatus("wrong");
   }, [passcode]);
 
   const onKey = useCallback(
     (e: React.KeyboardEvent) => { if (e.key === "Enter") submit(); },
     [submit]
   );
+
+  // Auto-recognise correct passcode as user types
+  useEffect(() => {
+    if (passcode.trim().toUpperCase() === CORRECT) setStatus("correct");
+  }, [passcode]);
 
   // ── Shutter exit animation ────────────────────────────────────────────────
   const handleAccess = useCallback(() => {
@@ -166,10 +170,10 @@ export default function LockScreen() {
                 }}
               />
               <div
-                className="font-mono-frag"
+                className="font-lockscreen"
                 style={{
                   fontSize: "clamp(9px, 0.85vw, 12px)",
-                  color: "rgba(255,255,255,0.45)",
+                  color: "#8796a1",
                   letterSpacing: "0.05em",
                   lineHeight: 1.7,
                   textAlign: c.align === "flex-end" ? "right" : c.align === "center" ? "center" : "left",
@@ -210,7 +214,7 @@ export default function LockScreen() {
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/images/access card.png"
+              src="/images/access card 1.png"
               alt="Matcha Cartel Access Card"
               style={{ width: "100%", height: "auto", display: "block" }}
               draggable={false}
@@ -239,7 +243,7 @@ export default function LockScreen() {
             {status === "correct" ? (
               // "ACCESS THE SITE" — clickable
               <div
-                className="font-hubot"
+                className="font-lockscreen"
                 onClick={handleAccess}
                 style={{
                   fontSize: "clamp(20px, 2.8vw, 42px)",
@@ -263,7 +267,7 @@ export default function LockScreen() {
                   placeholder="ENTER PASSCODE"
                   maxLength={10}
                   autoFocus
-                  className="font-hubot lockscreen-input"
+                  className="font-lockscreen lockscreen-input"
                   style={{
                     background: "transparent",
                     border: "none",
@@ -281,7 +285,7 @@ export default function LockScreen() {
 
                 {status === "wrong" && (
                   <div
-                    className="font-mono-frag"
+                    className="font-lockscreen"
                     style={{
                       fontSize: 11,
                       color: "#e53e3e",
@@ -300,10 +304,10 @@ export default function LockScreen() {
         {/* ── Bottom: passcode hint + copyright ── */}
         <div style={{ paddingBottom: 28, textAlign: "center" }}>
           <div
-            className="font-mono-frag"
+            className="font-lockscreen"
             style={{
               fontSize: "clamp(9px, 0.85vw, 12px)",
-              color: "rgba(255,255,255,0.45)",
+              color: "#8796a1",
               letterSpacing: "0.14em",
               marginBottom: 10,
             }}
@@ -311,7 +315,7 @@ export default function LockScreen() {
             PASSCODE : MC26
           </div>
           <div
-            className="font-mono-frag"
+            className="font-lockscreen"
             style={{
               fontSize: "clamp(8px, 0.72vw, 10px)",
               color: "rgba(255,255,255,0.22)",
