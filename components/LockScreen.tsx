@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import gsap from "gsap";
 
-const CORRECT     = "MC26";
-const BAR_COUNT   = 8;
+const CORRECT = "MC26";
+const BAR_COUNT = 8;
 
 // ── Per-character glitch opacity ───────────────────────────────────────────────
 function GlitchChar({ char }: { char: string }) {
@@ -79,25 +79,25 @@ function CityTime({ tz }: { tz: string }) {
 }
 
 const CITIES = [
-  { name: "NEW YORK, USA",      tz: "America/New_York",   gmt: "GMT-5", align: "flex-start" },
-  { name: "TOKYO, JPN",         tz: "Asia/Tokyo",          gmt: "GMT+9", align: "center" },
-  { name: "RIO DE JANEIRO, BR", tz: "America/Sao_Paulo",  gmt: "GMT-3", align: "flex-end" },
+  { name: "NEW YORK, USA", tz: "America/New_York", gmt: "GMT-5", align: "flex-start" },
+  { name: "TOKYO, JPN", tz: "Asia/Tokyo", gmt: "GMT+9", align: "center" },
+  { name: "RIO DE JANEIRO, BR", tz: "America/Sao_Paulo", gmt: "GMT-3", align: "flex-end" },
 ] as const;
 
 // ── Main component ─────────────────────────────────────────────────────────────
 export default function LockScreen() {
-  const [passcode, setPasscode]   = useState("");
-  const [status, setStatus]       = useState<"idle" | "wrong" | "correct">("idle");
-  const [visible, setVisible]     = useState(true);
-  const [exiting, setExiting]     = useState(false);
+  const [passcode, setPasscode] = useState("");
+  const [status, setStatus] = useState<"idle" | "wrong" | "correct">("idle");
+  const [visible, setVisible] = useState(true);
+  const [exiting, setExiting] = useState(false);
 
-  const barRefs     = useRef<(HTMLDivElement | null)[]>([]);
-  const contentRef  = useRef<HTMLDivElement>(null);
-  const inputRef    = useRef<HTMLInputElement>(null);
-  const cardRef     = useRef<HTMLDivElement>(null);
+  const barRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
 
-  const [tilt, setTilt]       = useState({ x: 0, y: 0 });
-  const [shine, setShine]     = useState({ x: 50, y: 50 });
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const [shine, setShine] = useState({ x: 50, y: 50 });
   const [hovering, setHovering] = useState(false);
 
   // ── Card 3D tilt + shine ──────────────────────────────────────────────────
@@ -137,14 +137,15 @@ export default function LockScreen() {
     setExiting(true);
 
     // 1. Fade out the content quickly
-    gsap.to(contentRef.current, { opacity: 0, duration: 0.25, ease: "power1.in",
+    gsap.to(contentRef.current, {
+      opacity: 0, duration: 0.25, ease: "power1.in",
       onComplete: () => {
         // 2. Animate shutter bars: alternating up/down
         const bars = barRefs.current.filter(Boolean) as HTMLDivElement[];
-        const upBars   = bars.filter((_, i) => i % 2 === 0);
+        const upBars = bars.filter((_, i) => i % 2 === 0);
         const downBars = bars.filter((_, i) => i % 2 === 1);
 
-        gsap.to(upBars,   { y: "-100%", duration: 0.55, ease: "power2.inOut", stagger: 0.045 });
+        gsap.to(upBars, { y: "-100%", duration: 0.55, ease: "power2.inOut", stagger: 0.045 });
         gsap.to(downBars, {
           y: "100%", duration: 0.55, ease: "power2.inOut", stagger: 0.045,
           onComplete: () => setVisible(false),
@@ -215,8 +216,8 @@ export default function LockScreen() {
               {/* Small square marker */}
               <div
                 style={{
-                  width: 7,
-                  height: 7,
+                  width: 12,
+                  height: 12,
                   backgroundColor: "rgba(255,255,255,0.28)",
                   marginBottom: 6,
                 }}
@@ -373,11 +374,11 @@ export default function LockScreen() {
           <div
             className="font-lockscreen"
             style={{
-              fontSize: 16,
+              fontSize: 17,
               color: "rgb(135, 150, 161)",
               letterSpacing: "0.06em",
               lineHeight: 1,
-              lineHeight: 1.8,
+              lineHeight: 1,
             }}
           >
             © 2026 MATCHA CARTEL. ALL RIGHTS RESERVED. PRODUCED BY MATCHA CARTEL.<br />
