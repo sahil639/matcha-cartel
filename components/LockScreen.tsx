@@ -208,13 +208,12 @@ export default function LockScreen() {
               cursor: "default",
             }}
           >
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/access card.png"
+              alt="Matcha Cartel Access Card"
               style={{ width: "100%", height: "auto", display: "block" }}
-              src="/videos/MPC_STAMP EFFECTT.mp4"
+              draggable={false}
             />
 
             {/* Shine overlay */}
