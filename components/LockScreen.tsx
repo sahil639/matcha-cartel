@@ -84,6 +84,41 @@ const CITIES = [
   { name: "RIO DE JANEIRO, BR", tz: "America/Sao_Paulo", gmt: "GMT-3", align: "flex-end" },
 ] as const;
 
+// ── Access button with side squares on hover ───────────────────────────────────
+function AccessButton({ onClick }: { onClick: () => void }) {
+  const [hovered, setHovered] = useState(false);
+  const square = {
+    width: 12,
+    height: 12,
+    backgroundColor: "rgba(255,255,255,0.28)",
+    flexShrink: 0,
+    opacity: hovered ? 1 : 0,
+    transition: "opacity 0.2s ease",
+  };
+  return (
+    <div
+      style={{ display: "inline-flex", alignItems: "center", gap: 14, cursor: "pointer", userSelect: "none" as const }}
+      onClick={onClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <div style={square} />
+      <span
+        className="font-lockscreen"
+        style={{
+          fontSize: "clamp(20px, 2.8vw, 42px)",
+          color: "#ffffff",
+          letterSpacing: "-0.01em",
+          lineHeight: 1,
+        }}
+      >
+        ACCESS THE SITE
+      </span>
+      <div style={square} />
+    </div>
+  );
+}
+
 // ── Main component ─────────────────────────────────────────────────────────────
 export default function LockScreen() {
   const [passcode, setPasscode] = useState("");
@@ -295,20 +330,7 @@ export default function LockScreen() {
           >
             {status === "correct" ? (
               // "ACCESS THE SITE" — clickable
-              <div
-                className="font-lockscreen"
-                onClick={handleAccess}
-                style={{
-                  fontSize: "clamp(20px, 2.8vw, 42px)",
-                  color: "#ffffff",
-                  letterSpacing: "-0.01em",
-                  lineHeight: 1,
-                  cursor: "pointer",
-                  userSelect: "none",
-                }}
-              >
-                ACCESS THE SITE
-              </div>
+              <AccessButton onClick={handleAccess} />
             ) : (
               <>
                 {/* Invisible real input, visible display div */}
