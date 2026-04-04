@@ -205,7 +205,7 @@ export default function LockScreen() {
             onMouseLeave={onCardLeave}
             style={{
               position: "relative",
-              width: "clamp(340px, 42vw, 620px)",
+              width: "clamp(388px, 47.9vw, 707px)",
               transformStyle: "preserve-3d",
               transform: `perspective(900px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
               transition: hovering ? "transform 0.06s ease-out" : "transform 0.55s ease-out",
@@ -324,7 +324,7 @@ export default function LockScreen() {
               fontSize: 14,
               color: "rgba(255,255,255,0.22)",
               letterSpacing: "0.06em",
-              lineHeight: 1.5,
+              lineHeight: 0.8,
               lineHeight: 1.8,
             }}
           >
