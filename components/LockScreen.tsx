@@ -172,10 +172,10 @@ export default function LockScreen() {
               <div
                 className="font-lockscreen"
                 style={{
-                  fontSize: "clamp(9px, 0.85vw, 12px)",
+                  fontSize: 16,
                   color: "#8796a1",
-                  letterSpacing: "0.05em",
-                  lineHeight: 1.7,
+                  letterSpacing: "-0.01em",
+                  lineHeight: 1,
                   textAlign: c.align === "flex-end" ? "right" : c.align === "center" ? "center" : "left",
                 }}
               >
@@ -248,7 +248,8 @@ export default function LockScreen() {
                 style={{
                   fontSize: "clamp(20px, 2.8vw, 42px)",
                   color: "#ffffff",
-                  letterSpacing: "0.04em",
+                  letterSpacing: "-0.01em",
+                  lineHeight: 1,
                   cursor: "pointer",
                   userSelect: "none",
                 }}
@@ -275,7 +276,8 @@ export default function LockScreen() {
                     color: "#ffffff",
                     fontSize: "clamp(20px, 2.8vw, 42px)",
                     textAlign: "center",
-                    letterSpacing: "0.06em",
+                    letterSpacing: "-0.01em",
+                    lineHeight: 1,
                     width: "clamp(260px, 34vw, 500px)",
                     caretColor: "#ffffff",
                     display: "block",
@@ -287,9 +289,10 @@ export default function LockScreen() {
                   <div
                     className="font-lockscreen"
                     style={{
-                      fontSize: 11,
+                      fontSize: 16,
                       color: "#e53e3e",
-                      letterSpacing: "0.12em",
+                      letterSpacing: "-0.01em",
+                      lineHeight: 1,
                       marginTop: 10,
                     }}
                   >
@@ -306,9 +309,10 @@ export default function LockScreen() {
           <div
             className="font-lockscreen"
             style={{
-              fontSize: "clamp(9px, 0.85vw, 12px)",
+              fontSize: 14,
               color: "#8796a1",
-              letterSpacing: "0.14em",
+              letterSpacing: "-0.01em",
+              lineHeight: 1,
               marginBottom: 10,
             }}
           >
@@ -317,9 +321,10 @@ export default function LockScreen() {
           <div
             className="font-lockscreen"
             style={{
-              fontSize: "clamp(8px, 0.72vw, 10px)",
+              fontSize: 14,
               color: "rgba(255,255,255,0.22)",
-              letterSpacing: "0.06em",
+              letterSpacing: "-0.01em",
+              lineHeight: 1,
               lineHeight: 1.8,
             }}
           >
