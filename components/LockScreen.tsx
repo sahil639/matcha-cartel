@@ -263,7 +263,7 @@ export default function LockScreen() {
                   ref={inputRef}
                   type="text"
                   value={passcode}
-                  onChange={e => { setPasscode(e.target.value); setStatus("idle"); }}
+                  onChange={e => { setPasscode(e.target.value.toUpperCase()); setStatus("idle"); }}
                   onKeyDown={onKey}
                   placeholder="ENTER PASSCODE"
                   maxLength={10}
@@ -309,10 +309,10 @@ export default function LockScreen() {
           <div
             className="font-lockscreen"
             style={{
-              fontSize: 14,
-              color: "#8796a1",
+              fontSize: 18,
+              color: "#dbe3ea",
               letterSpacing: "0.06em",
-              lineHeight: 1.5,
+              lineHeight: 1.1,
               marginBottom: 10,
             }}
           >
@@ -321,10 +321,10 @@ export default function LockScreen() {
           <div
             className="font-lockscreen"
             style={{
-              fontSize: 14,
-              color: "rgba(255,255,255,0.22)",
+              fontSize: 16,
+              color: "rgb(135, 150, 161)",
               letterSpacing: "0.06em",
-              lineHeight: 0.8,
+              lineHeight: 1,
               lineHeight: 1.8,
             }}
           >
