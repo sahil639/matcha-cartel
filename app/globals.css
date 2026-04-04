@@ -27,8 +27,8 @@
 }
 
 ::selection {
-  background-color: #6abf3c;
-  color: #000;
+  background-color: rgba(255, 255, 255, 0.02);
+  color: #6abf3c;
 }
 
 html,

@@ -311,8 +311,8 @@ export default function LockScreen() {
             style={{
               fontSize: 14,
               color: "#8796a1",
-              letterSpacing: "-0.01em",
-              lineHeight: 1,
+              letterSpacing: "0.06em",
+              lineHeight: 1.5,
               marginBottom: 10,
             }}
           >
@@ -323,8 +323,8 @@ export default function LockScreen() {
             style={{
               fontSize: 14,
               color: "rgba(255,255,255,0.22)",
-              letterSpacing: "-0.01em",
-              lineHeight: 1,
+              letterSpacing: "0.06em",
+              lineHeight: 1.5,
               lineHeight: 1.8,
             }}
           >
