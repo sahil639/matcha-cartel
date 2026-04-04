@@ -6,24 +6,76 @@ import gsap from "gsap";
 const CORRECT     = "MC26";
 const BAR_COUNT   = 8;
 
+// ── Per-character glitch opacity ───────────────────────────────────────────────
+function GlitchChar({ char }: { char: string }) {
+  const [opacity, setOpacity] = useState(1);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    let running = true;
+    function flicker() {
+      if (!running) return;
+      let count = 0;
+      const burstCount = Math.floor(Math.random() * 5) + 3;
+      function burst() {
+        if (!running || count >= burstCount) {
+          setOpacity(1);
+          timerRef.current = setTimeout(flicker, 600 + Math.random() * 2500);
+          return;
+        }
+        setOpacity(Math.random() > 0.5 ? 0.05 + Math.random() * 0.2 : 1);
+        count++;
+        timerRef.current = setTimeout(burst, 30 + Math.random() * 70);
+      }
+      burst();
+    }
+    timerRef.current = setTimeout(flicker, Math.random() * 2000);
+    return () => { running = false; if (timerRef.current) clearTimeout(timerRef.current); };
+  }, []);
+
+  return <span style={{ opacity, display: "inline-block" }}>{char}</span>;
+}
+
+function GlitchText({ text }: { text: string }) {
+  return (
+    <>
+      {text.split("").map((char, i) => (
+        <GlitchChar key={i} char={char} />
+      ))}
+    </>
+  );
+}
+
 // ── Live city clock ────────────────────────────────────────────────────────────
 function CityTime({ tz }: { tz: string }) {
-  const [display, setDisplay] = useState("");
+  const [parts, setParts] = useState<[string, string]>(["--", "--"]);
+  const [colonVisible, setColonVisible] = useState(true);
+
   useEffect(() => {
-    const tick = () =>
-      setDisplay(
-        new Date().toLocaleTimeString("en-US", {
-          timeZone: tz,
-          hour12: false,
-          hour: "2-digit",
-          minute: "2-digit",
-        })
-      );
+    const tick = () => {
+      const now = new Date();
+      const str = now.toLocaleTimeString("en-US", {
+        timeZone: tz,
+        hour12: false,
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+      const [h, m] = str.split(":");
+      setParts([h, m]);
+      setColonVisible(now.getSeconds() % 2 === 0);
+    };
     tick();
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
   }, [tz]);
-  return <>{display}</>;
+
+  return (
+    <>
+      {parts[0]}
+      <span style={{ opacity: colonVisible ? 1 : 0, transition: "opacity 0.1s" }}>:</span>
+      {parts[1]}
+    </>
+  );
 }
 
 const CITIES = [
@@ -316,7 +368,7 @@ export default function LockScreen() {
               marginBottom: 10,
             }}
           >
-            PASSCODE : MC26
+            <GlitchText text="PASSCODE : MC26" />
           </div>
           <div
             className="font-lockscreen"
