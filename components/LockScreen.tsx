@@ -329,7 +329,7 @@ export default function LockScreen() {
                     color: "#ffffff",
                     fontSize: "clamp(20px, 2.8vw, 42px)",
                     textAlign: "center",
-                    letterSpacing: "-0.01em",
+                    letterSpacing: "0.06em",
                     lineHeight: 1,
                     width: "clamp(260px, 34vw, 500px)",
                     caretColor: "#ffffff",
@@ -374,10 +374,9 @@ export default function LockScreen() {
           <div
             className="font-lockscreen"
             style={{
-              fontSize: 17,
+              fontSize: 16,
               color: "rgb(135, 150, 161)",
               letterSpacing: "0.06em",
-              lineHeight: 1,
               lineHeight: 1,
             }}
           >
