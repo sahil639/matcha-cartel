@@ -22,12 +22,11 @@ const IMAGES = Array.from({ length: 15 }, (_, i) => {
 const BORDER = "0.5px solid rgba(100,120,130,0.3)";
 const HUD_BORDER = "1px solid rgba(100,120,130,0.75)";
 
-// HUD corner bracket definitions
 const CORNERS: { pos: React.CSSProperties; border: React.CSSProperties }[] = [
-  { pos: { top: -6, left: -6 },   border: { borderTop: HUD_BORDER, borderLeft: HUD_BORDER } },
-  { pos: { top: -6, right: -6 },  border: { borderTop: HUD_BORDER, borderRight: HUD_BORDER } },
-  { pos: { bottom: -6, left: -6 },  border: { borderBottom: HUD_BORDER, borderLeft: HUD_BORDER } },
-  { pos: { bottom: -6, right: -6 }, border: { borderBottom: HUD_BORDER, borderRight: HUD_BORDER } },
+  { pos: { top: -6, left: -6 },    border: { borderTop: HUD_BORDER, borderLeft: HUD_BORDER } },
+  { pos: { top: -6, right: -6 },   border: { borderTop: HUD_BORDER, borderRight: HUD_BORDER } },
+  { pos: { bottom: -6, left: -6 }, border: { borderBottom: HUD_BORDER, borderLeft: HUD_BORDER } },
+  { pos: { bottom: -6, right: -6 },border: { borderBottom: HUD_BORDER, borderRight: HUD_BORDER } },
 ];
 
 function ImageCell({
@@ -52,37 +51,55 @@ function ImageCell({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Number label — Fragment Mono, top-left */}
+      {/* Number label */}
       <div className="absolute top-[6px] left-[6px] z-10">
         <GlitchNumber label={`(${num})`} glitch={isGlitch} />
       </div>
 
       {/* Centered image area */}
       <div className="absolute inset-0 flex items-center justify-center">
-        {/* Wrapper: 35% of cell height, strict 1:1 */}
-        <div style={{ position: "relative", height: "35%", aspectRatio: "1 / 1" }}>
+        {/*
+          Wrapper: 40% cell height (15% bigger than before).
+          Default: square (1:1). Hover: rectangle (4:3), clipped.
+          No scaling — image fills the shape via objectFit cover.
+        */}
+        <div
+          style={{
+            position: "relative",
+            height: "40%",
+            aspectRatio: hovered ? "4 / 3" : "1 / 1",
+            transition: "aspect-ratio 0.35s ease",
+            overflow: "hidden",         // clips to rectangle on hover
+          }}
+        >
+          {/* Image — fills wrapper, no scale transform */}
+          <Image
+            src={src}
+            alt={`Matcha ${num}`}
+            fill
+            className="object-cover"
+            sizes="15vw"
+          />
 
-          {/* Image: scales + grayscale transition */}
+          {/*
+            Color blend overlay: #8796a1 with mix-blend-mode color
+            replaces old grayscale filter.
+            Fades out on hover to reveal natural color.
+          */}
           <div
             style={{
               position: "absolute",
               inset: 0,
-              transform: hovered ? "scale(2.4)" : "scale(1)",
-              filter: hovered ? "none" : "grayscale(100%)",
-              transition: "transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94), filter 0.3s ease",
-              transformOrigin: "center center",
+              backgroundColor: "#8796a1",
+              mixBlendMode: "color",
+              opacity: hovered ? 0 : 1,
+              transition: "opacity 0.3s ease",
+              pointerEvents: "none",
+              zIndex: 2,
             }}
-          >
-            <Image
-              src={src}
-              alt={`Matcha ${num}`}
-              fill
-              className="object-cover"
-              sizes="15vw"
-            />
-          </div>
+          />
 
-          {/* HUD corner brackets — stay at wrapper corners (inside scaled image) */}
+          {/* HUD corner brackets (inside clipped area, anchored to corners) */}
           {CORNERS.map((c, i) => (
             <div
               key={i}
@@ -102,11 +119,11 @@ function ImageCell({
         </div>
       </div>
 
-      {/* LOT label — below scaled image (82% from top of cell) */}
+      {/* LOT label — appears below image on hover, black text */}
       <div
         style={{
           position: "absolute",
-          top: "82%",
+          top: "72%",
           left: "50%",
           transform: "translateX(-50%)",
           opacity: hovered ? 1 : 0,
@@ -118,7 +135,7 @@ function ImageCell({
       >
         <span
           className="font-mono-frag"
-          style={{ fontSize: 9, color: "var(--text)", letterSpacing: "0.04em" }}
+          style={{ fontSize: 9, color: "#000", letterSpacing: "0.04em" }}
         >
           {lot}
         </span>
@@ -152,9 +169,9 @@ export default function HeroGrid() {
         />
       ))}
 
-      {/* Text column — col 6 (index 5) */}
+      {/* Text column — col 6 */}
 
-      {/* Row 1: top tagline + nav dots */}
+      {/* Row 1: top tagline — font-lockscreen (78wPss3wDcm038Pbi4wdFX6Utkk.ttf) */}
       <div
         className="relative"
         style={{
@@ -162,9 +179,8 @@ export default function HeroGrid() {
           borderRight: BORDER, borderBottom: BORDER, borderTop: BORDER,
         }}
       >
-        {/* Font: font-hubot = Hubot Sans Variable (wdth:75, weight:800) */}
         <p
-          className="font-hubot uppercase"
+          className="font-lockscreen uppercase"
           style={{
             position: "absolute", top: 0, left: 0,
             fontSize: 10, lineHeight: 1.4, letterSpacing: "0.08em",
@@ -183,7 +199,7 @@ export default function HeroGrid() {
         }}
       />
 
-      {/* Row 3: bottom tagline */}
+      {/* Row 3: bottom tagline — font-lockscreen (78wPss3wDcm038Pbi4wdFX6Utkk.ttf) */}
       <div
         className="relative"
         style={{
@@ -192,7 +208,7 @@ export default function HeroGrid() {
         }}
       >
         <p
-          className="font-hubot uppercase"
+          className="font-lockscreen uppercase"
           style={{
             position: "absolute", bottom: 0, left: 0,
             fontSize: 10, lineHeight: 1.4, letterSpacing: "0.08em",
