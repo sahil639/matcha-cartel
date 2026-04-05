@@ -103,74 +103,6 @@ function HudFrame({
   );
 }
 
-// ─── Grain overlay ────────────────────────────────────────────────────────────
-
-function GrainOverlay({ opacity = 0.08 }: { opacity?: number }) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const rafRef = useRef<number | null>(null);
-  let frame = 0;
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    const draw = () => {
-      frame++;
-      // Redraw at ~24fps
-      if (frame % 2 === 0) {
-        const w = canvas.width;
-        const h = canvas.height;
-        if (w === 0 || h === 0) {
-          rafRef.current = requestAnimationFrame(draw);
-          return;
-        }
-        const img = ctx.createImageData(w, h);
-        const d = img.data;
-        for (let i = 0; i < d.length; i += 4) {
-          const v = (Math.random() * 255) | 0;
-          d[i] = d[i + 1] = d[i + 2] = v;
-          d[i + 3] = 28;
-        }
-        ctx.putImageData(img, 0, 0);
-      }
-      rafRef.current = requestAnimationFrame(draw);
-    };
-
-    const resize = () => {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-    };
-
-    resize();
-    const ro = new ResizeObserver(resize);
-    ro.observe(canvas);
-    draw();
-
-    return () => {
-      ro.disconnect();
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
-  }, []);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      style={{
-        position: "absolute",
-        inset: 0,
-        width: "100%",
-        height: "100%",
-        pointerEvents: "none",
-        opacity,
-        mixBlendMode: "overlay",
-        zIndex: 10,
-      }}
-    />
-  );
-}
-
 // ─── Main component ───────────────────────────────────────────────────────────
 
 export default function ProductionChain() {
@@ -200,20 +132,16 @@ export default function ProductionChain() {
         onUpdate: (self) => {
           const p = self.progress;
 
-          // Scrub main video
           const mv = mainVideoRef.current;
           if (mv && mv.duration && isFinite(mv.duration)) {
             mv.currentTime = p * mv.duration;
           }
 
-          // Scrub secondary video (same source, stays in sync)
           const sv = secVideoRef.current;
           if (sv && sv.duration && isFinite(sv.duration)) {
             sv.currentTime = p * sv.duration;
           }
 
-
-          // Update phase
           const newPhase = Math.min(Math.floor(p * 4), 3);
           if (newPhase !== phaseRef.current) {
             phaseRef.current = newPhase;
@@ -226,7 +154,6 @@ export default function ProductionChain() {
     return () => ctx.revert();
   }, []);
 
-  // Pause both videos on load (scrub controls playback)
   const handleVideoLoad = useCallback(
     (ref: React.RefObject<HTMLVideoElement | null>) => () => {
       const v = ref.current;
@@ -240,13 +167,18 @@ export default function ProductionChain() {
 
   const BORDER = "0.5px solid rgba(100,120,130,0.3)";
 
+  // Green line progress: percentage from top to current phase marker
+  // Phases are placed at 20%, 40%, 60%, 80% of panel height
+  const PHASE_TOPS = [20, 38, 56, 74]; // percentage positions
+  const greenHeight = PHASE_TOPS[currentPhase];
+
   return (
     <section
       ref={sectionRef}
       style={{
         width: "100%",
         height: "100vh",
-        backgroundColor: "var(--bg)",
+        backgroundColor: "#ffffff",           // ← white bg
         display: "grid",
         gridTemplateColumns: "1fr 1fr 1fr",
         gridTemplateRows: "auto 1fr",
@@ -260,10 +192,11 @@ export default function ProductionChain() {
           className="font-hubot"
           style={{
             padding: "10px 14px 8px",
-            fontSize: "clamp(32px, 5.5vw, 78px)",
+            // Font: font-hubot = Hubot Sans Variable (wdth:75, weight:800)
+            fontSize: "clamp(32px, 5.5vw, 78px)", // ← current size
             lineHeight: 1,
             color: "var(--logo-color)",
-            letterSpacing: "0.01em",
+            letterSpacing: "-0.01em",             // ← tightened to match lock screen style
             borderBottom: BORDER,
             borderRight: i < 2 ? BORDER : undefined,
             borderLeft: i === 0 ? BORDER : undefined,
@@ -276,7 +209,7 @@ export default function ProductionChain() {
         </div>
       ))}
 
-      {/* ── Left content panel (cols 1+2) ── */}
+      {/* ── Left panel: phase nav + main video ── */}
       <div
         style={{
           gridColumn: "1 / 3",
@@ -291,7 +224,7 @@ export default function ProductionChain() {
           minHeight: 0,
         }}
       >
-        {/* Main video */}
+        {/* Main video — 75% of container size, centred */}
         <video
           ref={mainVideoRef}
           muted
@@ -299,63 +232,89 @@ export default function ProductionChain() {
           preload="auto"
           onLoadedMetadata={handleVideoLoad(mainVideoRef)}
           style={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
+            width: "75%",
+            height: "75%",
+            objectFit: "contain",
             display: "block",
+            position: "relative",
+            zIndex: 1,
           }}
           src="/videos/section-3-main.mp4"
         />
 
-        {/* Grain overlay */}
-        <GrainOverlay opacity={0.06} />
-
-        {/* Phase nav — left edge, vertically centered */}
+        {/* ── Vertical progress line + phase nav ── */}
         <div
           style={{
             position: "absolute",
-            left: 20,
-            top: "50%",
-            transform: "translateY(-50%)",
-            display: "flex",
-            flexDirection: "column",
-            gap: 10,
+            left: 28,
+            top: "10%",
+            bottom: "10%",
             zIndex: 20,
           }}
         >
+          {/* Full grey track */}
+          <div
+            style={{
+              position: "absolute",
+              left: 4,
+              top: 0,
+              bottom: 0,
+              width: 1,
+              backgroundColor: "rgba(100,120,130,0.25)",
+            }}
+          />
+
+          {/* Green progress fill */}
+          <div
+            style={{
+              position: "absolute",
+              left: 4,
+              top: 0,
+              width: 1,
+              height: `${greenHeight}%`,
+              backgroundColor: "#6abf3c",
+              transition: "height 0.5s ease",
+            }}
+          />
+
+          {/* Phase markers */}
           {PHASES.map((p, i) => {
             const isActive = i === currentPhase;
             return (
               <div
                 key={p.label}
                 style={{
+                  position: "absolute",
+                  top: `${PHASE_TOPS[i]}%`,
+                  left: 0,
+                  transform: "translateY(-50%)",
                   display: "flex",
                   alignItems: "center",
-                  gap: 8,
+                  gap: 10,
                 }}
               >
-                {/* Active indicator */}
+                {/* Square on the line */}
                 <div
                   style={{
                     width: 8,
                     height: 8,
-                    backgroundColor: isActive ? "#6abf3c" : "transparent",
+                    backgroundColor: isActive ? "#6abf3c" : "rgba(100,120,130,0.3)",
                     flexShrink: 0,
                     transition: "background-color 0.3s ease",
                   }}
                 />
+                {/* Label — active shifts right 6px */}
                 <span
                   className="font-mono-frag"
                   style={{
-                    fontSize: 10,
+                    fontSize: 10,             // ← current size
                     letterSpacing: "0.06em",
                     color: isActive
                       ? "var(--logo-color)"
                       : "rgba(100,120,130,0.4)",
                     fontWeight: isActive ? 700 : 400,
-                    transition: "color 0.3s ease",
+                    transform: isActive ? "translateX(6px)" : "translateX(0)",
+                    transition: "color 0.3s ease, transform 0.3s ease",
                   }}
                 >
                   {p.label}
@@ -380,16 +339,15 @@ export default function ProductionChain() {
           padding: "18px 14px 14px",
           overflow: "hidden",
           minHeight: 0,
+          justifyContent: "flex-end",        // ← text block pinned to bottom
         }}
       >
-        {/* Phase title (typewriter) */}
-        <div
-          style={{ marginTop: "auto", marginBottom: 0 }}
-        >
+        {/* Phase title + description — at bottom */}
+        <div>
           <h2
             className="font-mono-frag"
             style={{
-              fontSize: "clamp(13px, 1.3vw, 18px)",
+              fontSize: "clamp(13px, 1.3vw, 18px)",  // ← current size
               lineHeight: 1.3,
               color: "var(--logo-color)",
               letterSpacing: "0.06em",
@@ -400,11 +358,10 @@ export default function ProductionChain() {
             {displayedTitle}
           </h2>
 
-          {/* Description (typewriter) */}
           <p
             className="font-mono-frag"
             style={{
-              fontSize: 11,
+              fontSize: 11,                          // ← current size
               lineHeight: 1.75,
               color: "var(--text)",
               marginTop: 12,
@@ -415,7 +372,7 @@ export default function ProductionChain() {
           </p>
         </div>
 
-        {/* Secondary video + HUD frame */}
+        {/* Secondary video (B&W) + HUD frame */}
         <div
           style={{
             position: "relative",
@@ -441,19 +398,12 @@ export default function ProductionChain() {
               filter: "grayscale(100%) contrast(1.4) brightness(0.9)",
               display: "block",
             }}
-            src="/videos/section-3-main.mp4"
+            src="/videos/MPC_STAMP EFFECTT.mp4"   // ← updated to B&W card video
           />
-          <GrainOverlay opacity={0.14} />
         </div>
 
         {/* Scroll down */}
-        <div
-          style={{
-            marginTop: "auto",
-            paddingTop: 14,
-            alignSelf: "flex-start",
-          }}
-        >
+        <div style={{ marginTop: 14, alignSelf: "flex-start" }}>
           <ScrollDownText />
         </div>
       </div>
