@@ -152,7 +152,7 @@ export default function HeroGrid() {
         display: "grid",
         gridTemplateColumns: "repeat(5, 1fr) 1fr",
         gridTemplateRows: "repeat(3, 1fr)",
-        height: "calc(100svh - clamp(90px, 17vw, 215px))",
+        height: "100%",
         overflow: "visible",
       }}
     >
