@@ -224,6 +224,18 @@ export default function ProductionChain() {
           minHeight: 0,
         }}
       >
+        {/* Full-height grid line at the left edge (column separator) */}
+        <div
+          style={{
+            position: "absolute",
+            left: 0,
+            top: 0,
+            bottom: 0,
+            width: "0.5px",
+            backgroundColor: "rgba(100,120,130,0.3)",
+            pointerEvents: "none",
+          }}
+        />
         {/* Main video — 75% of container size, centred */}
         <video
           ref={mainVideoRef}
@@ -372,15 +384,15 @@ export default function ProductionChain() {
           </p>
         </div>
 
-        {/* Secondary video (B&W) + HUD frame */}
+        {/* Secondary video (B&W) — square, natural aspect ratio */}
         <div
           style={{
             position: "relative",
             marginTop: 24,
             flex: "0 0 auto",
-            height: "clamp(130px, 18vh, 220px)",
             alignSelf: "flex-start",
-            width: "calc(100% - 24px)",
+            width: "clamp(130px, 18vh, 220px)",
+            aspectRatio: "1 / 1",
             marginLeft: 12,
           }}
         >
@@ -398,7 +410,7 @@ export default function ProductionChain() {
               filter: "grayscale(100%) contrast(1.4) brightness(0.9)",
               display: "block",
             }}
-            src="/videos/MPC_STAMP EFFECTT.mp4"   // ← updated to B&W card video
+            src="/videos/MPC_STAMP EFFECTT.mp4"
           />
         </div>
 
