@@ -190,7 +190,7 @@ export default function ProductionChain() {
           key={word}
           className="font-lockscreen"
           style={{
-            padding: "10px 36px 8px",
+            padding: i === 0 ? "10px 36px 8px 36px" : "10px 36px 8px 12px",
             // Font: font-lockscreen = 78wPss3wDcm038Pbi4wdFX6Utkk.ttf
             fontSize: "clamp(32px, 5.5vw, 78px)",
             lineHeight: 1,
@@ -318,7 +318,7 @@ export default function ProductionChain() {
                 <span
                   className="font-mono-frag"
                   style={{
-                    fontSize: 10,             // ← current size
+                    fontSize: 14,
                     letterSpacing: "0.06em",
                     color: isActive
                       ? "var(--logo-color)"
@@ -390,7 +390,7 @@ export default function ProductionChain() {
             marginTop: 24,
             flex: "0 0 auto",
             alignSelf: "flex-start",
-            width: "clamp(130px, 18vh, 220px)",
+            width: "clamp(163px, 22.5vh, 275px)",
             aspectRatio: "1 / 1",
             marginLeft: 12,
           }}

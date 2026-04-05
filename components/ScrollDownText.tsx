@@ -50,7 +50,7 @@ function GlitchChar({ char, delay }: { char: string; delay: number }) {
 
 export default function ScrollDownText() {
   return (
-    <span className="font-mono-frag text-[11px] tracking-widest" style={{ color: "var(--text)" }}>
+    <span className="font-mono-frag tracking-widest" style={{ color: "var(--text)", fontSize: 14 }}>
       {CHARS.map((ch, i) => (
         <GlitchChar key={i} char={ch} delay={i * 120} />
       ))}
