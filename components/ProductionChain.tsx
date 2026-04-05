@@ -190,7 +190,7 @@ export default function ProductionChain() {
           key={word}
           className="font-lockscreen"
           style={{
-            padding: "10px 14px 8px",
+            padding: "10px 36px 8px",
             // Font: font-lockscreen = 78wPss3wDcm038Pbi4wdFX6Utkk.ttf
             fontSize: "clamp(32px, 5.5vw, 78px)",
             lineHeight: 1,
