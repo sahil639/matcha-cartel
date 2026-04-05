@@ -129,7 +129,7 @@ export default function EffectsOfMatcha() {
         {HEADER_WORDS.map((word, i) => (
           <div
             key={word}
-            className="font-hubot"
+            className="font-lockscreen"
             style={{
               padding: "10px 14px 8px",
               fontSize: "clamp(32px, 5.5vw, 78px)",
@@ -179,7 +179,7 @@ export default function EffectsOfMatcha() {
             <div
               className="font-mono-frag"
               style={{
-                fontSize: 13,
+                fontSize: 14,
                 color: "rgba(255,255,255,0.7)",
                 marginBottom: 6,
                 letterSpacing: "0.04em",
@@ -190,7 +190,7 @@ export default function EffectsOfMatcha() {
 
             {/* Title */}
             <h2
-              className="font-hubot uppercase"
+              className="font-lockscreen uppercase"
               style={{
                 fontSize: "clamp(22px, 3vw, 46px)",
                 lineHeight: 1.0,
@@ -207,7 +207,7 @@ export default function EffectsOfMatcha() {
             <p
               className="font-mono-frag"
               style={{
-                fontSize: 11,
+                fontSize: 15,
                 lineHeight: 1.65,
                 color: "rgba(255,255,255,0.85)",
                 marginBottom: 10,
@@ -222,7 +222,7 @@ export default function EffectsOfMatcha() {
                 key={j}
                 className="font-mono-frag"
                 style={{
-                  fontSize: 11,
+                  fontSize: 15,
                   lineHeight: 1.65,
                   color: "rgba(255,255,255,0.6)",
                   marginTop: j > 0 ? 8 : 0,
