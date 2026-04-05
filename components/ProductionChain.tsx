@@ -167,9 +167,8 @@ export default function ProductionChain() {
 
   const BORDER = "0.5px solid rgba(100,120,130,0.3)";
 
-  // Green line progress: percentage from top to current phase marker
-  // Phases are placed at 20%, 40%, 60%, 80% of panel height
-  const PHASE_TOPS = [20, 38, 56, 74]; // percentage positions
+  // Phase markers evenly spaced; line runs full height
+  const PHASE_TOPS = [15, 38, 61, 84];
   const greenHeight = PHASE_TOPS[currentPhase];
 
   return (
@@ -189,14 +188,14 @@ export default function ProductionChain() {
       {(["Matcha", "Production", "Chain."] as const).map((word, i) => (
         <div
           key={word}
-          className="font-hubot"
+          className="font-lockscreen"
           style={{
             padding: "10px 14px 8px",
-            // Font: font-hubot = Hubot Sans Variable (wdth:75, weight:800)
-            fontSize: "clamp(32px, 5.5vw, 78px)", // ← current size
+            // Font: font-lockscreen = 78wPss3wDcm038Pbi4wdFX6Utkk.ttf
+            fontSize: "clamp(32px, 5.5vw, 78px)",
             lineHeight: 1,
             color: "var(--logo-color)",
-            letterSpacing: "-0.01em",             // ← tightened to match lock screen style
+            letterSpacing: "-0.01em",
             borderBottom: BORDER,
             borderRight: i < 2 ? BORDER : undefined,
             borderLeft: i === 0 ? BORDER : undefined,
@@ -259,8 +258,8 @@ export default function ProductionChain() {
           style={{
             position: "absolute",
             left: 28,
-            top: "10%",
-            bottom: "10%",
+            top: 0,
+            bottom: 0,
             zIndex: 20,
           }}
         >
@@ -359,8 +358,8 @@ export default function ProductionChain() {
           <h2
             className="font-mono-frag"
             style={{
-              fontSize: "clamp(13px, 1.3vw, 18px)",  // ← current size
-              lineHeight: 1.3,
+              fontSize: 24,
+              lineHeight: 1.2,
               color: "var(--logo-color)",
               letterSpacing: "0.06em",
               whiteSpace: "pre-line",
@@ -373,8 +372,8 @@ export default function ProductionChain() {
           <p
             className="font-mono-frag"
             style={{
-              fontSize: 11,                          // ← current size
-              lineHeight: 1.75,
+              fontSize: 15,
+              lineHeight: 1.5,
               color: "var(--text)",
               marginTop: 12,
               minHeight: "5.25em",
@@ -407,7 +406,7 @@ export default function ProductionChain() {
               width: "100%",
               height: "100%",
               objectFit: "cover",
-              filter: "grayscale(100%) contrast(1.4) brightness(0.9)",
+              filter: "none",
               display: "block",
             }}
             src="/videos/MPC_STAMP EFFECTT.mp4"
