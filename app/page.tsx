@@ -27,7 +27,7 @@ export default function Home() {
         </div>
         <div
           className="relative w-full flex items-center"
-          style={{ borderTop: "0.5px solid var(--text)", gap: 12, paddingRight: 24 }}
+          style={{ borderTop: "0.5px solid var(--text)", gap: 24, paddingRight: 24 }}
         >
           <LogoSwap />
           <ScrollDownText />

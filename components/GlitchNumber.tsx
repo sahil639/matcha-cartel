@@ -62,7 +62,7 @@ export default function GlitchNumber({ label, glitch = false }: GlitchNumberProp
   return (
     <span
       className="font-mono-frag"
-      style={{ color: "var(--text)", fontSize: 10, letterSpacing: "0.04em" }}
+      style={{ color: "#000", fontSize: 10, letterSpacing: "0.04em" }}
     >
       {label.split("").map((char, i) => (
         <GlitchChar key={i} char={char} active={glitch} />

@@ -7,11 +7,11 @@ import GlitchNumber from "./GlitchNumber";
 const GLITCH_NUMS = new Set(["01", "07", "10", "14"]);
 
 const LOT_CODES = [
-  "LOT\u201302\u2013KY",  "LOT\u201389\u2013UJI", "LOT\u201313\u2013NR",
-  "LOT\u201377\u2013KY",  "LOT\u201356\u2013UJI", "LOT\u201331\u2013NR",
-  "LOT\u201394\u2013UJI", "LOT\u201367\u2013KY",  "LOT\u201328\u2013NR",
-  "LOT\u201383\u2013UJI", "LOT\u201319\u2013KY",  "LOT\u201362\u2013NR",
-  "LOT\u201347\u2013UJI", "LOT\u201388\u2013KY",  "LOT\u201335\u2013NR",
+  "LOT\u201302\u2013KY", "LOT\u201389\u2013UJI", "LOT\u201313\u2013NR",
+  "LOT\u201377\u2013KY", "LOT\u201356\u2013UJI", "LOT\u201331\u2013NR",
+  "LOT\u201394\u2013UJI", "LOT\u201367\u2013KY", "LOT\u201328\u2013NR",
+  "LOT\u201383\u2013UJI", "LOT\u201319\u2013KY", "LOT\u201362\u2013NR",
+  "LOT\u201347\u2013UJI", "LOT\u201388\u2013KY", "LOT\u201335\u2013NR",
 ];
 
 const IMAGES = Array.from({ length: 15 }, (_, i) => {
@@ -23,10 +23,10 @@ const BORDER = "0.5px solid rgba(100,120,130,0.3)";
 const HUD_BORDER = "1px solid rgba(100,120,130,0.75)";
 
 const CORNERS: { pos: React.CSSProperties; border: React.CSSProperties }[] = [
-  { pos: { top: -6, left: -6 },    border: { borderTop: HUD_BORDER, borderLeft: HUD_BORDER } },
-  { pos: { top: -6, right: -6 },   border: { borderTop: HUD_BORDER, borderRight: HUD_BORDER } },
+  { pos: { top: -6, left: -6 }, border: { borderTop: HUD_BORDER, borderLeft: HUD_BORDER } },
+  { pos: { top: -6, right: -6 }, border: { borderTop: HUD_BORDER, borderRight: HUD_BORDER } },
   { pos: { bottom: -6, left: -6 }, border: { borderBottom: HUD_BORDER, borderLeft: HUD_BORDER } },
-  { pos: { bottom: -6, right: -6 },border: { borderBottom: HUD_BORDER, borderRight: HUD_BORDER } },
+  { pos: { bottom: -6, right: -6 }, border: { borderBottom: HUD_BORDER, borderRight: HUD_BORDER } },
 ];
 
 function ImageCell({
@@ -66,10 +66,10 @@ function ImageCell({
         <div
           style={{
             position: "relative",
-            height: "40%",
+            height: hovered ? "56%" : "40%",   // 40% × 1.4 = 56% on hover
             aspectRatio: hovered ? "4 / 3" : "1 / 1",
-            transition: "aspect-ratio 0.35s ease",
-            overflow: "hidden",         // clips to rectangle on hover
+            transition: "height 0.35s ease, aspect-ratio 0.35s ease",
+            overflow: "hidden",
           }}
         >
           {/* Image — fills wrapper, no scale transform */}
@@ -183,7 +183,7 @@ export default function HeroGrid() {
           className="font-lockscreen uppercase"
           style={{
             position: "absolute", top: 0, left: 0,
-            fontSize: 10, lineHeight: 1.4, letterSpacing: "0.08em",
+            fontSize: 18, lineHeight: 1, letterSpacing: ".4px",
             color: "var(--text)",
           }}
         >
@@ -211,7 +211,7 @@ export default function HeroGrid() {
           className="font-lockscreen uppercase"
           style={{
             position: "absolute", bottom: 0, left: 0,
-            fontSize: 10, lineHeight: 1.4, letterSpacing: "0.08em",
+            fontSize: 18, lineHeight: 1, letterSpacing: ".4px",
             color: "var(--text)",
           }}
         >
@@ -248,7 +248,7 @@ function CrossMarkers({ rows, cols }: { rows: number; cols: number }) {
             style={{
               padding: "4px 5px",
               lineHeight: 1,
-              color: "rgba(30,40,50,0.6)",
+              color: "#000",
               fontSize: 11,
               fontFamily: "sans-serif",
               fontWeight: 300,
