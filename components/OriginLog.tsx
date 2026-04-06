@@ -92,10 +92,10 @@ const CARDS: CardData[] = [
     figLabel: "DRIED\nTEA LEAF",
     bg: "#3c4a1a",
     color: "#a8c050",
-    width: 380,
-    height: 560,
-    initialX: 310,
-    initialY: 70,
+    width: 640,
+    height: 380,
+    initialX: 180,
+    initialY: 140,
     rotation: 0,
     initialZ: 5,
     horizontalImage: "/images/matcha-dust-sketch.png",
@@ -107,102 +107,204 @@ const CARDS: CardData[] = [
 function CardContent({ card }: { card: CardData }) {
   const mono = "font-mono-frag";
 
-  // ── Card 01: horizontal layout — text left, sketch image right ──
+  // ── Card 01: landscape layout matching reference design ──
   if (card.horizontalImage) {
     return (
       <div
         style={{
           width: "100%",
           height: "100%",
-          display: "flex",
-          flexDirection: "row",
+          position: "relative",
           overflow: "hidden",
           boxSizing: "border-box",
         }}
       >
-        {/* Left: text */}
+        {/* Sketch image — absolute, right side, overlay blend */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={card.horizontalImage}
+          alt=""
+          style={{
+            position: "absolute",
+            right: "-5%",
+            top: "5%",
+            width: "58%",
+            height: "88%",
+            objectFit: "contain",
+            objectPosition: "center",
+            mixBlendMode: "overlay",
+            display: "block",
+            zIndex: 1,
+          }}
+        />
+
+        {/* Texture overlay — highest z-index */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/firstcontacttex.avif"
+          alt=""
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            mixBlendMode: "overlay",
+            display: "block",
+            zIndex: 99,
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* Horizontal rule ~54px from top */}
         <div
           style={{
-            flex: "0 0 52%",
-            padding: "16px 12px 12px 16px",
-            display: "flex",
-            flexDirection: "column",
-            overflow: "hidden",
+            position: "absolute",
+            top: 54,
+            left: 12,
+            right: 0,
+            height: "0.5px",
+            backgroundColor: card.color,
+            opacity: 0.5,
+            zIndex: 2,
+          }}
+        />
+
+        {/* Vertical rule ~12px from left */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 12,
+            bottom: 0,
+            width: "0.5px",
+            backgroundColor: card.color,
+            opacity: 0.5,
+            zIndex: 2,
+          }}
+        />
+
+        {/* FIG. 01 — top right */}
+        <div
+          className={mono}
+          style={{
+            position: "absolute",
+            top: 10,
+            right: 14,
+            fontSize: 11,
+            /* letterSpacing: "0.08em", lineHeight: 1 */
+            letterSpacing: "0.08em",
+            lineHeight: 1,
+            color: card.color,
+            zIndex: 3,
           }}
         >
-          {/* Number */}
-          <div className={mono} style={{ fontSize: 13, color: card.color, marginBottom: 4 }}>
-            {card.id}.
-          </div>
+          {card.fig}
+        </div>
 
-          {/* Title — mono, not hubot */}
+        {/* Number + Title at intersection (top:54, left:24) */}
+        <div
+          style={{
+            position: "absolute",
+            top: 10,
+            left: 24,
+            zIndex: 3,
+          }}
+        >
           <div
             className={mono}
             style={{
-              fontSize: 18,
-              lineHeight: 1.1,
+              fontSize: 24,
+              /* letterSpacing: "0.02em", lineHeight: 1 */
+              letterSpacing: "0.02em",
+              lineHeight: 1,
               color: card.color,
-              marginBottom: 10,
-              letterSpacing: "0.01em",
+              marginBottom: 4,
+            }}
+          >
+            {card.id}.
+          </div>
+          <div
+            className={mono}
+            style={{
+              fontSize: 24,
+              /* letterSpacing: "0.02em", lineHeight: 1.05 */
+              letterSpacing: "0.02em",
+              lineHeight: 1.05,
+              color: card.color,
               textTransform: "uppercase",
+              textDecoration: "underline",
+              textUnderlineOffset: 4,
             }}
           >
             {card.title}
           </div>
+        </div>
 
-          {/* Rule */}
-          <div style={{ height: "0.5px", backgroundColor: card.color, opacity: 0.4, marginBottom: 10, flexShrink: 0 }} />
-
-          {/* Subtitle */}
+        {/* Left text block — subtitle + body, below horizontal rule */}
+        <div
+          style={{
+            position: "absolute",
+            top: 74,
+            left: 24,
+            width: "46%",
+            zIndex: 3,
+            display: "flex",
+            flexDirection: "column",
+            gap: 14,
+          }}
+        >
           {card.subtitle && (
-            <div className={mono} style={{ fontSize: 9, color: card.color, marginBottom: 14, lineHeight: 1.5 }}>
+            <div
+              className={mono}
+              style={{
+                fontSize: 11,
+                /* letterSpacing: "0.04em", lineHeight: 1.5 */
+                letterSpacing: "0.04em",
+                lineHeight: 1.5,
+                color: card.color,
+              }}
+            >
               {card.subtitle}
             </div>
           )}
 
-          {/* Body */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {card.body.map((line, i) => (
-              <p key={i} className={mono} style={{ fontSize: 9, lineHeight: 1.65, color: card.color }}>
-                {line}
-              </p>
-            ))}
-          </div>
-
-          {/* Fig label — bottom */}
-          <div style={{ marginTop: "auto", display: "flex", flexDirection: "column", gap: 2 }}>
-            <span className={mono} style={{ fontSize: 8, color: card.color, opacity: 0.7 }}>
-              {card.fig}
-            </span>
-            <span className={mono} style={{ fontSize: 8, color: card.color, opacity: 0.7, whiteSpace: "pre-line" }}>
-              {card.figLabel}
-            </span>
-          </div>
+          {card.body.map((line, i) => (
+            <p
+              key={i}
+              className={mono}
+              style={{
+                fontSize: 11,
+                /* letterSpacing: "0.04em", lineHeight: 1.65 */
+                letterSpacing: "0.04em",
+                lineHeight: 1.65,
+                color: card.color,
+                margin: 0,
+              }}
+            >
+              {line}
+            </p>
+          ))}
         </div>
 
-        {/* Right: sketch image with overlay blend */}
+        {/* Fig label — bottom right */}
         <div
+          className={mono}
           style={{
-            flex: "0 0 48%",
-            position: "relative",
-            overflow: "hidden",
+            position: "absolute",
+            bottom: 14,
+            right: 14,
+            fontSize: 11,
+            /* letterSpacing: "0.08em", lineHeight: 1.4 */
+            letterSpacing: "0.08em",
+            lineHeight: 1.4,
+            color: card.color,
+            textAlign: "right",
+            zIndex: 3,
+            whiteSpace: "pre-line",
           }}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={card.horizontalImage}
-            alt=""
-            style={{
-              position: "absolute",
-              inset: 0,
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              objectPosition: "center",
-              mixBlendMode: "overlay",
-              display: "block",
-            }}
-          />
+          {card.figLabel}
         </div>
       </div>
     );
