@@ -90,7 +90,7 @@ const CARDS: CardData[] = [
     ],
     fig: "FIG. 01",
     figLabel: "DRIED\nTEA LEAF",
-    bg: "#588309",
+    bg: "#588309",  // base color of card 01
     color: "#a8c050",
     width: 640,
     height: 380,
