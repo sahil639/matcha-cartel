@@ -213,10 +213,10 @@ function CardContent({ card }: { card: CardData }) {
           <div
             className={mono}
             style={{
-              fontSize: 24,
+              fontSize: 20,
               letterSpacing: "0.02em",
               lineHeight: 1.05,
-              color: card.color,
+              color: "#000",
               textTransform: "uppercase",
               marginBottom: 8,
             }}
@@ -252,7 +252,7 @@ function CardContent({ card }: { card: CardData }) {
             <div
               className={mono}
               style={{
-                fontSize: 16,
+                fontSize: 13,
                 letterSpacing: "0.04em",
                 lineHeight: 1.5,
                 color: "#000",
@@ -266,7 +266,7 @@ function CardContent({ card }: { card: CardData }) {
               key={i}
               className={mono}
               style={{
-                fontSize: 16,
+                fontSize: 13,
                 letterSpacing: "0.04em",
                 lineHeight: 1.65,
                 color: "#000",
