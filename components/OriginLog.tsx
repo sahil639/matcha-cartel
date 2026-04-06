@@ -403,7 +403,7 @@ export default function OriginLog() {
       {/* ── Left canvas ── */}
       <div
         style={{
-          flex: "0 0 78%",
+          flex: "0 0 82.4%",
           height: "100%",
           backgroundColor: "#000",
           position: "relative",
@@ -435,43 +435,54 @@ export default function OriginLog() {
           />
         ))}
 
-        {/* Bottom nav — green, no dividers */}
-        <div
-          style={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            display: "flex",
-            backgroundColor: "#000",
-            zIndex: 200,
-            borderTop: "0.5px solid rgba(255,255,255,0.06)",
-          }}
-        >
-          {CARDS.map((card) => (
+        {/* Bottom nav — green, no dividers, all 5 eras */}
+        {(() => {
+          const ALL_ERAS = [
+            { id: "01", era: "Tang-Song Dynasty" },
+            { id: "02", era: "12th Century" },
+            { id: "03", era: "Kamakura-Muromachi" },
+            { id: "04", era: "Zen & Tea Ceremony" },
+            { id: "05", era: "Early Modern Japan" },
+          ];
+          return (
             <div
-              key={card.id}
-              className="font-mono-frag"
               style={{
-                flex: 1,
-                padding: "10px 14px",
-                color: LIME,
-                fontSize: 10,
-                lineHeight: 1.5,
-                cursor: "default",
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                right: 0,
+                display: "flex",
+                backgroundColor: "#000",
+                zIndex: 200,
+                borderTop: "0.5px solid rgba(255,255,255,0.06)",
               }}
             >
-              <div>{card.id}.</div>
-              <div>{card.era}</div>
+              {ALL_ERAS.map((item) => (
+                <div
+                  key={item.id}
+                  className="font-mono-frag"
+                  style={{
+                    flex: 1,
+                    padding: "10px 14px",
+                    color: LIME,
+                    fontSize: 14,
+                    lineHeight: 1.5,
+                    cursor: "default",
+                  }}
+                >
+                  <div>{item.id}.</div>
+                  <div>{item.era}</div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          );
+        })()}
       </div>
 
       {/* ── Right panel — white bg, dark text ── */}
       <div
         style={{
-          flex: "0 0 22%",
+          flex: "0 0 17.6%",
           height: "100%",
           backgroundColor: "#ffffff",
           position: "relative",
@@ -501,9 +512,9 @@ export default function OriginLog() {
         <div>
           {/* "DOCUMENTED HISTORY OF THE GREEN POWDER" */}
           <div
-            className="font-hubot uppercase"
+            className="font-mono-frag uppercase"
             style={{
-              fontSize: "clamp(12px, 1.4vw, 20px)",
+              fontSize: 28,
               lineHeight: 1.25,
               color: "#111111",
               letterSpacing: "0.04em",
@@ -519,7 +530,7 @@ export default function OriginLog() {
           <p
             className="font-mono-frag"
             style={{
-              fontSize: 11,
+              fontSize: 14,
               lineHeight: 1.75,
               color: "#555555",
             }}
