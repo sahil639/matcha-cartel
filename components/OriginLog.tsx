@@ -90,7 +90,7 @@ const CARDS: CardData[] = [
     ],
     fig: "FIG. 01",
     figLabel: "DRIED\nTEA LEAF",
-    bg: "#588309",  // base color of card 01
+    bg: "#588309",
     color: "#a8c050",
     width: 640,
     height: 380,
@@ -119,7 +119,7 @@ function CardContent({ card }: { card: CardData }) {
           boxSizing: "border-box",
         }}
       >
-        {/* Sketch image — absolute, right side, overlay blend */}
+        {/* Sketch image — absolute, right side, multiply blend */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={card.horizontalImage}
@@ -132,7 +132,7 @@ function CardContent({ card }: { card: CardData }) {
             height: "88%",
             objectFit: "contain",
             objectPosition: "center",
-            mixBlendMode: "overlay",
+            mixBlendMode: "multiply",
             display: "block",
             zIndex: 1,
           }}
@@ -156,21 +156,7 @@ function CardContent({ card }: { card: CardData }) {
           }}
         />
 
-        {/* Horizontal rule ~54px from top */}
-        <div
-          style={{
-            position: "absolute",
-            top: 54,
-            left: 12,
-            right: 0,
-            height: "0.5px",
-            backgroundColor: card.color,
-            opacity: 0.5,
-            zIndex: 2,
-          }}
-        />
-
-        {/* Vertical rule ~12px from left */}
+        {/* Vertical rule — full height, 12px from left */}
         <div
           style={{
             position: "absolute",
@@ -181,6 +167,7 @@ function CardContent({ card }: { card: CardData }) {
             backgroundColor: card.color,
             opacity: 0.5,
             zIndex: 2,
+            pointerEvents: "none",
           }}
         />
 
@@ -192,7 +179,6 @@ function CardContent({ card }: { card: CardData }) {
             top: 10,
             right: 14,
             fontSize: 11,
-            /* letterSpacing: "0.08em", lineHeight: 1 */
             letterSpacing: "0.08em",
             lineHeight: 1,
             color: card.color,
@@ -202,20 +188,20 @@ function CardContent({ card }: { card: CardData }) {
           {card.fig}
         </div>
 
-        {/* Number + Title at intersection (top:54, left:24) */}
+        {/* Header block: number + title, then horizontal rule right after */}
         <div
           style={{
-            position: "absolute",
-            top: 10,
-            left: 24,
+            position: "relative",
             zIndex: 3,
+            paddingLeft: 24,
+            paddingTop: 10,
+            paddingRight: 14,
           }}
         >
           <div
             className={mono}
             style={{
               fontSize: 24,
-              /* letterSpacing: "0.02em", lineHeight: 1 */
               letterSpacing: "0.02em",
               lineHeight: 1,
               color: card.color,
@@ -228,27 +214,35 @@ function CardContent({ card }: { card: CardData }) {
             className={mono}
             style={{
               fontSize: 24,
-              /* letterSpacing: "0.02em", lineHeight: 1.05 */
               letterSpacing: "0.02em",
               lineHeight: 1.05,
               color: card.color,
               textTransform: "uppercase",
-              textDecoration: "underline",
-              textUnderlineOffset: 4,
+              marginBottom: 8,
             }}
           >
             {card.title}
           </div>
+          {/* Horizontal rule — exactly under title, spans full card width */}
+          <div
+            style={{
+              height: "0.5px",
+              backgroundColor: card.color,
+              opacity: 0.5,
+              marginLeft: -24,
+              marginRight: -14,
+            }}
+          />
         </div>
 
-        {/* Left text block — subtitle + body, below horizontal rule */}
+        {/* Left text block — subtitle + body, below rule */}
         <div
           style={{
-            position: "absolute",
-            top: 74,
-            left: 24,
-            width: "46%",
+            position: "relative",
             zIndex: 3,
+            paddingLeft: 24,
+            paddingTop: 14,
+            paddingRight: "55%",
             display: "flex",
             flexDirection: "column",
             gap: 14,
@@ -259,7 +253,6 @@ function CardContent({ card }: { card: CardData }) {
               className={mono}
               style={{
                 fontSize: 11,
-                /* letterSpacing: "0.04em", lineHeight: 1.5 */
                 letterSpacing: "0.04em",
                 lineHeight: 1.5,
                 color: card.color,
@@ -268,14 +261,12 @@ function CardContent({ card }: { card: CardData }) {
               {card.subtitle}
             </div>
           )}
-
           {card.body.map((line, i) => (
             <p
               key={i}
               className={mono}
               style={{
                 fontSize: 11,
-                /* letterSpacing: "0.04em", lineHeight: 1.65 */
                 letterSpacing: "0.04em",
                 lineHeight: 1.65,
                 color: card.color,
@@ -295,7 +286,6 @@ function CardContent({ card }: { card: CardData }) {
             bottom: 14,
             right: 14,
             fontSize: 11,
-            /* letterSpacing: "0.08em", lineHeight: 1.4 */
             letterSpacing: "0.08em",
             lineHeight: 1.4,
             color: card.color,
