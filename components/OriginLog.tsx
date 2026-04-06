@@ -92,7 +92,7 @@ const CARDS: CardData[] = [
     figLabel: "DRIED\nTEA LEAF",
     bg: "#588309",
     color: "#a8c050",
-    width: 640,
+    width: 520,
     height: 380,
     initialX: 180,
     initialY: 140,
@@ -126,10 +126,10 @@ function CardContent({ card }: { card: CardData }) {
           alt=""
           style={{
             position: "absolute",
-            right: "-5%",
-            top: "5%",
-            width: "58%",
-            height: "88%",
+            right: "-10%",
+            top: "-6%",
+            width: "70%",
+            height: "112%",
             objectFit: "contain",
             objectPosition: "center",
             mixBlendMode: "multiply",
@@ -164,8 +164,8 @@ function CardContent({ card }: { card: CardData }) {
             left: 12,
             bottom: 0,
             width: "0.5px",
-            backgroundColor: card.color,
-            opacity: 0.5,
+            backgroundColor: "#000",
+            opacity: 0.6,
             zIndex: 2,
             pointerEvents: "none",
           }}
@@ -181,7 +181,7 @@ function CardContent({ card }: { card: CardData }) {
             fontSize: 11,
             letterSpacing: "0.08em",
             lineHeight: 1,
-            color: card.color,
+            color: "#000",
             zIndex: 3,
           }}
         >
@@ -204,7 +204,7 @@ function CardContent({ card }: { card: CardData }) {
               fontSize: 24,
               letterSpacing: "0.02em",
               lineHeight: 1,
-              color: card.color,
+              color: "#000",
               marginBottom: 4,
             }}
           >
@@ -227,8 +227,8 @@ function CardContent({ card }: { card: CardData }) {
           <div
             style={{
               height: "0.5px",
-              backgroundColor: card.color,
-              opacity: 0.5,
+              backgroundColor: "#000",
+              opacity: 0.6,
               marginLeft: -24,
               marginRight: -14,
             }}
@@ -288,7 +288,7 @@ function CardContent({ card }: { card: CardData }) {
             fontSize: 11,
             letterSpacing: "0.08em",
             lineHeight: 1.4,
-            color: card.color,
+            color: "#000",
             textAlign: "right",
             zIndex: 3,
             whiteSpace: "pre-line",
