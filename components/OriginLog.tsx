@@ -149,7 +149,7 @@ function CardContent({ card }: { card: CardData }) {
             width: "100%",
             height: "100%",
             objectFit: "cover",
-            mixBlendMode: "overlay",
+            mixBlendMode: "multiply",
             display: "block",
             zIndex: 99,
             pointerEvents: "none",
