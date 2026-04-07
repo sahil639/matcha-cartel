@@ -77,6 +77,8 @@ interface CardData {
   horizontalImage?: string; // card 01: right-side image path
   card02Image?: string;     // card 02: bottom-left image path
   card02Texture?: string;   // card 02: texture overlay path
+  card03Image?: string;     // card 03: center image path
+  card03Texture?: string;   // card 03: texture overlay path
 }
 
 const CARDS: CardData[] = [
@@ -125,6 +127,28 @@ const CARDS: CardData[] = [
     initialZ: 3,
     card02Image: "/images/balls- sketch.png",
     card02Texture: "/images/CARD02_TEXTURE.avif",
+  },
+  {
+    id: "03",
+    era: "Kamakura-Muromachi",
+    title: "FORMALIZATION",
+    subtitle: "Kamakura-Muromachi Periods",
+    body: [
+      "Japan standardized powdered tea production.",
+      "Shade-growing, stone-grinding, and leaf selection were formalized.",
+    ],
+    fig: "FIG. 03",
+    figLabel: "STONE\nGRINDER",
+    bg: "#DBE3EA",           // base color — change here
+    color: "#000",
+    width: 420,              // width — change here
+    height: 480,             // height — change here (~1:1 ratio)
+    initialX: 260,
+    initialY: 60,
+    rotation: 0,
+    initialZ: 2,
+    card03Image: "/images/cheese-sketch.png",
+    card03Texture: "/images/CARD02_TEXTURE.avif",
   },
 ];
 
@@ -495,6 +519,195 @@ function CardContent({ card }: { card: CardData }) {
           }}
         >
           {card.fig}{"\n"}{card.figLabel}
+        </div>
+      </div>
+    );
+  }
+
+  // ── Card 03: portrait, center image, text right-shifted below image ──
+  if (card.card03Image) {
+    return (
+      <div
+        style={{
+          width: "100%",
+          height: "100%",
+          position: "relative",
+          overflow: "hidden",
+          boxSizing: "border-box",
+        }}
+      >
+        {/* Center image — multiply blend */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={card.card03Image}
+          alt=""
+          style={{
+            position: "absolute",
+            left: "50%",
+            top: "50%",
+            transform: "translate(-50%, -44%)",
+            width: "72%",
+            height: "60%",
+            objectFit: "contain",
+            mixBlendMode: "multiply",
+            display: "block",
+            zIndex: 1,
+          }}
+        />
+
+        {/* Texture overlay */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={card.card03Texture}
+          alt=""
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            mixBlendMode: "multiply",
+            display: "block",
+            zIndex: 99,
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* Vertical rule — 12px from left, full height */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0, left: 12, bottom: 0,
+            width: "0.5px",
+            backgroundColor: "#000",
+            opacity: 0.4,
+            zIndex: 2,
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* Header block: number + title on same line, then horizontal rule */}
+        <div
+          style={{
+            position: "relative",
+            zIndex: 3,
+            paddingLeft: 24,
+            paddingTop: 10,
+            paddingRight: 14,
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "baseline",
+              gap: 24,
+              marginBottom: 8,
+            }}
+          >
+            <div
+              className={mono}
+              style={{
+                fontSize: 24,           /* letterSpacing: "0.02em", lineHeight: 1 */
+                letterSpacing: "0.02em",
+                lineHeight: 1,
+                color: "#000",
+                flexShrink: 0,
+              }}
+            >
+              {card.id}.
+            </div>
+            <div
+              className={mono}
+              style={{
+                fontSize: 20,           /* letterSpacing: "0.02em", lineHeight: 1.05 */
+                letterSpacing: "0.02em",
+                lineHeight: 1.05,
+                color: "#000",
+                textTransform: "uppercase",
+              }}
+            >
+              {card.title}
+            </div>
+          </div>
+          {/* Horizontal rule — exactly under title */}
+          <div
+            style={{
+              height: "0.5px",
+              backgroundColor: "#000",
+              opacity: 0.4,
+              marginLeft: -24,
+              marginRight: -14,
+            }}
+          />
+        </div>
+
+        {/* Subtitle — right-shifted, just under headline */}
+        {card.subtitle && (
+          <div
+            className={mono}
+            style={{
+              position: "relative",
+              zIndex: 3,
+              paddingLeft: "30%",
+              paddingRight: 14,
+              paddingTop: 10,
+              fontSize: 13,             /* letterSpacing: "0.04em", lineHeight: 1.5 */
+              letterSpacing: "0.04em",
+              lineHeight: 1.5,
+              color: "#000",
+            }}
+          >
+            {card.subtitle}
+          </div>
+        )}
+
+        {/* Body text — right-shifted, below the image */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: 50,
+            left: "30%",
+            right: 14,
+            zIndex: 3,
+            display: "flex",
+            flexDirection: "column",
+            gap: 12,
+          }}
+        >
+          {card.body.map((line, i) => (
+            <p
+              key={i}
+              className={mono}
+              style={{
+                fontSize: 13,           /* letterSpacing: "0.04em", lineHeight: 1.65 */
+                letterSpacing: "0.04em",
+                lineHeight: 1.65,
+                color: "#000",
+                margin: 0,
+              }}
+            >
+              {line}
+            </p>
+          ))}
+        </div>
+
+        {/* FIG. 03 + STONE GRINDER — left side, vertically centered */}
+        <div
+          className={mono}
+          style={{
+            position: "absolute",
+            left: 24,
+            top: "50%",
+            transform: "translateY(-50%)",
+            fontSize: 11,               /* letterSpacing: "0.08em", lineHeight: 1.6 */
+            letterSpacing: "0.08em",
+            lineHeight: 1.6,
+            color: "#000",
+            zIndex: 3,
+            whiteSpace: "pre-line",
+          }}
+        >
+          {card.fig}{"\n\n"}{card.figLabel}
         </div>
       </div>
     );
