@@ -836,7 +836,26 @@ function CardContent({ card }: { card: CardData }) {
           />
         </div>
 
-        {/* Matcha whisk image — top center */}
+        {/* Matcha whisk image 1 — top center */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={card.card04Image}
+          alt=""
+          style={{
+            position: "absolute",
+            top: "12%",
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "50%",
+            height: "55%",
+            objectFit: "contain",
+            mixBlendMode: "multiply",
+            display: "block",
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* Matcha whisk image 2 — duplicate */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={card.card04Image}
