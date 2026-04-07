@@ -836,37 +836,6 @@ function CardContent({ card }: { card: CardData }) {
           />
         </div>
 
-        {/* Duplicated flipped images — centered in card body */}
-        <div
-          style={{
-            position: "absolute",
-            top: "14%",
-            left: "50%",
-            transform: "translateX(-50%)",
-            display: "flex",
-            alignItems: "center",
-            width: "80%",
-            height: "62%",
-          }}
-        >
-          {/* Image 1 — horizontally flipped */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={card.card04Image}
-            alt=""
-            style={{
-              width: "55%",
-              height: "100%",
-              objectFit: "contain",
-              objectPosition: "center",
-              mixBlendMode: "multiply",
-              display: "block",
-              flexShrink: 0,
-              transform: "scaleX(-1)",
-            }}
-          />
-        </div>
-
         {/* Bottom row: subtitle left, body text right */}
         <div
           style={{
