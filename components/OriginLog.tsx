@@ -873,7 +873,7 @@ function CardContent({ card }: { card: CardData }) {
             <div
               className={mono}
               style={{
-                fontSize: 11,
+                fontSize: 13,
                 letterSpacing: "0.04em",
                 lineHeight: 1.5,
                 color: "#000",
@@ -890,7 +890,7 @@ function CardContent({ card }: { card: CardData }) {
                   key={i}
                   className={mono}
                   style={{
-                    fontSize: 11,
+                    fontSize: 13,
                     letterSpacing: "0.04em",
                     lineHeight: 1.55,
                     color: "#000",
