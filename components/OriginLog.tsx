@@ -847,7 +847,6 @@ function CardContent({ card }: { card: CardData }) {
             alignItems: "center",
             width: "80%",
             height: "62%",
-            zIndex: 1,
           }}
         >
           {/* Image 1 — horizontally flipped */}
