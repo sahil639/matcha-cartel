@@ -1415,6 +1415,12 @@ export default function OriginLog() {
   );
   const [animateIn, setAnimateIn] = useState(false);
   const [navChars, setNavChars] = useState<number[]>(ALL_ERAS.map(() => 0));
+
+  // Right panel typewriter strings
+  const RIGHT_HEADING = "ORIGIN\nLOG:\nMATCHA";
+  const RIGHT_SUBHEADING = "DOCUMENTED\nHISTORY OF\nTHE GREEN\nPOWDER";
+  const RIGHT_DESC = "An overview of matcha's early development, including changes in production methods, use, and standardization.";
+  const [rightChars, setRightChars] = useState([0, 0, 0]);
   const hasAnimated = useRef(false);
   const sectionRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
@@ -1470,6 +1476,28 @@ export default function OriginLog() {
           if (count >= total) clearInterval(iv);
         }, 38);
       }, startDelay);
+      timers.push(t);
+    });
+    return () => timers.forEach(clearTimeout);
+  }, [animateIn]);
+
+  // Typewriter for right panel texts
+  useEffect(() => {
+    if (!animateIn) return;
+    const texts = [RIGHT_HEADING, RIGHT_SUBHEADING, RIGHT_DESC];
+    const speeds = [45, 35, 22];
+    const startDelays = [100, 900, 1800];
+    const timers: ReturnType<typeof setTimeout>[] = [];
+
+    texts.forEach((text, i) => {
+      let count = 0;
+      const t = setTimeout(() => {
+        const iv = setInterval(() => {
+          count++;
+          setRightChars(prev => { const next = [...prev]; next[i] = count; return next; });
+          if (count >= text.length) clearInterval(iv);
+        }, speeds[i]);
+      }, startDelays[i]);
       timers.push(t);
     });
     return () => timers.forEach(clearTimeout);
@@ -1572,51 +1600,34 @@ export default function OriginLog() {
           padding: "14px 16px 20px",
         }}
       >
-        {/* ORIGIN LOG: MATCHA — top */}
+        {/* ORIGIN LOG: MATCHA — top, typewriter */}
         <div
           className="font-lockscreen uppercase"
-          style={{
-            fontSize: "clamp(32px, 3.6vw, 58px)",
-            lineHeight: 1.0,
-            color: "#111111",
-            letterSpacing: "0.01em",
-          }}
+          style={{ fontSize: "clamp(32px, 3.6vw, 58px)", lineHeight: 1.0, color: "#111111", letterSpacing: "0.01em" }}
         >
-          ORIGIN<br />LOG:<br />MATCHA
+          {RIGHT_HEADING.slice(0, rightChars[0]).split("\n").map((line, i, arr) => (
+            <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+          ))}
         </div>
 
-        {/* Push bottom content to bottom */}
         <div style={{ flex: 1 }} />
 
-        {/* Bottom content block */}
         <div>
-          {/* "DOCUMENTED HISTORY OF THE GREEN POWDER" */}
+          {/* DOCUMENTED HISTORY… typewriter */}
           <div
             className="font-mono-frag uppercase"
-            style={{
-              fontSize: 28,
-              lineHeight: 1.25,
-              color: "#111111",
-              letterSpacing: "0.04em",
-            }}
+            style={{ fontSize: 28, lineHeight: 1.25, color: "#111111", letterSpacing: "0.04em" }}
           >
-            DOCUMENTED<br />HISTORY OF<br />THE GREEN<br />POWDER
+            {RIGHT_SUBHEADING.slice(0, rightChars[1]).split("\n").map((line, i, arr) => (
+              <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+            ))}
           </div>
 
-          {/* 42px gap */}
           <div style={{ height: 42 }} />
 
-          {/* Description */}
-          <p
-            className="font-mono-frag"
-            style={{
-              fontSize: 14,
-              lineHeight: 1.75,
-              color: "#555555",
-            }}
-          >
-            An overview of matcha&apos;s early development, including changes
-            in production methods, use, and standardization.
+          {/* Description typewriter */}
+          <p className="font-mono-frag" style={{ fontSize: 14, lineHeight: 1.75, color: "#555555" }}>
+            {RIGHT_DESC.slice(0, rightChars[2])}
           </p>
         </div>
       </div>
