@@ -81,6 +81,8 @@ interface CardData {
   card03Texture?: string;   // card 03: texture overlay path
   card04Image?: string;     // card 04: landscape, duplicated + mirrored image
   card04Texture?: string;   // card 04: texture overlay path
+  card05Image?: string;     // card 05: bottom area leaf image
+  card05Texture?: string;   // card 05: texture overlay path
 }
 
 const CARDS: CardData[] = [
@@ -174,6 +176,29 @@ const CARDS: CardData[] = [
     initialZ: 1,
     card04Image: "/images/matcha-bruhs.png",
     card04Texture: "/images/CARD02_TEXTURE.avif",
+  },
+  {
+    id: "05",
+    era: "Early Modern Japan",
+    title: "CONTROLLED\nCULTIVATION",
+    subtitle: "Early Modern\nJapan",
+    body: [
+      "Production consolidated into specific regions.",
+      "Uji established long-term quality standards.",
+      "Origin and grade became traceable.",
+    ],
+    fig: "FIG. 05",
+    figLabel: "FRESH TEA LEAF",
+    bg: "#8CCC00",
+    color: "#000",
+    width: 380,
+    height: 520,
+    initialX: 320,
+    initialY: 90,
+    rotation: 0,
+    initialZ: 5,
+    card05Image: "/images/matcha-leaves-sketch.png",
+    card05Texture: "/images/CARD02_TEXTURE.avif",
   },
 ];
 
@@ -955,6 +980,175 @@ function CardContent({ card }: { card: CardData }) {
           >
             {card.figLabel}
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Card 05: portrait, stacked heading, two-col text, leaf image ──
+  if (card.card05Image) {
+    return (
+      <div
+        style={{
+          width: "100%",
+          height: "100%",
+          position: "relative",
+          overflow: "hidden",
+          boxSizing: "border-box",
+        }}
+      >
+        {/* Texture overlay */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={card.card05Texture}
+          alt=""
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            mixBlendMode: "multiply",
+            display: "block",
+            zIndex: 99,
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* Vertical rule — 12px from left, full height */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0, left: 12, bottom: 0,
+            width: "0.5px",
+            backgroundColor: "#000",
+            opacity: 0.5,
+            zIndex: 2,
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* Header: 05. / CONTROLLED / CULTIVATION stacked, then horizontal rule */}
+        <div
+          style={{
+            position: "relative",
+            zIndex: 3,
+            paddingLeft: 24,
+            paddingTop: 10,
+            paddingRight: 14,
+          }}
+        >
+          <div
+            className={mono}
+            style={{
+              fontSize: 36,
+              letterSpacing: "0.01em",
+              lineHeight: 1.05,
+              color: "#000",
+              textTransform: "uppercase",
+              whiteSpace: "pre-line",
+              marginBottom: 8,
+            }}
+          >
+            {card.id}.{"\n"}{card.title}
+          </div>
+          {/* Horizontal rule */}
+          <div
+            style={{
+              height: "0.5px",
+              backgroundColor: "#000",
+              opacity: 0.5,
+              marginLeft: -24,
+              marginRight: -14,
+            }}
+          />
+        </div>
+
+        {/* Two-column text block */}
+        <div
+          style={{
+            position: "relative",
+            zIndex: 3,
+            paddingLeft: 24,
+            paddingRight: 14,
+            paddingTop: 14,
+            display: "flex",
+            gap: 20,
+          }}
+        >
+          {/* Left — subtitle */}
+          <div
+            className={mono}
+            style={{
+              fontSize: 13,
+              letterSpacing: "0.04em",
+              lineHeight: 1.5,
+              color: "#000",
+              flexShrink: 0,
+              width: "35%",
+              whiteSpace: "pre-line",
+            }}
+          >
+            {card.subtitle}
+          </div>
+          {/* Right — body paragraphs */}
+          <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 14 }}>
+            {card.body.map((line, i) => (
+              <p
+                key={i}
+                className={mono}
+                style={{
+                  fontSize: 13,
+                  letterSpacing: "0.04em",
+                  lineHeight: 1.55,
+                  color: "#000",
+                  margin: 0,
+                }}
+              >
+                {line}
+              </p>
+            ))}
+          </div>
+        </div>
+
+        {/* Leaf image — absolute, lower portion of card */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={card.card05Image}
+          alt=""
+          style={{
+            position: "absolute",
+            bottom: "8%",
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "90%",
+            height: "50%",
+            objectFit: "contain",
+            mixBlendMode: "multiply",
+            display: "block",
+            zIndex: 1,
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* FIG. 05 left, FRESH TEA LEAF right — bottom */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: 12,
+            left: 24,
+            right: 14,
+            display: "flex",
+            justifyContent: "space-between",
+            zIndex: 3,
+          }}
+        >
+          <span className={mono} style={{ fontSize: 11, letterSpacing: "0.08em", color: "#000" }}>
+            {card.fig}
+          </span>
+          <span className={mono} style={{ fontSize: 11, letterSpacing: "0.08em", color: "#000" }}>
+            {card.figLabel}
+          </span>
         </div>
       </div>
     );
