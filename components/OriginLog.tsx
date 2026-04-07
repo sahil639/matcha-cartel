@@ -1297,7 +1297,7 @@ function DraggableCard({
 
     const tid = setTimeout(() => {
       let vx = 0, vy = 0, vrot = 0;
-      const K = 0.055, D = 0.80;
+      const K = 0.025, D = 0.82;
 
       function spring() {
         vx += (targetX - posRef.current.x) * K; vx *= D;
