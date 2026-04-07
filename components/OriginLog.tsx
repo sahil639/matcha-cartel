@@ -866,23 +866,6 @@ function CardContent({ card }: { card: CardData }) {
               transform: "scaleX(-1)",
             }}
           />
-          {/* Image 2 — duplicate of the flipped image, overlapping by 24px */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={card.card04Image}
-            alt=""
-            style={{
-              width: "55%",
-              height: "100%",
-              objectFit: "contain",
-              objectPosition: "center",
-              mixBlendMode: "multiply",
-              display: "block",
-              flexShrink: 0,
-              transform: "scaleX(-1)",
-              marginLeft: -24,
-            }}
-          />
         </div>
 
         {/* Bottom row: subtitle left, body text right */}
