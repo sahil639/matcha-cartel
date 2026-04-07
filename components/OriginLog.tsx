@@ -117,7 +117,7 @@ const CARDS: CardData[] = [
     figLabel: "MATCHA\nTEA SEEDS",
     bg: "#8CCC00",           // base color — change here
     color: "#000",
-    width: 620,              // width — change here
+    width: 310,              // width — change here
     height: 480,
     initialX: 160,
     initialY: 80,
