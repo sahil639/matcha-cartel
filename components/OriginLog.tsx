@@ -75,9 +75,12 @@ interface CardData {
   initialZ: number;
   landscape?: boolean;
   horizontalImage?: string; // card 01: right-side image path
+  card02Image?: string;     // card 02: bottom-left image path
+  card02Texture?: string;   // card 02: texture overlay path
 }
 
 const CARDS: CardData[] = [
+  /* card 01 — hidden during other card design, uncomment when done
   {
     id: "01",
     era: "Tang-Song Dynasty",
@@ -99,6 +102,29 @@ const CARDS: CardData[] = [
     rotation: 0,
     initialZ: 5,
     horizontalImage: "/images/matcha-dust-sketch.png",
+  },
+  */
+  {
+    id: "02",
+    era: "12th Century",
+    title: "METHOD TRANSFER",
+    subtitle: "12th Century",
+    body: [
+      "Zen monks returned to Japan with tea seeds and preparation methods.",
+      "Knowledge transfer occurred through monastic exchange. Cultivation began under regulated conditions.",
+    ],
+    fig: "FIG. 02",
+    figLabel: "MATCHA\nTEA SEEDS",
+    bg: "#8CCC00",           // base color — change here
+    color: "#000",
+    width: 620,              // width — change here
+    height: 480,
+    initialX: 160,
+    initialY: 80,
+    rotation: 0,
+    initialZ: 3,
+    card02Image: "/images/balls- sketch.png",
+    card02Texture: "/images/CARD02_TEXTURE.avif",
   },
 ];
 
@@ -126,9 +152,9 @@ function CardContent({ card }: { card: CardData }) {
           alt=""
           style={{
             position: "absolute",
-            right: "-10%",
+            right: "-19%",
             top: "-6%",
-            width: "70%",
+            width: "112%",
             height: "112%",
             objectFit: "contain",
             objectPosition: "center",
@@ -300,6 +326,180 @@ function CardContent({ card }: { card: CardData }) {
     );
   }
 
+  // ── Card 02: portrait, image bottom-left, text right-shifted ──
+  if (card.card02Image) {
+    return (
+      <div
+        style={{
+          width: "100%",
+          height: "100%",
+          position: "relative",
+          overflow: "hidden",
+          boxSizing: "border-box",
+        }}
+      >
+        {/* Bottom-left image — offset down slightly, multiply blend */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={card.card02Image}
+          alt=""
+          style={{
+            position: "absolute",
+            left: "-8%",
+            bottom: "-10%",       // slight y-axis offset downward
+            width: "75%",
+            height: "60%",
+            objectFit: "contain",
+            objectPosition: "left bottom",
+            mixBlendMode: "multiply",
+            display: "block",
+            zIndex: 1,
+          }}
+        />
+
+        {/* Texture overlay */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={card.card02Texture}
+          alt=""
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            mixBlendMode: "multiply",
+            display: "block",
+            zIndex: 99,
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* Vertical rule — 12px from left, full height */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0, left: 12, bottom: 0,
+            width: "0.5px",
+            backgroundColor: "#000",
+            opacity: 0.5,
+            zIndex: 2,
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* Header block: number + title, then horizontal rule */}
+        <div
+          style={{
+            position: "relative",
+            zIndex: 3,
+            paddingLeft: 24,
+            paddingTop: 10,
+            paddingRight: 14,
+          }}
+        >
+          <div
+            className={mono}
+            style={{
+              fontSize: 24,         /* letterSpacing: "0.02em", lineHeight: 1 */
+              letterSpacing: "0.02em",
+              lineHeight: 1,
+              color: "#000",
+              marginBottom: 4,
+            }}
+          >
+            {card.id}.
+          </div>
+          <div
+            className={mono}
+            style={{
+              fontSize: 20,         /* letterSpacing: "0.02em", lineHeight: 1.05 */
+              letterSpacing: "0.02em",
+              lineHeight: 1.05,
+              color: "#000",
+              textTransform: "uppercase",
+              marginBottom: 8,
+            }}
+          >
+            {card.title}
+          </div>
+          {/* Horizontal rule — exactly under title */}
+          <div
+            style={{
+              height: "0.5px",
+              backgroundColor: "#000",
+              opacity: 0.5,
+              marginLeft: -24,
+              marginRight: -14,
+            }}
+          />
+        </div>
+
+        {/* Text block — shifted right */}
+        <div
+          style={{
+            position: "relative",
+            zIndex: 3,
+            paddingLeft: "28%",     // shifted right relative to card
+            paddingRight: 18,
+            paddingTop: 18,
+            display: "flex",
+            flexDirection: "column",
+            gap: 16,
+          }}
+        >
+          {card.subtitle && (
+            <div
+              className={mono}
+              style={{
+                fontSize: 13,       /* letterSpacing: "0.04em", lineHeight: 1.5 */
+                letterSpacing: "0.04em",
+                lineHeight: 1.5,
+                color: "#000",
+              }}
+            >
+              {card.subtitle}
+            </div>
+          )}
+          {card.body.map((line, i) => (
+            <p
+              key={i}
+              className={mono}
+              style={{
+                fontSize: 13,       /* letterSpacing: "0.04em", lineHeight: 1.65 */
+                letterSpacing: "0.04em",
+                lineHeight: 1.65,
+                color: "#000",
+                margin: 0,
+              }}
+            >
+              {line}
+            </p>
+          ))}
+        </div>
+
+        {/* FIG. 02 + label — bottom right */}
+        <div
+          className={mono}
+          style={{
+            position: "absolute",
+            bottom: 14,
+            right: 14,
+            fontSize: 11,           /* letterSpacing: "0.08em", lineHeight: 1.4 */
+            letterSpacing: "0.08em",
+            lineHeight: 1.4,
+            color: "#000",
+            textAlign: "right",
+            zIndex: 3,
+            whiteSpace: "pre-line",
+          }}
+        >
+          {card.fig}{"\n"}{card.figLabel}
+        </div>
+      </div>
+    );
+  }
+
   // ── Landscape card (card 04) ──
   if (card.landscape) {
     return (
@@ -387,11 +587,11 @@ function CardContent({ card }: { card: CardData }) {
 
 function DraggableCard({ card, zIndex, onFocus }: { card: CardData; zIndex: number; onFocus: () => void }) {
   const cardRef = useRef<HTMLDivElement>(null);
-  const posRef  = useRef({ x: card.initialX, y: card.initialY });
-  const velRef  = useRef({ x: 0, y: 0 });
+  const posRef = useRef({ x: card.initialX, y: card.initialY });
+  const velRef = useRef({ x: 0, y: 0 });
   const dragging = useRef(false);
-  const lastPtr  = useRef({ x: 0, y: 0, t: 0 });
-  const rafRef   = useRef<number | null>(null);
+  const lastPtr = useRef({ x: 0, y: 0, t: 0 });
+  const rafRef = useRef<number | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
   const applyTransform = useCallback(() => {
@@ -540,7 +740,7 @@ export default function OriginLog() {
             <div
               style={{
                 position: "absolute",
-                bottom: 0,
+                bottom: 16,
                 left: 0,
                 right: 0,
                 display: "flex",
