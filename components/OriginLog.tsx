@@ -843,10 +843,11 @@ function CardContent({ card }: { card: CardData }) {
           alt=""
           style={{
             position: "absolute",
-            top: "12%",
-            left: 0,
-            width: "50%",
-            height: "55%",
+            top: "39%",
+            left: -48,
+            width: "70%",
+            height: "70%",
+            rotate: "8deg",
             objectFit: "contain",
             mixBlendMode: "multiply",
             display: "block",
@@ -862,10 +863,10 @@ function CardContent({ card }: { card: CardData }) {
           alt=""
           style={{
             position: "absolute",
-            top: "12%",
-            right: 0,
-            width: "50%",
-            height: "55%",
+            top: "39%",
+            right: -48,
+            width: "70%",
+            height: "70%",
             objectFit: "contain",
             mixBlendMode: "multiply",
             display: "block",
