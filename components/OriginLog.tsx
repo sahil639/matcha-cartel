@@ -86,7 +86,6 @@ interface CardData {
 }
 
 const CARDS: CardData[] = [
-  /* card 01 — hidden during other card design, uncomment when done
   {
     id: "01",
     era: "Tang-Song Dynasty",
@@ -109,7 +108,6 @@ const CARDS: CardData[] = [
     initialZ: 5,
     horizontalImage: "/images/matcha-dust-sketch.png",
   },
-  */
   {
     id: "02",
     era: "12th Century",
@@ -1134,10 +1132,10 @@ function CardContent({ card }: { card: CardData }) {
           alt=""
           style={{
             position: "absolute",
-            bottom: "8%",
+            bottom: "0%",
             left: "50%",
             transform: "translateX(-50%)",
-            width: "90%",
+            width: "120%",
             height: "50%",
             objectFit: "contain",
             mixBlendMode: "multiply",
