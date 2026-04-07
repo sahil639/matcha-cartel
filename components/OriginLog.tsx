@@ -1267,7 +1267,7 @@ function DraggableCard({
   const cardRef = useRef<HTMLDivElement>(null);
   // Start off-screen left, rotation 10deg
   const posRef = useRef({ x: -(card.width + 200), y: targetY });
-  const rotRef = useRef(10);
+  const rotRef = useRef(24);
   const velRef = useRef({ x: 0, y: 0 });
   const entryDone = useRef(false);
   const dragging = useRef(false);
@@ -1292,7 +1292,7 @@ function DraggableCard({
   useEffect(() => {
     if (!animateIn) return;
     posRef.current = { x: -(card.width + 200), y: targetY };
-    rotRef.current = 10;
+    rotRef.current = 24;
     applyTransform();
 
     const tid = setTimeout(() => {
