@@ -141,8 +141,8 @@ const CARDS: CardData[] = [
     figLabel: "STONE\nGRINDER",
     bg: "#DBE3EA",           // base color — change here
     color: "#000",
-    width: 370,              // width — change here
-    height: 422,             // height — change here (~1:1 ratio)
+    width: 390,              // width — change here
+    height: 422,        // height — change here (~1:1 ratio)
     initialX: 260,
     initialY: 60,
     rotation: 0,
@@ -531,7 +531,7 @@ function CardContent({ card }: { card: CardData }) {
         style={{
           width: "100%",
           height: "100%",
-          position: "relative",
+          position: "absolute",
           overflow: "hidden",
           boxSizing: "border-box",
         }}
@@ -544,10 +544,10 @@ function CardContent({ card }: { card: CardData }) {
           style={{
             position: "absolute",
             left: "50%",
-            top: "50%",
+            top: "38%",
             transform: "translate(-50%, -44%)",
-            width: "72%",
-            height: "60%",
+            width: "55%",
+            height: "55%",
             objectFit: "contain",
             mixBlendMode: "multiply",
             display: "block",
@@ -665,7 +665,7 @@ function CardContent({ card }: { card: CardData }) {
         <div
           style={{
             position: "absolute",
-            bottom: 50,
+            bottom: 15,
             left: "30%",
             right: 14,
             zIndex: 3,
