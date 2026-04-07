@@ -836,7 +836,7 @@ function CardContent({ card }: { card: CardData }) {
           />
         </div>
 
-        {/* Matcha whisk image 1 — top center */}
+        {/* Matcha whisk image 2 — flipped, left side */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={card.card04Image}
@@ -844,18 +844,18 @@ function CardContent({ card }: { card: CardData }) {
           style={{
             position: "absolute",
             top: "12%",
-            left: "50%",
-            transform: "translateX(-50%)",
+            left: 0,
             width: "50%",
             height: "55%",
             objectFit: "contain",
             mixBlendMode: "multiply",
             display: "block",
             pointerEvents: "none",
+            transform: "scaleX(-1)",
           }}
         />
 
-        {/* Matcha whisk image 2 — duplicate, flipped horizontally */}
+        {/* Matcha whisk image 1 — original, right side */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={card.card04Image}
@@ -863,8 +863,7 @@ function CardContent({ card }: { card: CardData }) {
           style={{
             position: "absolute",
             top: "12%",
-            left: "50%",
-            transform: "translateX(-50%) scaleX(-1)",
+            right: 0,
             width: "50%",
             height: "55%",
             objectFit: "contain",
