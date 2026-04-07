@@ -834,6 +834,49 @@ function CardContent({ card }: { card: CardData }) {
               marginRight: -14,
             }}
           />
+
+          {/* Subtitle + body text — under headline */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "flex-start",
+              gap: 16,
+              paddingTop: 10,
+            }}
+          >
+            {/* Subtitle — left */}
+            <div
+              className={mono}
+              style={{
+                fontSize: 11,
+                letterSpacing: "0.04em",
+                lineHeight: 1.5,
+                color: "#000",
+                flexShrink: 0,
+                width: "28%",
+              }}
+            >
+              {card.subtitle}
+            </div>
+            {/* Body text — right */}
+            <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 8 }}>
+              {card.body.map((line, i) => (
+                <p
+                  key={i}
+                  className={mono}
+                  style={{
+                    fontSize: 11,
+                    letterSpacing: "0.04em",
+                    lineHeight: 1.55,
+                    color: "#000",
+                    margin: 0,
+                  }}
+                >
+                  {line}
+                </p>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Matcha whisk image 2 — flipped, left side */}
@@ -874,77 +917,44 @@ function CardContent({ card }: { card: CardData }) {
           }}
         />
 
-        {/* Bottom row: subtitle left, body text right */}
+        {/* FIG. 04 — bottom left, CHASEN (MATCHA WHISK) — bottom center */}
         <div
-          style={{
-            position: "absolute",
-            bottom: 30,
-            left: 24,
-            right: 14,
-            zIndex: 3,
-            display: "flex",
-            alignItems: "flex-start",
-            gap: 16,
-          }}
-        >
-          {/* Subtitle — left */}
-          <div
-            className={mono}
-            style={{
-              fontSize: 11,
-              letterSpacing: "0.04em",
-              lineHeight: 1.5,
-              color: "#000",
-              flexShrink: 0,
-              width: "28%",
-            }}
-          >
-            {card.subtitle}
-          </div>
-          {/* Body text — right-shifted */}
-          <div
-            style={{
-              flex: 1,
-              display: "flex",
-              flexDirection: "column",
-              gap: 8,
-            }}
-          >
-            {card.body.map((line, i) => (
-              <p
-                key={i}
-                className={mono}
-                style={{
-                  fontSize: 11,
-                  letterSpacing: "0.04em",
-                  lineHeight: 1.55,
-                  color: "#000",
-                  margin: 0,
-                }}
-              >
-                {line}
-              </p>
-            ))}
-          </div>
-        </div>
-
-        {/* FIG. 04 + CHASEN (MATCHA WHISK) — centered at the very bottom */}
-        <div
-          className={mono}
           style={{
             position: "absolute",
             bottom: 10,
             left: 0,
             right: 0,
-            textAlign: "center",
-            fontSize: 11,
-            letterSpacing: "0.08em",
-            lineHeight: 1.4,
-            color: "#000",
+            display: "flex",
+            alignItems: "center",
+            paddingLeft: 24,
             zIndex: 3,
           }}
         >
-          {card.fig} {card.figLabel}
+          <div
+            className={mono}
+            style={{
+              fontSize: 11,
+              letterSpacing: "0.08em",
+              color: "#000",
+            }}
+          >
+            {card.fig}
+          </div>
+          <div
+            className={mono}
+            style={{
+              position: "absolute",
+              left: 0,
+              right: 0,
+              textAlign: "center",
+              fontSize: 11,
+              letterSpacing: "0.08em",
+              color: "#000",
+              pointerEvents: "none",
+            }}
+          >
+            {card.figLabel}
+          </div>
         </div>
       </div>
     );
