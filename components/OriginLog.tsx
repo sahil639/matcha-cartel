@@ -836,7 +836,7 @@ function CardContent({ card }: { card: CardData }) {
           />
         </div>
 
-        {/* Duplicated + mirrored images — centered in card body */}
+        {/* Duplicated flipped images — centered in card body */}
         <div
           style={{
             position: "absolute",
@@ -850,7 +850,7 @@ function CardContent({ card }: { card: CardData }) {
             zIndex: 1,
           }}
         >
-          {/* Original image */}
+          {/* Image 1 — horizontally flipped */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={card.card04Image}
@@ -859,27 +859,28 @@ function CardContent({ card }: { card: CardData }) {
               width: "55%",
               height: "100%",
               objectFit: "contain",
-              objectPosition: "right center",
-              mixBlendMode: "multiply",
-              display: "block",
-              flexShrink: 0,
-            }}
-          />
-          {/* Mirrored image — overlaps by ~10% */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={card.card04Image}
-            alt=""
-            style={{
-              width: "55%",
-              height: "100%",
-              objectFit: "contain",
-              objectPosition: "left center",
+              objectPosition: "center",
               mixBlendMode: "multiply",
               display: "block",
               flexShrink: 0,
               transform: "scaleX(-1)",
-              marginLeft: "-10%",
+            }}
+          />
+          {/* Image 2 — duplicate of the flipped image, overlapping by 24px */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={card.card04Image}
+            alt=""
+            style={{
+              width: "55%",
+              height: "100%",
+              objectFit: "contain",
+              objectPosition: "center",
+              mixBlendMode: "multiply",
+              display: "block",
+              flexShrink: 0,
+              transform: "scaleX(-1)",
+              marginLeft: -24,
             }}
           />
         </div>
