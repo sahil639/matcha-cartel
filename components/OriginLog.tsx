@@ -1040,17 +1040,33 @@ function CardContent({ card }: { card: CardData }) {
         >
           <div
             className={mono}
-            style={{
-              fontSize: 36,
-              letterSpacing: "0.01em",
-              lineHeight: 1.05,
-              color: "#000",
-              textTransform: "uppercase",
-              whiteSpace: "pre-line",
-              marginBottom: 8,
-            }}
+            style={{ marginBottom: 8 }}
           >
-            {card.id}.{"\n"}{card.title}
+            <div
+              className={mono}
+              style={{
+                fontSize: 24,
+                letterSpacing: "0.02em",
+                lineHeight: 1,
+                color: "#000",
+                marginBottom: 4,
+              }}
+            >
+              {card.id}.
+            </div>
+            <div
+              className={mono}
+              style={{
+                fontSize: 20,
+                letterSpacing: "0.02em",
+                lineHeight: 1.05,
+                color: "#000",
+                textTransform: "uppercase",
+                whiteSpace: "pre-line",
+              }}
+            >
+              {card.title}
+            </div>
           </div>
           {/* Horizontal rule */}
           <div
