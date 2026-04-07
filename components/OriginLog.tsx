@@ -79,6 +79,8 @@ interface CardData {
   card02Texture?: string;   // card 02: texture overlay path
   card03Image?: string;     // card 03: center image path
   card03Texture?: string;   // card 03: texture overlay path
+  card04Image?: string;     // card 04: landscape, duplicated + mirrored image
+  card04Texture?: string;   // card 04: texture overlay path
 }
 
 const CARDS: CardData[] = [
@@ -149,6 +151,29 @@ const CARDS: CardData[] = [
     initialZ: 2,
     card03Image: "/images/cheese-sketch.png",
     card03Texture: "/images/CARD02_TEXTURE.avif",
+  },
+  {
+    id: "04",
+    era: "Zen & Tea Ceremony",
+    title: "RITUALIZED USE",
+    subtitle: "Zen & Tea Ceremony",
+    body: [
+      "Preparation was structured into ritual practice.",
+      "Movement, timing, and sequence were regulated.",
+      "Matcha functioned as a tool for focus.",
+    ],
+    fig: "FIG. 04",
+    figLabel: "CHASEN (MATCHA WHISK)",
+    bg: "#8796A1",           // base color — change here
+    color: "#000",
+    width: 620,              // width — change here (aspect ~1.82:1)
+    height: 340,             // height — change here
+    initialX: 80,
+    initialY: 200,
+    rotation: 0,
+    initialZ: 1,
+    card04Image: "/images/matcha-bruhs.png",
+    card04Texture: "/images/CARD02_TEXTURE.avif",
   },
 ];
 
@@ -708,6 +733,228 @@ function CardContent({ card }: { card: CardData }) {
           }}
         >
           {card.fig}{"\n\n"}{card.figLabel}
+        </div>
+      </div>
+    );
+  }
+
+  // ── Card 04: landscape, duplicated + mirrored image ──
+  if (card.card04Image) {
+    return (
+      <div
+        style={{
+          width: "100%",
+          height: "100%",
+          position: "relative",
+          overflow: "hidden",
+          boxSizing: "border-box",
+        }}
+      >
+        {/* Texture overlay */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={card.card04Texture}
+          alt=""
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            mixBlendMode: "multiply",
+            display: "block",
+            zIndex: 99,
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* Vertical rule — 12px from left, full height */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0, left: 12, bottom: 0,
+            width: "0.5px",
+            backgroundColor: "#000",
+            opacity: 0.4,
+            zIndex: 2,
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* Header: "04." left, "RITUALIZED USE" centered, then horizontal rule */}
+        <div
+          style={{
+            position: "relative",
+            zIndex: 3,
+            paddingLeft: 24,
+            paddingTop: 10,
+            paddingRight: 14,
+          }}
+        >
+          <div style={{ position: "relative", display: "flex", alignItems: "baseline", marginBottom: 8 }}>
+            {/* 04. — left */}
+            <div
+              className={mono}
+              style={{
+                fontSize: 24,
+                letterSpacing: "0.02em",
+                lineHeight: 1,
+                color: "#000",
+                flexShrink: 0,
+              }}
+            >
+              {card.id}.
+            </div>
+            {/* RITUALIZED USE — centered in full card width */}
+            <div
+              className={mono}
+              style={{
+                position: "absolute",
+                left: 0,
+                right: 0,
+                textAlign: "center",
+                fontSize: 20,
+                letterSpacing: "0.02em",
+                lineHeight: 1.05,
+                color: "#000",
+                textTransform: "uppercase",
+                pointerEvents: "none",
+              }}
+            >
+              {card.title}
+            </div>
+          </div>
+          {/* Horizontal rule */}
+          <div
+            style={{
+              height: "0.5px",
+              backgroundColor: "#000",
+              opacity: 0.4,
+              marginLeft: -24,
+              marginRight: -14,
+            }}
+          />
+        </div>
+
+        {/* Duplicated + mirrored images — centered in card body */}
+        <div
+          style={{
+            position: "absolute",
+            top: "14%",
+            left: "50%",
+            transform: "translateX(-50%)",
+            display: "flex",
+            alignItems: "center",
+            width: "80%",
+            height: "62%",
+            zIndex: 1,
+          }}
+        >
+          {/* Original image */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={card.card04Image}
+            alt=""
+            style={{
+              width: "55%",
+              height: "100%",
+              objectFit: "contain",
+              objectPosition: "right center",
+              mixBlendMode: "multiply",
+              display: "block",
+              flexShrink: 0,
+            }}
+          />
+          {/* Mirrored image — overlaps by ~10% */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={card.card04Image}
+            alt=""
+            style={{
+              width: "55%",
+              height: "100%",
+              objectFit: "contain",
+              objectPosition: "left center",
+              mixBlendMode: "multiply",
+              display: "block",
+              flexShrink: 0,
+              transform: "scaleX(-1)",
+              marginLeft: "-10%",
+            }}
+          />
+        </div>
+
+        {/* Bottom row: subtitle left, body text right */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: 30,
+            left: 24,
+            right: 14,
+            zIndex: 3,
+            display: "flex",
+            alignItems: "flex-start",
+            gap: 16,
+          }}
+        >
+          {/* Subtitle — left */}
+          <div
+            className={mono}
+            style={{
+              fontSize: 11,
+              letterSpacing: "0.04em",
+              lineHeight: 1.5,
+              color: "#000",
+              flexShrink: 0,
+              width: "28%",
+            }}
+          >
+            {card.subtitle}
+          </div>
+          {/* Body text — right-shifted */}
+          <div
+            style={{
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              gap: 8,
+            }}
+          >
+            {card.body.map((line, i) => (
+              <p
+                key={i}
+                className={mono}
+                style={{
+                  fontSize: 11,
+                  letterSpacing: "0.04em",
+                  lineHeight: 1.55,
+                  color: "#000",
+                  margin: 0,
+                }}
+              >
+                {line}
+              </p>
+            ))}
+          </div>
+        </div>
+
+        {/* FIG. 04 + CHASEN (MATCHA WHISK) — centered at the very bottom */}
+        <div
+          className={mono}
+          style={{
+            position: "absolute",
+            bottom: 10,
+            left: 0,
+            right: 0,
+            textAlign: "center",
+            fontSize: 11,
+            letterSpacing: "0.08em",
+            lineHeight: 1.4,
+            color: "#000",
+            zIndex: 3,
+          }}
+        >
+          {card.fig} {card.figLabel}
         </div>
       </div>
     );
