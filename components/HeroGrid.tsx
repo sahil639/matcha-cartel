@@ -77,6 +77,7 @@ function ImageCell({
             src={src}
             alt={`Matcha ${num}`}
             fill
+            priority
             className="object-cover"
             sizes="15vw"
           />
