@@ -4,6 +4,14 @@ import { useState, useRef, useCallback, useEffect } from "react";
 
 const LIME = "#8dff00";
 
+const ALL_ERAS = [
+  { id: "01", era: "Tang-Song Dynasty" },
+  { id: "02", era: "12th Century" },
+  { id: "03", era: "Kamakura-Muromachi" },
+  { id: "04", era: "Zen & Tea Ceremony" },
+  { id: "05", era: "Early Modern Japan" },
+];
+
 // ─── Per-letter glitch (same pattern as ScrollDownText) ───────────────────────
 
 function GlitchChar({ char, delay, color }: { char: string; delay: number; color: string }) {
@@ -1406,6 +1414,7 @@ export default function OriginLog() {
     Object.fromEntries(CARDS.map((c) => [c.id, c.initialZ]))
   );
   const [animateIn, setAnimateIn] = useState(false);
+  const [navChars, setNavChars] = useState<number[]>(ALL_ERAS.map(() => 0));
   const hasAnimated = useRef(false);
   const sectionRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
@@ -1427,10 +1436,9 @@ export default function OriginLog() {
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting && !hasAnimated.current) {
         hasAnimated.current = true;
-        // Compute random positions now that we know canvas size
         const cw = canvas.clientWidth;
         const ch = canvas.clientHeight;
-        const navHeight = 80; // approx bottom nav height
+        const navHeight = 80;
         targets.current = CARDS.map((card) => ({
           x: Math.random() * Math.max(0, cw - card.width - 40) + 20,
           y: Math.random() * Math.max(0, ch - card.height - navHeight - 20) + 20,
@@ -1442,6 +1450,30 @@ export default function OriginLog() {
     observer.observe(section);
     return () => observer.disconnect();
   }, []);
+
+  // Typewriter for nav — starts when animateIn fires, each era staggered
+  useEffect(() => {
+    if (!animateIn) return;
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    ALL_ERAS.forEach((item, eraIdx) => {
+      const total = item.era.length;
+      let count = 0;
+      const startDelay = eraIdx * 120;
+      const t = setTimeout(() => {
+        const iv = setInterval(() => {
+          count++;
+          setNavChars(prev => {
+            const next = [...prev];
+            next[eraIdx] = count;
+            return next;
+          });
+          if (count >= total) clearInterval(iv);
+        }, 38);
+      }, startDelay);
+      timers.push(t);
+    });
+    return () => timers.forEach(clearTimeout);
+  }, [animateIn]);
 
   return (
     <section
@@ -1494,48 +1526,37 @@ export default function OriginLog() {
           />
         ))}
 
-        {/* Bottom nav — green, no dividers, all 5 eras */}
-        {(() => {
-          const ALL_ERAS = [
-            { id: "01", era: "Tang-Song Dynasty" },
-            { id: "02", era: "12th Century" },
-            { id: "03", era: "Kamakura-Muromachi" },
-            { id: "04", era: "Zen & Tea Ceremony" },
-            { id: "05", era: "Early Modern Japan" },
-          ];
-          return (
+        {/* Bottom nav — typewriter on section entry */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            display: "flex",
+            backgroundColor: "#000",
+            zIndex: 200,
+            borderTop: "0.5px solid rgba(255,255,255,0.06)",
+          }}
+        >
+          {ALL_ERAS.map((item, eraIdx) => (
             <div
+              key={item.id}
+              className="font-mono-frag"
               style={{
-                position: "absolute",
-                bottom: 0,
-                left: 0,
-                right: 0,
-                display: "flex",
-                backgroundColor: "#000",
-                zIndex: 200,
-                borderTop: "0.5px solid rgba(255,255,255,0.06)",
+                flex: 1,
+                padding: "20px 14px",
+                color: LIME,
+                fontSize: 14,
+                lineHeight: 1.5,
+                cursor: "default",
               }}
             >
-              {ALL_ERAS.map((item) => (
-                <div
-                  key={item.id}
-                  className="font-mono-frag"
-                  style={{
-                    flex: 1,
-                    padding: "20px 14px",
-                    color: LIME,
-                    fontSize: 14,
-                    lineHeight: 1.5,
-                    cursor: "default",
-                  }}
-                >
-                  <div>{item.id}.</div>
-                  <div>{item.era}</div>
-                </div>
-              ))}
+              <div>{item.id}.</div>
+              <div>{item.era.slice(0, navChars[eraIdx])}</div>
             </div>
-          );
-        })()}
+          ))}
+        </div>
       </div>
 
       {/* ── Right panel — white bg, dark text ── */}
