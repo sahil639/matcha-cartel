@@ -126,7 +126,7 @@ const CARDS: CardData[] = [
     initialX: 160,
     initialY: 80,
     rotation: 0,
-    initialZ: 4,
+    initialZ: 3,
     card02Image: "/images/balls- sketch.png",
     card02Texture: "/images/CARD02_TEXTURE.avif",
   },
@@ -148,7 +148,7 @@ const CARDS: CardData[] = [
     initialX: 260,
     initialY: 60,
     rotation: 0,
-    initialZ: 3,
+    initialZ: 2,
     card03Image: "/images/cheese-sketch.png",
     card03Texture: "/images/CARD02_TEXTURE.avif",
   },
@@ -171,7 +171,7 @@ const CARDS: CardData[] = [
     initialX: 80,
     initialY: 200,
     rotation: 0,
-    initialZ: 2,
+    initialZ: 1,
     card04Image: "/images/matcha-bruhs.png",
     card04Texture: "/images/CARD02_TEXTURE.avif",
   },
@@ -194,7 +194,7 @@ const CARDS: CardData[] = [
     initialX: 320,
     initialY: 90,
     rotation: 0,
-    initialZ: 1,
+    initialZ: 5,
     card05Image: "/images/matcha-leaves-sketch.png",
     card05Texture: "/images/CARD02_TEXTURE.avif",
   },
@@ -1254,20 +1254,21 @@ function CardContent({ card }: { card: CardData }) {
 // ─── Draggable card ───────────────────────────────────────────────────────────
 
 function DraggableCard({
-  card, zIndex, onFocus, canvasRef, animateIn, animateInDelay,
+  card, zIndex, onFocus, animateIn, animateInDelay, targetX, targetY,
 }: {
   card: CardData;
   zIndex: number;
   onFocus: () => void;
-  canvasRef: React.RefObject<HTMLDivElement | null>;
   animateIn: boolean;
   animateInDelay: number;
+  targetX: number;
+  targetY: number;
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
-  // Start far off-screen left so entry animation can fly in
-  const posRef = useRef({ x: -2000, y: card.initialY });
+  // Start off-screen left, rotation 10deg
+  const posRef = useRef({ x: -(card.width + 200), y: targetY });
+  const rotRef = useRef(10);
   const velRef = useRef({ x: 0, y: 0 });
-  const rotRef = useRef(12); // animated rotation (12→0 during entry)
   const entryDone = useRef(false);
   const dragging = useRef(false);
   const lastPtr = useRef({ x: 0, y: 0, t: 0 });
@@ -1281,48 +1282,39 @@ function DraggableCard({
     }
   }, []);
 
-  // Initial off-screen render
+  // Set initial off-screen position
   useEffect(() => {
     applyTransform();
     return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
   }, [applyTransform]);
 
-  // Entry animation: fly in from left with rotation 12→0
+  // Entry animation: spring in from left, rotation 10→0
   useEffect(() => {
     if (!animateIn) return;
-    posRef.current = { x: -2000, y: card.initialY };
-    rotRef.current = 12;
+    posRef.current = { x: -(card.width + 200), y: targetY };
+    rotRef.current = 10;
     applyTransform();
 
-    const timeoutId = setTimeout(() => {
-      const targetX = card.initialX;
-      const targetY = card.initialY;
+    const tid = setTimeout(() => {
       let vx = 0, vy = 0, vrot = 0;
-      const STIFFNESS = 0.055;
-      const DAMPING = 0.80;
+      const K = 0.055, D = 0.80;
 
       function spring() {
-        vx += (targetX - posRef.current.x) * STIFFNESS;
-        vx *= DAMPING;
+        vx += (targetX - posRef.current.x) * K; vx *= D;
+        vy += (targetY - posRef.current.y) * K; vy *= D;
+        vrot += (0 - rotRef.current) * K; vrot *= D;
+
         posRef.current.x += vx;
-
-        vy += (targetY - posRef.current.y) * STIFFNESS;
-        vy *= DAMPING;
         posRef.current.y += vy;
-
-        vrot += (0 - rotRef.current) * STIFFNESS;
-        vrot *= DAMPING;
         rotRef.current += vrot;
-
         applyTransform();
 
-        const settled =
-          Math.abs(vx) < 0.08 && Math.abs(posRef.current.x - targetX) < 0.3 &&
-          Math.abs(vy) < 0.08 && Math.abs(posRef.current.y - targetY) < 0.3;
+        const done =
+          Math.abs(vx) < 0.1 && Math.abs(posRef.current.x - targetX) < 0.5 &&
+          Math.abs(vy) < 0.1 && Math.abs(posRef.current.y - targetY) < 0.5;
 
-        if (settled) {
-          posRef.current.x = targetX;
-          posRef.current.y = targetY;
+        if (done) {
+          posRef.current = { x: targetX, y: targetY };
           rotRef.current = 0;
           applyTransform();
           entryDone.current = true;
@@ -1333,44 +1325,17 @@ function DraggableCard({
       rafRef.current = requestAnimationFrame(spring);
     }, animateInDelay);
 
-    return () => clearTimeout(timeoutId);
-  }, [animateIn, animateInDelay, card.initialX, card.initialY, applyTransform]);
+    return () => clearTimeout(tid);
+  }, [animateIn, animateInDelay, targetX, targetY, card.width, applyTransform]);
 
-  const springToTarget = useCallback((targetX: number, targetY: number) => {
-    if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    let vx = velRef.current.x * 0.3;
-    let vy = velRef.current.y * 0.3;
-    const STIFFNESS = 0.09;
-    const DAMPING = 0.74;
-
-    function tick() {
-      vx += (targetX - posRef.current.x) * STIFFNESS;
-      vx *= DAMPING;
-      posRef.current.x += vx;
-
-      vy += (targetY - posRef.current.y) * STIFFNESS;
-      vy *= DAMPING;
-      posRef.current.y += vy;
-
-      applyTransform();
-
-      const settled =
-        Math.abs(vx) < 0.08 && Math.abs(posRef.current.x - targetX) < 0.3 &&
-        Math.abs(vy) < 0.08 && Math.abs(posRef.current.y - targetY) < 0.3;
-
-      if (settled) {
-        posRef.current.x = targetX;
-        posRef.current.y = targetY;
-        applyTransform();
-        return;
-      }
-      rafRef.current = requestAnimationFrame(tick);
+  useEffect(() => {
+    // Update posRef if targetX/targetY change before animation starts
+    if (!entryDone.current && !animateIn) {
+      posRef.current.y = targetY;
     }
-    rafRef.current = requestAnimationFrame(tick);
-  }, [applyTransform]);
+  }, [targetX, targetY, animateIn]);
 
   const onPointerDown = useCallback((e: React.PointerEvent) => {
-    if (!entryDone.current) return;
     e.preventDefault();
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     dragging.current = true;
@@ -1395,32 +1360,8 @@ function DraggableCard({
   }, [applyTransform]);
 
   const onPointerUp = useCallback(() => {
-    if (!dragging.current) return;
     dragging.current = false;
     setIsDragging(false);
-
-    const canvas = canvasRef.current;
-    if (canvas) {
-      const cw = canvas.clientWidth;
-      const ch = canvas.clientHeight;
-      const x = posRef.current.x;
-      const y = posRef.current.y;
-      const outOfBounds =
-        x < -card.width * 0.4 ||
-        x > cw - card.width * 0.6 ||
-        y < -card.height * 0.4 ||
-        y > ch - card.height * 0.6;
-
-      if (outOfBounds) {
-        const cx = (cw - card.width) / 2;
-        const cy = (ch - card.height) / 2;
-        springToTarget(cx, cy);
-        return;
-      }
-    }
-
-    // Normal inertia
-    if (rafRef.current) cancelAnimationFrame(rafRef.current);
     const animate = () => {
       velRef.current.x *= 0.9;
       velRef.current.y *= 0.9;
@@ -1431,7 +1372,7 @@ function DraggableCard({
       rafRef.current = requestAnimationFrame(animate);
     };
     rafRef.current = requestAnimationFrame(animate);
-  }, [applyTransform, canvasRef, card.width, card.height, springToTarget]);
+  }, [applyTransform]);
 
   return (
     <div
@@ -1442,7 +1383,6 @@ function DraggableCard({
         width: card.width,
         height: card.height,
         backgroundColor: card.bg,
-        boxShadow: "0px 2px 1px rgba(0,0,0,0.25)",
         zIndex,
         userSelect: "none",
         cursor: isDragging ? "grabbing" : "grab",
@@ -1460,60 +1400,45 @@ function DraggableCard({
 
 // ─── Main section ─────────────────────────────────────────────────────────────
 
-const ALL_ERAS = [
-  { id: "01", era: "Tang-Song Dynasty" },
-  { id: "02", era: "12th Century" },
-  { id: "03", era: "Kamakura-Muromachi" },
-  { id: "04", era: "Zen & Tea Ceremony" },
-  { id: "05", era: "Early Modern Japan" },
-];
-
 export default function OriginLog() {
   const maxZRef = useRef(CARDS.length);
   const [zIndexes, setZIndexes] = useState<Record<string, number>>(() =>
     Object.fromEntries(CARDS.map((c) => [c.id, c.initialZ]))
   );
   const [animateIn, setAnimateIn] = useState(false);
-  const [navChars, setNavChars] = useState<number[]>(ALL_ERAS.map(() => 0));
+  const hasAnimated = useRef(false);
   const sectionRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
-  const hasAnimated = useRef(false);
+
+  // Random target positions per card, computed once on mount
+  const targets = useRef<{ x: number; y: number }[]>([]);
 
   const bringToFront = useCallback((id: string) => {
     maxZRef.current += 1;
     setZIndexes((prev) => ({ ...prev, [id]: maxZRef.current }));
   }, []);
 
-  // Trigger entry animation when section scrolls into view (once)
+  // IntersectionObserver — trigger entry animation once
   useEffect(() => {
     const section = sectionRef.current;
-    if (!section) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !hasAnimated.current) {
-          hasAnimated.current = true;
-          setAnimateIn(true);
-          // Typewriter for each era, staggered
-          ALL_ERAS.forEach((item, eraIdx) => {
-            const total = item.era.length;
-            let count = 0;
-            const startDelay = eraIdx * 180;
-            setTimeout(() => {
-              const interval = setInterval(() => {
-                count++;
-                setNavChars(prev => {
-                  const next = [...prev];
-                  next[eraIdx] = count;
-                  return next;
-                });
-                if (count >= total) clearInterval(interval);
-              }, 45);
-            }, startDelay);
-          });
-        }
-      },
-      { threshold: 0.3 }
-    );
+    const canvas = canvasRef.current;
+    if (!section || !canvas) return;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !hasAnimated.current) {
+        hasAnimated.current = true;
+        // Compute random positions now that we know canvas size
+        const cw = canvas.clientWidth;
+        const ch = canvas.clientHeight;
+        const navHeight = 80; // approx bottom nav height
+        targets.current = CARDS.map((card) => ({
+          x: Math.random() * Math.max(0, cw - card.width - 40) + 20,
+          y: Math.random() * Math.max(0, ch - card.height - navHeight - 20) + 20,
+        }));
+        setAnimateIn(true);
+      }
+    }, { threshold: 0.25 });
+
     observer.observe(section);
     return () => observer.disconnect();
   }, []);
@@ -1562,43 +1487,55 @@ export default function OriginLog() {
             card={card}
             zIndex={zIndexes[card.id]}
             onFocus={() => bringToFront(card.id)}
-            canvasRef={canvasRef}
             animateIn={animateIn}
-            animateInDelay={idx * 120}
+            animateInDelay={idx * 100}
+            targetX={targets.current[idx]?.x ?? card.initialX}
+            targetY={targets.current[idx]?.y ?? card.initialY}
           />
         ))}
 
-        {/* Bottom nav — typewriter effect */}
-        <div
-          style={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            display: "flex",
-            backgroundColor: "#000",
-            zIndex: 200,
-            borderTop: "0.5px solid rgba(255,255,255,0.06)",
-          }}
-        >
-          {ALL_ERAS.map((item, eraIdx) => (
+        {/* Bottom nav — green, no dividers, all 5 eras */}
+        {(() => {
+          const ALL_ERAS = [
+            { id: "01", era: "Tang-Song Dynasty" },
+            { id: "02", era: "12th Century" },
+            { id: "03", era: "Kamakura-Muromachi" },
+            { id: "04", era: "Zen & Tea Ceremony" },
+            { id: "05", era: "Early Modern Japan" },
+          ];
+          return (
             <div
-              key={item.id}
-              className="font-mono-frag"
               style={{
-                flex: 1,
-                padding: "18px 14px",
-                color: LIME,
-                fontSize: 14,
-                lineHeight: 1.5,
-                cursor: "default",
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                right: 0,
+                display: "flex",
+                backgroundColor: "#000",
+                zIndex: 200,
+                borderTop: "0.5px solid rgba(255,255,255,0.06)",
               }}
             >
-              <div>{item.id}.</div>
-              <div>{item.era.slice(0, navChars[eraIdx])}</div>
+              {ALL_ERAS.map((item) => (
+                <div
+                  key={item.id}
+                  className="font-mono-frag"
+                  style={{
+                    flex: 1,
+                    padding: "20px 14px",
+                    color: LIME,
+                    fontSize: 14,
+                    lineHeight: 1.5,
+                    cursor: "default",
+                  }}
+                >
+                  <div>{item.id}.</div>
+                  <div>{item.era}</div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          );
+        })()}
       </div>
 
       {/* ── Right panel — white bg, dark text ── */}
