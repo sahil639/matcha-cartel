@@ -141,8 +141,8 @@ const CARDS: CardData[] = [
     figLabel: "STONE\nGRINDER",
     bg: "#DBE3EA",           // base color — change here
     color: "#000",
-    width: 336,              // width — change here
-    height: 384,             // height — change here (~1:1 ratio)
+    width: 370,              // width — change here
+    height: 422,             // height — change here (~1:1 ratio)
     initialX: 260,
     initialY: 60,
     rotation: 0,
