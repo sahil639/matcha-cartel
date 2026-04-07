@@ -1305,7 +1305,7 @@ function DraggableCard({
 
     const tid = setTimeout(() => {
       let vx = 0, vy = 0, vrot = 0;
-      const K = 0.025, D = 0.82;
+      const K = 0.08, D = 0.75;
 
       function spring() {
         vx += (targetX - posRef.current.x) * K; vx *= D;
@@ -1464,7 +1464,7 @@ export default function OriginLog() {
     ALL_ERAS.forEach((item, eraIdx) => {
       const total = item.era.length;
       let count = 0;
-      const startDelay = eraIdx * 120;
+      const startDelay = eraIdx * 60;
       const t = setTimeout(() => {
         const iv = setInterval(() => {
           count++;
@@ -1474,7 +1474,7 @@ export default function OriginLog() {
             return next;
           });
           if (count >= total) clearInterval(iv);
-        }, 38);
+        }, 55);
       }, startDelay);
       timers.push(t);
     });
@@ -1485,8 +1485,8 @@ export default function OriginLog() {
   useEffect(() => {
     if (!animateIn) return;
     const texts = [RIGHT_HEADING, RIGHT_SUBHEADING, RIGHT_DESC];
-    const speeds = [45, 35, 22];
-    const startDelays = [100, 900, 1800];
+    const speeds = [25, 20, 10];
+    const startDelays = [0, 300, 700];
     const timers: ReturnType<typeof setTimeout>[] = [];
 
     texts.forEach((text, i) => {
