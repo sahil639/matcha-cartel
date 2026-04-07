@@ -886,8 +886,8 @@ function CardContent({ card }: { card: CardData }) {
           alt=""
           style={{
             position: "absolute",
-            top: "39%",
-            left: -48,
+            top: "29%",
+            left: -38,
             width: "70%",
             height: "70%",
             rotate: "8deg",
@@ -906,8 +906,8 @@ function CardContent({ card }: { card: CardData }) {
           alt=""
           style={{
             position: "absolute",
-            top: "39%",
-            right: -48,
+            top: "29%",
+            right: -38,
             width: "70%",
             height: "70%",
             objectFit: "contain",
