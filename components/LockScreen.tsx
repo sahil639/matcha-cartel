@@ -151,19 +151,18 @@ export default function LockScreen() {
   }, []);
 
   // ── Passcode logic ────────────────────────────────────────────────────────
-  const submit = useCallback(() => {
-    const val = passcode.trim().toUpperCase();
-    if (val.length > 0 && val !== CORRECT) setStatus("wrong");
-  }, [passcode]);
+  const onPasscodeChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value.toUpperCase();
+    setPasscode(val);
+    if (val.trim() === CORRECT) {
+      setStatus("correct");
+    } else {
+      setStatus("idle");
+    }
+  }, []);
 
-  const onKey = useCallback(
-    (e: React.KeyboardEvent) => { if (e.key === "Enter") submit(); },
-    [submit]
-  );
-
-  // Auto-recognise correct passcode as user types
-  useEffect(() => {
-    if (passcode.trim().toUpperCase() === CORRECT) setStatus("correct");
+  const onKey = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && passcode.trim() !== CORRECT) setStatus("wrong");
   }, [passcode]);
 
   // ── Shutter exit animation ────────────────────────────────────────────────
@@ -171,14 +170,12 @@ export default function LockScreen() {
     if (exiting) return;
     setExiting(true);
 
-    // Safety: always dismiss after max animation time
+    // Safety: always dismiss within 1400ms regardless of GSAP
     const safetyTimer = setTimeout(() => setVisible(false), 1400);
 
-    // 1. Fade out content
     gsap.to(contentRef.current, {
       opacity: 0, duration: 0.25, ease: "power1.in",
       onComplete: () => {
-        // 2. Shutter bars: alternating up/down
         const bars = barRefs.current.filter(Boolean) as HTMLDivElement[];
         const upBars = bars.filter((_, i) => i % 2 === 0);
         const downBars = bars.filter((_, i) => i % 2 === 1);
@@ -332,6 +329,7 @@ export default function LockScreen() {
             onClick={e => { e.stopPropagation(); inputRef.current?.focus(); }}
           >
             {status === "correct" ? (
+              // "ACCESS THE SITE" — clickable
               <AccessButton onClick={handleAccess} />
             ) : (
               <>
@@ -340,7 +338,7 @@ export default function LockScreen() {
                   ref={inputRef}
                   type="text"
                   value={passcode}
-                  onChange={e => { setPasscode(e.target.value.toUpperCase()); setStatus("idle"); }}
+                  onChange={onPasscodeChange}
                   onKeyDown={onKey}
                   placeholder="ENTER PASSCODE"
                   maxLength={10}
@@ -357,6 +355,7 @@ export default function LockScreen() {
                     lineHeight: 1,
                     width: "clamp(260px, 34vw, 500px)",
                     caretColor: "#ffffff",
+                    textTransform: "uppercase",
                     display: "block",
                     margin: "0 auto",
                   }}
