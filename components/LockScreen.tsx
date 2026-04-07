@@ -171,11 +171,14 @@ export default function LockScreen() {
     if (exiting) return;
     setExiting(true);
 
-    // 1. Fade out the content quickly
+    // Safety: always dismiss after max animation time
+    const safetyTimer = setTimeout(() => setVisible(false), 1400);
+
+    // 1. Fade out content
     gsap.to(contentRef.current, {
       opacity: 0, duration: 0.25, ease: "power1.in",
       onComplete: () => {
-        // 2. Animate shutter bars: alternating up/down
+        // 2. Shutter bars: alternating up/down
         const bars = barRefs.current.filter(Boolean) as HTMLDivElement[];
         const upBars = bars.filter((_, i) => i % 2 === 0);
         const downBars = bars.filter((_, i) => i % 2 === 1);
@@ -183,7 +186,7 @@ export default function LockScreen() {
         gsap.to(upBars, { y: "-100%", duration: 0.55, ease: "power2.inOut", stagger: 0.045 });
         gsap.to(downBars, {
           y: "100%", duration: 0.55, ease: "power2.inOut", stagger: 0.045,
-          onComplete: () => setVisible(false),
+          onComplete: () => { clearTimeout(safetyTimer); setVisible(false); },
         });
       },
     });
@@ -329,7 +332,6 @@ export default function LockScreen() {
             onClick={e => { e.stopPropagation(); inputRef.current?.focus(); }}
           >
             {status === "correct" ? (
-              // "ACCESS THE SITE" — clickable
               <AccessButton onClick={handleAccess} />
             ) : (
               <>
