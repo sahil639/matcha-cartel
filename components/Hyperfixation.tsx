@@ -105,16 +105,14 @@ const VIDEOS = [
   },
 ];
 
-// Positions: images land at screen edges, partially clipped — visible in frame
+// 6 images: ix/iy = initial position (visible at edges), tx/ty = off-screen exit
 const BURST = [
-  { src: "/images/bigmatachcup.png",     w: 320, h: 228, tx: "-38vw", ty: "-36vh" }, // top-left
-  { src: "/images/catmatcha.png",        w: 280, h: 280, tx:  "-8vw", ty: "-40vh" }, // top-center
-  { src: "/images/matchahand.png",       w: 320, h: 226, tx:  "36vw", ty: "-34vh" }, // top-right
-  { src: "/images/matchaburger.png",     w: 300, h: 216, tx:  "42vw", ty:   "2vh" }, // right
-  { src: "/images/matchalvbag.png",      w: 280, h: 198, tx:  "36vw", ty:  "36vh" }, // bottom-right
-  { src: "/images/sppilled matcha.png",  w: 280, h: 196, tx:   "0vw", ty:  "42vh" }, // bottom
-  { src: "/images/matchagirldinner.png", w: 300, h: 214, tx: "-38vw", ty:  "35vh" }, // bottom-left
-  { src: "/images/matchammee.png",       w: 270, h: 194, tx: "-42vw", ty:   "2vh" }, // left
+  { src: "/images/bigmatachcup.png",     w: 340, h: 242, ix: "-26vw", iy: "-22vh", tx: "-65vw", ty: "-60vh" }, // top-left
+  { src: "/images/catmatcha.png",        w: 300, h: 300, ix:  "10vw", iy: "-32vh", tx:  "10vw", ty: "-85vh" }, // top-right
+  { src: "/images/matchahand.png",       w: 340, h: 240, ix:  "36vw", iy:  "-8vh", tx:  "85vw", ty:  "-8vh" }, // right
+  { src: "/images/matchalvbag.png",      w: 300, h: 212, ix:  "28vw", iy:  "30vh", tx:  "65vw", ty:  "65vh" }, // bottom-right
+  { src: "/images/sppilled matcha.png",  w: 300, h: 210, ix:  "-6vw", iy:  "32vh", tx:  "-6vw", ty:  "85vh" }, // bottom
+  { src: "/images/matchammee.png",       w: 290, h: 208, ix: "-38vw", iy:   "6vh", tx: "-85vw", ty:   "6vh" }, // left
 ];
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -149,11 +147,13 @@ export default function Hyperfixation() {
           anticipatePin: 1,
           onUpdate(self) {
             const p = self.progress;
+            // Video section: t=14→24 (total 24 units)
             const vIdx =
-              p >= 0.917 ? 4 :
-              p >= 0.833 ? 3 :
-              p >= 0.75  ? 2 :
-              p >= 0.667 ? 1 : 0;
+              p >= 0.875 ? 4 :  // t=21
+              p >= 0.792 ? 3 :  // t=19
+              p >= 0.708 ? 2 :  // t=17
+              p >= 0.625 ? 1 :  // t=15
+              0;
             if (vIdx !== activeVideoRef.current) {
               activeVideoRef.current = vIdx;
               setActiveVideo(vIdx);
@@ -162,49 +162,57 @@ export default function Hyperfixation() {
         },
       });
 
-      // ── Stage 1: Images fly out one-by-one, land and hold ───────────────
-      // Each image: dur 1.5, stagger 2.0 → last starts at 14, ends at 15.5
+      // ── Stage 1: All 6 images visible at t=0, exit one-by-one over 3 units each
+      // Set initial position (images start at ix/iy, already visible)
       BURST.forEach((conf, i) => {
         const el = imageRefs.current[i];
         if (!el) return;
-        tl.fromTo(
-          el,
-          { opacity: 0, x: 0, y: 0, scale: 0 },
-          { opacity: 1, x: conf.tx, y: conf.ty, scale: 1, duration: 1.5, ease: "power2.out" },
-          i * 2.0
-        );
+        gsap.set(el, { x: conf.ix, y: conf.iy, opacity: 1, scale: 1 });
       });
-      // All images now visible — hold for a beat (t → 17)
+
+      // t=0→1.5: Hold — all 6 visible, nothing animating
       tl.to({}, { duration: 1.5 });
 
-      // ── Stage 2: Fade images + title, video layout scales in ─────────────
-      // t=17: fade everything out
-      tl.to(imageRefs.current.filter(Boolean) as HTMLDivElement[], { opacity: 0, duration: 1 }, 17);
-      tl.to(titleRef.current,       { opacity: 0, y: -30, duration: 0.8 }, 17);
-      tl.to(attributionRef.current, { opacity: 0, duration: 0.5 },         17);
+      // t=1.5: Staggered exit — each image takes 3 units, 0.5 stagger between starts
+      // img0: 1.5→4.5, img1: 2→5, img2: 2.5→5.5, img3: 3→6, img4: 3.5→6.5, img5: 4→7
+      BURST.forEach((conf, i) => {
+        const el = imageRefs.current[i];
+        if (!el) return;
+        tl.to(
+          el,
+          { x: conf.tx, y: conf.ty, opacity: 0, duration: 3, ease: "power1.inOut" },
+          1.5 + i * 0.5
+        );
+      });
+
+      // t=7: title fades, hold a moment
+      tl.to(titleRef.current,       { opacity: 0, y: -30, duration: 1 },   7);
+      tl.to(attributionRef.current, { opacity: 0, duration: 0.5 },          7);
+
+      // t=8: video layout scales in
       tl.fromTo(
         videoLayoutRef.current,
         { opacity: 0, scale: 0.05 },
         { opacity: 1, scale: 1, duration: 1.8, ease: "power3.inOut" },
-        17.5 // ends at 19.3
+        8
       );
 
-      // ── Stage 3: Left + right panels slide in ─────────────────────────────
-      tl.fromTo(leftPanelRef.current,  { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 1 }, 19);
-      tl.fromTo(rightPanelRef.current, { opacity: 0, x:  30 }, { opacity: 1, x: 0, duration: 1 }, 19);
-      tl.to({}, { duration: 1 }); // t → 20, hold before video transitions
+      // ── Stage 3: Left + right panels slide in (t=9.5) ────────────────────
+      tl.fromTo(leftPanelRef.current,  { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 1 }, 9.5);
+      tl.fromTo(rightPanelRef.current, { opacity: 0, x:  30 }, { opacity: 1, x: 0, duration: 1 }, 9.5);
+      // Hold to t=12 before video transitions
+      tl.to({}, { duration: 1.5 });
 
-      // ── Stage 4: Scroll-up video transitions (no fade) ────────────────────
-      let cursor = 20;
+      // ── Stage 4: Scroll-up video transitions (t=12→24) ───────────────────
+      // 4 transitions × 3 units each
       for (let i = 1; i < VIDEOS.length; i++) {
         tl.to(videoColumnRef.current, {
           y: `-${i * 100}%`,
-          duration: 1.2,
+          duration: 1.5,
           ease: "power2.inOut",
-        }, cursor);
-        cursor += 2.5;
+        }, 12 + (i - 1) * 3);
       }
-      tl.to({}, { duration: 1 }, 29);
+      tl.to({}, { duration: 1 }, 23);
     }, section);
 
     return () => ctx.revert();
@@ -225,7 +233,7 @@ export default function Hyperfixation() {
             left: "50%", top: "50%",
             width: img.w, height: img.h,
             marginLeft: -img.w / 2, marginTop: -img.h / 2,
-            opacity: 0, overflow: "hidden", zIndex: 20,
+            opacity: 1, overflow: "hidden", zIndex: 20,
           }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
