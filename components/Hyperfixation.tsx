@@ -300,27 +300,40 @@ export default function Hyperfixation() {
           }}
         >
           {/* Heading + description side by side */}
-          <div style={{ display: "flex", gap: 24, alignItems: "flex-start" }}>
-            {/*
-              "Obsession Archives." — font-lockscreen
-              clamp(22px, 2.8vw, 42px)
-            */}
-            <h2
-              className="font-lockscreen"
-              style={{
-                fontSize: "clamp(22px, 2.8vw, 42px)",
-                color: LIME, lineHeight: 1.1,
-                margin: 0, flexShrink: 0,
-              }}
-            >
-              Obsession<br />Archives.
-            </h2>
+          <div style={{ display: "flex", gap: 0, alignItems: "flex-start" }}>
+            {/* Heading + green line to its right */}
+            <div style={{ position: "relative", flexShrink: 0, paddingRight: 20 }}>
+              {/*
+                "Obsession Archives." — font-lockscreen
+                clamp(22px, 2.8vw, 42px)
+              */}
+              <h2
+                className="font-lockscreen"
+                style={{
+                  fontSize: "clamp(22px, 2.8vw, 42px)",
+                  color: LIME, lineHeight: 1.1,
+                  margin: 0,
+                }}
+              >
+                Obsession<br />Archives.
+              </h2>
+              {/* Green vertical line — spans full panel height */}
+              <div style={{
+                position: "absolute",
+                right: 0,
+                top: "-36px",
+                bottom: "-9999px",
+                width: "0.5px",
+                backgroundColor: LIME,
+                opacity: 0.45,
+              }} />
+            </div>
             {/*
               Description — font-mono-frag, 12px, green
             */}
             <p
               className="font-mono-frag"
-              style={{ fontSize: 12, color: LIME, lineHeight: 1.7, margin: 0 }}
+              style={{ fontSize: 12, color: LIME, lineHeight: 1.7, margin: 0, paddingLeft: 20 }}
             >
               A record of unconventional uses and excess consumption, reflecting matcha&apos;s fixation beyond tradition.
             </p>
@@ -400,8 +413,8 @@ export default function Hyperfixation() {
             borderLeft: "0.5px solid rgba(255,255,255,0.08)",
           }}
         >
-          {/* TOP: counter + glitch coords */}
-          <div>
+          {/* TOP: counter + glitch coords, with green line to the right */}
+          <div style={{ position: "relative", paddingRight: 20 }}>
             {/*
               Counter — font-mono-frag, 12px, green
             */}
@@ -420,6 +433,16 @@ export default function Hyperfixation() {
             >
               <GlitchText text={vid.coords} />
             </div>
+            {/* Green vertical line — spans full panel height */}
+            <div style={{
+              position: "absolute",
+              right: 0,
+              top: "-36px",
+              bottom: "-9999px",
+              width: "0.5px",
+              backgroundColor: LIME,
+              opacity: 0.45,
+            }} />
           </div>
 
           {/* Spacer — pushes everything below to the bottom */}
