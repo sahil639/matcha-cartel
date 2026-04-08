@@ -420,7 +420,7 @@ export default function Hyperfixation() {
             */}
             <div
               className="font-mono-frag"
-              style={{ fontSize: 12, color: LIME, marginBottom: 6 }}
+              style={{ fontSize: 16, color: LIME, marginBottom: 6 }}
             >
               {vid.counter}
             </div>
@@ -429,7 +429,7 @@ export default function Hyperfixation() {
             */}
             <div
               className="font-mono-frag"
-              style={{ fontSize: 10, color: LIME, letterSpacing: "0.06em" }}
+              style={{ fontSize: 16, color: LIME, letterSpacing: "0.06em" }}
             >
               <GlitchText text={vid.coords} />
             </div>
@@ -456,7 +456,7 @@ export default function Hyperfixation() {
             <h3
               className="font-mono-frag"
               style={{
-                fontSize: "clamp(13px, 1.5vw, 22px)",
+                fontSize: 24,
                 color: LIME, letterSpacing: "0.04em",
                 lineHeight: 1.25, margin: "0 0 20px 0",
               }}
@@ -467,7 +467,7 @@ export default function Hyperfixation() {
             {/*
               Location / Courtesy — font-mono-frag, 11px, green
             */}
-            <div className="font-mono-frag" style={{ fontSize: 11, color: LIME, lineHeight: 2.1 }}>
+            <div className="font-mono-frag" style={{ fontSize: 16, color: LIME, lineHeight: 2.1 }}>
               <div>LOCATION : {vid.location}</div>
               <div style={{ marginTop: 2 }}>COURTESY OF: {vid.courtesy}</div>
               <div style={{ marginTop: 2, opacity: 0.55 }}>(link to original source)</div>
@@ -478,7 +478,7 @@ export default function Hyperfixation() {
             */}
             <p
               className="font-mono-frag"
-              style={{ fontSize: 11, color: LIME, lineHeight: 1.75, marginTop: 24 }}
+              style={{ fontSize: 16, color: LIME, lineHeight: 1.75, marginTop: 24 }}
             >
               {vid.description}
             </p>
