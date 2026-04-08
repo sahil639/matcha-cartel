@@ -105,15 +105,16 @@ const VIDEOS = [
   },
 ];
 
+// Positions: images land at screen edges, partially clipped — visible in frame
 const BURST = [
-  { src: "/images/bigmatachcup.png",     w: 260, h: 185, tx: "-68vw", ty: "-55vh" },
-  { src: "/images/catmatcha.png",        w: 200, h: 200, tx:   "5vw", ty: "-72vh" },
-  { src: "/images/matchahand.png",       w: 240, h: 170, tx:  "65vw", ty: "-52vh" },
-  { src: "/images/matchaburger.png",     w: 250, h: 180, tx:  "72vw", ty:   "4vh" },
-  { src: "/images/matchalvbag.png",      w: 220, h: 155, tx:  "63vw", ty:  "55vh" },
-  { src: "/images/sppilled matcha.png",  w: 230, h: 160, tx:   "4vw", ty:  "72vh" },
-  { src: "/images/matchagirldinner.png", w: 245, h: 175, tx: "-65vw", ty:  "54vh" },
-  { src: "/images/matchammee.png",       w: 215, h: 155, tx: "-72vw", ty:   "3vh" },
+  { src: "/images/bigmatachcup.png",     w: 320, h: 228, tx: "-38vw", ty: "-36vh" }, // top-left
+  { src: "/images/catmatcha.png",        w: 280, h: 280, tx:  "-8vw", ty: "-40vh" }, // top-center
+  { src: "/images/matchahand.png",       w: 320, h: 226, tx:  "36vw", ty: "-34vh" }, // top-right
+  { src: "/images/matchaburger.png",     w: 300, h: 216, tx:  "42vw", ty:   "2vh" }, // right
+  { src: "/images/matchalvbag.png",      w: 280, h: 198, tx:  "36vw", ty:  "36vh" }, // bottom-right
+  { src: "/images/sppilled matcha.png",  w: 280, h: 196, tx:   "0vw", ty:  "42vh" }, // bottom
+  { src: "/images/matchagirldinner.png", w: 300, h: 214, tx: "-38vw", ty:  "35vh" }, // bottom-left
+  { src: "/images/matchammee.png",       w: 270, h: 194, tx: "-42vw", ty:   "2vh" }, // left
 ];
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -141,10 +142,10 @@ export default function Hyperfixation() {
         scrollTrigger: {
           trigger: section,
           start: "top top",
-          end: "+=500%",
+          end: "+=700%",
           pin: true,
           pinSpacing: true,
-          scrub: 0.8,
+          scrub: 1.2,
           anticipatePin: 1,
           onUpdate(self) {
             const p = self.progress;
@@ -161,33 +162,37 @@ export default function Hyperfixation() {
         },
       });
 
-      // ── Stage 1: Images burst one-by-one ─────────────────────────────────
+      // ── Stage 1: Images fly out one-by-one, land and hold ───────────────
+      // Each image: dur 1.5, stagger 2.0 → last starts at 14, ends at 15.5
       BURST.forEach((conf, i) => {
         const el = imageRefs.current[i];
         if (!el) return;
         tl.fromTo(
           el,
           { opacity: 0, x: 0, y: 0, scale: 0 },
-          { opacity: 1, x: conf.tx, y: conf.ty, scale: 1, duration: 2, ease: "power2.inOut" },
-          i * 1.5
+          { opacity: 1, x: conf.tx, y: conf.ty, scale: 1, duration: 1.5, ease: "power2.out" },
+          i * 2.0
         );
       });
-      tl.to({}, { duration: 0.5 });
+      // All images now visible — hold for a beat (t → 17)
+      tl.to({}, { duration: 1.5 });
 
-      // ── Stage 2: Title fades, video layout scales in ──────────────────────
-      tl.to(titleRef.current,     { opacity: 0, y: -40, duration: 1 }, 13);
-      tl.to(attributionRef.current, { opacity: 0, duration: 0.5 },     13);
+      // ── Stage 2: Fade images + title, video layout scales in ─────────────
+      // t=17: fade everything out
+      tl.to(imageRefs.current.filter(Boolean) as HTMLDivElement[], { opacity: 0, duration: 1 }, 17);
+      tl.to(titleRef.current,       { opacity: 0, y: -30, duration: 0.8 }, 17);
+      tl.to(attributionRef.current, { opacity: 0, duration: 0.5 },         17);
       tl.fromTo(
         videoLayoutRef.current,
         { opacity: 0, scale: 0.05 },
-        { opacity: 1, scale: 1, duration: 2, ease: "power3.inOut" },
-        13.3
+        { opacity: 1, scale: 1, duration: 1.8, ease: "power3.inOut" },
+        17.5 // ends at 19.3
       );
 
       // ── Stage 3: Left + right panels slide in ─────────────────────────────
-      tl.fromTo(leftPanelRef.current,  { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 1.2 }, 15.3);
-      tl.fromTo(rightPanelRef.current, { opacity: 0, x:  30 }, { opacity: 1, x: 0, duration: 1.2 }, 15.3);
-      tl.to({}, { duration: 3.5 });
+      tl.fromTo(leftPanelRef.current,  { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 1 }, 19);
+      tl.fromTo(rightPanelRef.current, { opacity: 0, x:  30 }, { opacity: 1, x: 0, duration: 1 }, 19);
+      tl.to({}, { duration: 1 }); // t → 20, hold before video transitions
 
       // ── Stage 4: Scroll-up video transitions (no fade) ────────────────────
       let cursor = 20;
