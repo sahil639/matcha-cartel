@@ -302,7 +302,7 @@ export default function Hyperfixation() {
           {/* Heading + description side by side */}
           <div style={{ display: "flex", gap: 0, alignItems: "flex-start" }}>
             {/* Heading + green line to its right */}
-            <div style={{ position: "relative", flexShrink: 0, paddingRight: 20 }}>
+            <div style={{ position: "relative", flexShrink: 0, paddingLeft: 20 }}>
               {/*
                 "Obsession Archives." — font-lockscreen
                 clamp(22px, 2.8vw, 42px)
@@ -320,7 +320,7 @@ export default function Hyperfixation() {
               {/* Green vertical line — spans full panel height */}
               <div style={{
                 position: "absolute",
-                right: 0,
+                left: 0,
                 top: "-36px",
                 bottom: "-9999px",
                 width: "0.5px",
@@ -333,7 +333,7 @@ export default function Hyperfixation() {
             */}
             <p
               className="font-mono-frag"
-              style={{ fontSize: 12, color: LIME, lineHeight: 1.7, margin: 0, paddingLeft: 20 }}
+              style={{ fontSize: 12, color: LIME, lineHeight: 1.7, margin: 0, paddingLeft: 24 }}
             >
               A record of unconventional uses and excess consumption, reflecting matcha&apos;s fixation beyond tradition.
             </p>
@@ -414,7 +414,7 @@ export default function Hyperfixation() {
           }}
         >
           {/* TOP: counter + glitch coords, with green line to the right */}
-          <div style={{ position: "relative", paddingRight: 20 }}>
+          <div style={{ position: "relative", paddingLeft: 20 }}>
             {/*
               Counter — font-mono-frag, 12px, green
             */}
@@ -467,7 +467,7 @@ export default function Hyperfixation() {
             {/*
               Location / Courtesy — font-mono-frag, 11px, green
             */}
-            <div className="font-mono-frag" style={{ fontSize: 16, color: LIME, lineHeight: 2.1 }}>
+            <div className="font-mono-frag" style={{ fontSize: 13, color: LIME, lineHeight: 2.1 }}>
               <div>LOCATION : {vid.location}</div>
               <div style={{ marginTop: 2 }}>COURTESY OF: {vid.courtesy}</div>
               <div style={{ marginTop: 2, opacity: 0.55 }}>(link to original source)</div>
@@ -478,7 +478,7 @@ export default function Hyperfixation() {
             */}
             <p
               className="font-mono-frag"
-              style={{ fontSize: 16, color: LIME, lineHeight: 1.75, marginTop: 24 }}
+              style={{ fontSize: 13, color: LIME, lineHeight: 1.75, marginTop: 24 }}
             >
               {vid.description}
             </p>
