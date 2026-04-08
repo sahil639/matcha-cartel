@@ -65,7 +65,7 @@ export default function TheVault() {
         }}
       >
         <span
-          className="font-hubot"
+          className="font-lockscreen"
           style={{
             fontSize: "clamp(40px, 6.5vw, 100px)",
             color: "#ffffff",
@@ -87,7 +87,7 @@ export default function TheVault() {
         }}
       >
         <span
-          className="font-hubot"
+          className="font-lockscreen"
           style={{
             fontSize: "clamp(40px, 6.5vw, 100px)",
             color: "#ffffff",
