@@ -1,19 +1,17 @@
 "use client";
 
-
 // Each item: position as % of the left panel, z-index, sizes.
-// All coordinates are the item CENTER point, then we translate(-50%,-50%).
-// labelAnchor is where the label box appears relative to the item center.
+// shadowOffset: how far the shadow shifts relative to the item center (should be ~0 so shadow sits under item)
 const ITEMS = [
   {
     num: "01",
     name: "CHAWAN",
     item:   "/images/chawan.png",
     shadow: "/images/chawan-shadow.png",
-    // Large bowl, center-left, mid-depth
     cx: "28%", cy: "46%",
-    width: "clamp(200px, 23vw, 340px)",
-    shadowOffsetX: "4%", shadowOffsetY: "6%",
+    width: "clamp(280px, 32vw, 480px)",
+    shadowScale: 1.0,
+    shadowOffsetX: "0%", shadowOffsetY: "0%",
     z: 3,
     labelCx: "19%", labelCy: "64%",
   },
@@ -22,10 +20,10 @@ const ITEMS = [
     name: "MATCHA POWDER",
     item:   "/images/matcha powder.png",
     shadow: "/images/matcha powder-shadow.png",
-    // Round tin, right of chasen
-    cx: "66%", cy: "58%",
-    width: "clamp(130px, 14vw, 210px)",
-    shadowOffsetX: "3%", shadowOffsetY: "5%",
+    cx: "66%", cy: "60%",
+    width: "clamp(160px, 18vw, 280px)",
+    shadowScale: 1.0,
+    shadowOffsetX: "0%", shadowOffsetY: "0%",
     z: 4,
     labelCx: "62%", labelCy: "76%",
   },
@@ -34,10 +32,10 @@ const ITEMS = [
     name: "CHASEN",
     item:   "/images/chasen.png",
     shadow: "/images/chasen-shadow.png",
-    // Bamboo whisk, center-front
-    cx: "52%", cy: "50%",
-    width: "clamp(120px, 13vw, 200px)",
-    shadowOffsetX: "2%", shadowOffsetY: "5%",
+    cx: "52%", cy: "52%",
+    width: "clamp(160px, 18vw, 270px)",
+    shadowScale: 1.0,
+    shadowOffsetX: "0%", shadowOffsetY: "0%",
     z: 7,
     labelCx: "51%", labelCy: "72%",
   },
@@ -46,34 +44,34 @@ const ITEMS = [
     name: "CHASEN STAND",
     item:   "/images/chasen-stand.png",
     shadow: null,
-    // Small cup holder, center-left of chasen
-    cx: "38%", cy: "57%",
-    width: "clamp(90px, 10vw, 155px)",
+    cx: "38%", cy: "60%",
+    width: "clamp(120px, 13vw, 200px)",
+    shadowScale: 1.0,
     shadowOffsetX: "0", shadowOffsetY: "0",
     z: 5,
-    labelCx: "34%", labelCy: "73%",
+    labelCx: "34%", labelCy: "75%",
   },
   {
     num: "05",
     name: "SIEVE",
     item:   "/images/sieve.png",
     shadow: "/images/sieve-shadow.png",
-    // Strainer, far lower-left
-    cx: "13%", cy: "65%",
-    width: "clamp(140px, 16vw, 240px)",
-    shadowOffsetX: "3%", shadowOffsetY: "4%",
+    cx: "13%", cy: "66%",
+    width: "clamp(180px, 20vw, 310px)",
+    shadowScale: 1.0,
+    shadowOffsetX: "0%", shadowOffsetY: "0%",
     z: 6,
-    labelCx: "10%", labelCy: "83%",
+    labelCx: "10%", labelCy: "84%",
   },
   {
     num: "06",
     name: "KETTLE",
     item:   "/images/kettle.png",
     shadow: "/images/kettle-shadow.png",
-    // Tall dark kettle, back-right
     cx: "58%", cy: "32%",
-    width: "clamp(180px, 20vw, 300px)",
-    shadowOffsetX: "4%", shadowOffsetY: "6%",
+    width: "clamp(240px, 27vw, 410px)",
+    shadowScale: 1.0,
+    shadowOffsetX: "0%", shadowOffsetY: "0%",
     z: 2,
     labelCx: "65%", labelCy: "56%",
   },
@@ -82,12 +80,12 @@ const ITEMS = [
     name: "CHASHAKU",
     item:   "/images/chashaku.png",
     shadow: "/images/chashaku-shadow.png",
-    // Long bamboo scoop, horizontal at bottom
-    cx: "48%", cy: "82%",
-    width: "clamp(300px, 34vw, 520px)",
-    shadowOffsetX: "1%", shadowOffsetY: "3%",
+    cx: "48%", cy: "84%",
+    width: "clamp(380px, 44vw, 660px)",
+    shadowScale: 1.0,
+    shadowOffsetX: "0%", shadowOffsetY: "0%",
     z: 1,
-    labelCx: "46%", labelCy: "89%",
+    labelCx: "46%", labelCy: "91%",
   },
 ] as const;
 
@@ -122,7 +120,6 @@ function ItemLabel({ num, name }: { num: string; name: string }) {
       >
         {num}
       </span>
-      {/* Divider */}
       <div style={{ width: 1, height: 12, backgroundColor: "rgba(0,0,0,0.25)", marginRight: 7 }} />
       <span
         className="font-mono-frag"
@@ -141,7 +138,7 @@ export default function ConfiscatedGoods() {
         width: "100%",
         height: "100vh",
         display: "flex",
-        backgroundColor: "var(--bg)",
+        background: "radial-gradient(116.56% 67.63% at 50% 67.63%, #D7DCE3 6.05%, #A8AEBC 27.65%, #7E889A 58.67%, #5F6B7F 88.58%)",
         overflow: "hidden",
       }}
     >
@@ -151,7 +148,7 @@ export default function ConfiscatedGoods() {
         {/* "CONFISCATED GOODS" heading */}
         <div style={{ position: "absolute", top: 20, left: 22, zIndex: 50 }}>
           <h2
-            className="font-hubot"
+            className="font-lockscreen"
             style={{
               fontSize: "clamp(16px, 2.2vw, 32px)",
               color: "#ffffff",
@@ -185,14 +182,14 @@ export default function ConfiscatedGoods() {
         {/* Items */}
         {ITEMS.map((item) => (
           <div key={item.num}>
-            {/* Shadow layer */}
+            {/* Shadow — same center as item, sits directly under it */}
             {item.shadow && (
               <div
                 style={{
                   position: "absolute",
                   left: item.cx,
                   top:  item.cy,
-                  transform: `translate(calc(-50% + ${item.shadowOffsetX}), calc(-50% + ${item.shadowOffsetY}))`,
+                  transform: "translate(-50%, -50%)",
                   width: item.width,
                   zIndex: item.z,
                   pointerEvents: "none",
@@ -202,12 +199,12 @@ export default function ConfiscatedGoods() {
                 <img
                   src={item.shadow}
                   alt=""
-                  style={{ width: "100%", height: "auto", display: "block", opacity: 0.6 }}
+                  style={{ width: "100%", height: "auto", display: "block", opacity: 0.7 }}
                 />
               </div>
             )}
 
-            {/* Item image */}
+            {/* Item image — same center, higher z within same z band via isolation */}
             <div
               style={{
                 position: "absolute",
@@ -223,7 +220,7 @@ export default function ConfiscatedGoods() {
               <img
                 src={item.item}
                 alt={item.name}
-                style={{ width: "100%", height: "auto", display: "block" }}
+                style={{ width: "100%", height: "auto", display: "block", position: "relative", zIndex: 1 }}
               />
             </div>
 
@@ -257,7 +254,7 @@ export default function ConfiscatedGoods() {
       >
         {/* "ASSEMBLY PROTOCOL" heading */}
         <h2
-          className="font-hubot"
+          className="font-lockscreen"
           style={{
             fontSize: "clamp(20px, 2.8vw, 42px)",
             color: "#ffffff",
