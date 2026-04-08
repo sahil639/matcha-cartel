@@ -50,7 +50,7 @@ export default function TheVault() {
       style={{
         width: "100%",
         height: "100vh",
-        backgroundColor: "var(--bg)",
+        background: "linear-gradient(to bottom, #8B97A1, #ffffff)",
         overflow: "hidden",
         position: "relative",
       }}
