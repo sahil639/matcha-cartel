@@ -75,7 +75,6 @@ export default function Footer() {
         style={{
           gridColumn: "1 / 4",
           gridRow: "1",
-          borderBottom: BORDER,
           borderRight: BORDER,
           padding: "10px 16px 14px",
           display: "flex",
@@ -106,7 +105,6 @@ export default function Footer() {
         style={{
           gridColumn: "4",
           gridRow: "1",
-          borderBottom: BORDER,
           padding: "12px 14px",
           display: "flex",
           flexDirection: "column",
@@ -136,8 +134,6 @@ export default function Footer() {
         style={{
           gridColumn: "1",
           gridRow: "2",
-          borderRight: BORDER,
-          borderBottom: BORDER,
           padding: "16px 18px 24px",
           display: "flex",
           flexDirection: "column",
@@ -176,8 +172,6 @@ export default function Footer() {
         style={{
           gridColumn: "2",
           gridRow: "2",
-          borderRight: BORDER,
-          borderBottom: BORDER,
           padding: "16px 18px 24px",
           display: "flex",
           flexDirection: "column",
@@ -247,7 +241,6 @@ export default function Footer() {
           gridColumn: "3",
           gridRow: "2",
           borderRight: BORDER,
-          borderBottom: BORDER,
           padding: "16px 18px 24px",
           display: "flex",
           flexDirection: "column",
@@ -298,7 +291,6 @@ export default function Footer() {
         style={{
           gridColumn: "4",
           gridRow: "2",
-          borderBottom: BORDER,
           zIndex: 20,
         }}
       />
