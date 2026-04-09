@@ -23,7 +23,18 @@ const ITEMS = [
     cx: "70%", cy: "40%",
     width: "clamp(336px, 37.8vw, 574px)",
     z: 2,
-    labelCx: "48%", labelCy: "62%",
+    labelCx: "72%", labelCy: "54%",
+  },
+  {
+    num: "05",
+    name: "SIEVE",
+    item: "/images/sieve.png",
+    shadow: "/images/sieve-shadow.png",
+    video: "/videos/Bowl.mp4",
+    cx: "15%", cy: "65%",
+    width: "clamp(180px, 20vw, 310px)",
+    z: 4,
+    labelCx: "5%", labelCy: "78%",
   },
 ] as const;
 
