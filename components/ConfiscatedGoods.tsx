@@ -14,6 +14,17 @@ const ITEMS = [
     z: 3,
     labelCx: "9%", labelCy: "54%",
   },
+  {
+    num: "06",
+    name: "KETTLE",
+    item: "/images/kettle.png",
+    shadow: "/images/kettle-shadow.png",
+    video: "/videos/Bowl.mp4",
+    cx: "60%", cy: "40%",
+    width: "clamp(240px, 27vw, 410px)",
+    z: 2,
+    labelCx: "48%", labelCy: "62%",
+  },
 ] as const;
 
 const ASSEMBLY_LIST = [
