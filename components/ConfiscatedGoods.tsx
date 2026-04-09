@@ -54,8 +54,8 @@ const ITEMS = [
     shadow: null,
     video: "/videos/Bowl.mp4",
     cx: "40%", cy: "65%",
-    width: "clamp(120px, 13vw, 200px)",
-    z: 5,
+    width: "clamp(200px, 22vw, 340px)",
+    z: 7,
     labelCx: "33%", labelCy: "78%",
   },
   {
