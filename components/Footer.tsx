@@ -114,8 +114,8 @@ export default function Footer() {
         <div
           className="font-lockscreen"
           style={{
-            fontSize: "clamp(7px, 0.65vw, 10px)",
-            lineHeight: 1.85,
+            fontSize: 16,
+            lineHeight: 1,
             letterSpacing: "0.04em",
             color: INK,
             textTransform: "uppercase",
@@ -143,7 +143,7 @@ export default function Footer() {
         <div
           className="font-mono-frag"
           style={{
-            fontSize: "clamp(9px, 0.85vw, 13px)",
+            fontSize: 18,
             letterSpacing: "0.12em",
             color: INK,
             paddingBottom: 8,
@@ -154,13 +154,13 @@ export default function Footer() {
         </div>
         <p
           className="font-mono-frag"
-          style={{ fontSize: "clamp(9px, 0.8vw, 12px)", lineHeight: 1.75, color: INK, margin: "0 0 16px 0" }}
+          style={{ fontSize: 14, lineHeight: 1.75, color: INK, margin: "0 0 16px 0" }}
         >
           Matcha Cartel began as a shared interest in matcha and an observation of its rapid rise as a global trend. As demand grew, scarcity followed, shifting matcha from ritual ingredient to high-value commodity.
         </p>
         <p
           className="font-mono-frag"
-          style={{ fontSize: "clamp(9px, 0.8vw, 12px)", lineHeight: 1.75, color: INK, margin: 0 }}
+          style={{ fontSize: 14, lineHeight: 1.75, color: INK, margin: 0 }}
         >
           This project reframes matcha through a darker visual language, presenting it as something controlled, traded, and desired rather than purely ceremonial. Familiar wellness aesthetics are replaced with systems of restriction, excess, and spectacle.
         </p>
@@ -182,7 +182,7 @@ export default function Footer() {
         <div
           className="font-mono-frag"
           style={{
-            fontSize: "clamp(9px, 0.85vw, 13px)",
+            fontSize: 18,
             letterSpacing: "0.12em",
             color: INK,
             paddingBottom: 8,
@@ -211,14 +211,14 @@ export default function Footer() {
               <div style={{ flex: 1 }}>
                 <div
                   className="font-mono-frag"
-                  style={{ fontSize: "clamp(8px, 0.75vw, 11px)", color: INK, lineHeight: 1.9, marginBottom: 4 }}
+                  style={{ fontSize: 14, color: INK, lineHeight: 1.9, marginBottom: 4 }}
                 >
                   DEALER {d.num}:<br />
                   {d.name} ({d.role})
                 </div>
                 <p
                   className="font-mono-frag"
-                  style={{ fontSize: "clamp(8px, 0.72vw, 11px)", color: INK, lineHeight: 1.75, margin: 0 }}
+                  style={{ fontSize: 14, color: INK, lineHeight: 1.75, margin: 0 }}
                 >
                   {d.bio}
                 </p>
@@ -243,7 +243,7 @@ export default function Footer() {
         <div
           className="font-mono-frag"
           style={{
-            fontSize: "clamp(9px, 0.85vw, 13px)",
+            fontSize: 18,
             letterSpacing: "0.12em",
             color: INK,
             paddingBottom: 8,
@@ -260,7 +260,7 @@ export default function Footer() {
                   key={link}
                   className="font-mono-frag"
                   style={{
-                    fontSize: "clamp(9px, 0.8vw, 12px)",
+                    fontSize: 14,
                     color: INK,
                     lineHeight: 2,
                     cursor: "pointer",
