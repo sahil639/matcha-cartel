@@ -137,6 +137,7 @@ export default function Footer() {
           padding: "16px 18px 24px",
           display: "flex",
           flexDirection: "column",
+          justifyContent: "flex-end",
           zIndex: 20,
         }}
       >
@@ -146,7 +147,6 @@ export default function Footer() {
             fontSize: "clamp(9px, 0.85vw, 13px)",
             letterSpacing: "0.12em",
             color: INK,
-            borderBottom: BORDER,
             paddingBottom: 8,
             marginBottom: 16,
           }}
@@ -175,6 +175,7 @@ export default function Footer() {
           padding: "16px 18px 24px",
           display: "flex",
           flexDirection: "column",
+          justifyContent: "flex-end",
           zIndex: 20,
         }}
       >
@@ -184,7 +185,6 @@ export default function Footer() {
             fontSize: "clamp(9px, 0.85vw, 13px)",
             letterSpacing: "0.12em",
             color: INK,
-            borderBottom: BORDER,
             paddingBottom: 8,
             marginBottom: 16,
           }}
@@ -244,6 +244,7 @@ export default function Footer() {
           padding: "16px 18px 24px",
           display: "flex",
           flexDirection: "column",
+          justifyContent: "flex-end",
           zIndex: 20,
         }}
       >
@@ -253,7 +254,6 @@ export default function Footer() {
             fontSize: "clamp(9px, 0.85vw, 13px)",
             letterSpacing: "0.12em",
             color: INK,
-            borderBottom: BORDER,
             paddingBottom: 8,
             marginBottom: 16,
           }}
