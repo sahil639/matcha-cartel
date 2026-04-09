@@ -238,9 +238,8 @@ export default function Footer() {
       {/* ── ROW 2 Col 3: Syndicates ── */}
       <div
         style={{
-          gridColumn: "3",
+          gridColumn: "4",
           gridRow: "2",
-          borderRight: BORDER,
           padding: "16px 18px 24px",
           display: "flex",
           flexDirection: "column",
@@ -286,14 +285,7 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* ── ROW 2 Col 4: Empty (nav dots overlay here) ── */}
-      <div
-        style={{
-          gridColumn: "4",
-          gridRow: "2",
-          zIndex: 20,
-        }}
-      />
+
     </footer>
   );
 }
