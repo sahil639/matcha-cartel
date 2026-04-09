@@ -125,7 +125,7 @@ function ItemLabel({ num, name, video }: { num: string; name: string; video: str
             flexShrink: 0,
           }}
         >
-          <span className="font-mono-frag" style={{ fontSize: 11, color: "#ffffff", letterSpacing: "0.06em" }}>
+          <span className="font-mono-frag" style={{ fontSize: 13, color: "#ffffff", letterSpacing: "0.06em" }}>
             {num}
           </span>
         </div>
@@ -133,14 +133,14 @@ function ItemLabel({ num, name, video }: { num: string; name: string; video: str
           style={{
             flex: 1,
             minWidth: 120,
-            backgroundColor: "rgba(220, 228, 234, 0.95)",
+            backgroundColor: "#ffffff",
             display: "flex",
             alignItems: "center",
             paddingLeft: 12,
             borderLeft: `1px solid ${HUD_COLOR}`,
           }}
         >
-          <span className="font-mono-frag" style={{ fontSize: 11, color: "#4a5560", letterSpacing: "0.1em" }}>
+          <span className="font-mono-frag" style={{ fontSize: 13, color: "#4a5560", letterSpacing: "0.1em" }}>
             {name}
           </span>
         </div>
@@ -192,7 +192,7 @@ export default function ConfiscatedGoods() {
         >
           <span
             className="font-mono-frag"
-            style={{ fontSize: 11, color: "rgba(255,255,255,0.45)", letterSpacing: "0.1em" }}
+            style={{ fontSize: 13, color: "rgba(255,255,255,0.45)", letterSpacing: "0.1em" }}
           >
             (inspect the labels)
           </span>
