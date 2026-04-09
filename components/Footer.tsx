@@ -88,14 +88,14 @@ export default function Footer() {
         <img
           src="/svgs/logo-en.svg"
           alt="MatchaCartel"
-          style={{ width: "100%", height: "auto", display: "block", filter: "brightness(0)" }}
+          style={{ width: "100%", height: "auto", display: "block", filter: "brightness(0)", opacity: 0.75 }}
         />
         {/* Japanese logo */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/svgs/logo-jp.svg"
           alt="抹茶カルテル"
-          style={{ width: "42%", height: "auto", display: "block", filter: "brightness(0)", marginTop: 6 }}
+          style={{ width: "42%", height: "auto", display: "block", filter: "brightness(0)", marginTop: 6, opacity: 0.75 }}
         />
       </div>
 
