@@ -26,26 +26,7 @@ const ASSEMBLY_LIST = [
   "07.  CHASHAKU",
 ];
 
-const HUD_SIZE = 14;
-const HUD_THICK = 1.5;
 const HUD_COLOR = "#8A96A0";
-
-function HudCorners({ inset = 10 }: { inset?: number }) {
-  const corner = (pos: React.CSSProperties): React.CSSProperties => ({
-    position: "absolute",
-    width: HUD_SIZE,
-    height: HUD_SIZE,
-    ...pos,
-  });
-  return (
-    <>
-      <div style={corner({ top: inset, left: inset, borderTop: `${HUD_THICK}px solid ${HUD_COLOR}`, borderLeft: `${HUD_THICK}px solid ${HUD_COLOR}` })} />
-      <div style={corner({ top: inset, right: inset, borderTop: `${HUD_THICK}px solid ${HUD_COLOR}`, borderRight: `${HUD_THICK}px solid ${HUD_COLOR}` })} />
-      <div style={corner({ bottom: inset, left: inset, borderBottom: `${HUD_THICK}px solid ${HUD_COLOR}`, borderLeft: `${HUD_THICK}px solid ${HUD_COLOR}` })} />
-      <div style={corner({ bottom: inset, right: inset, borderBottom: `${HUD_THICK}px solid ${HUD_COLOR}`, borderRight: `${HUD_THICK}px solid ${HUD_COLOR}` })} />
-    </>
-  );
-}
 
 function ItemLabel({ num, name, video }: { num: string; name: string; video: string }) {
   const [hovered, setHovered] = useState(false);
@@ -53,7 +34,7 @@ function ItemLabel({ num, name, video }: { num: string; name: string; video: str
 
   const BAR_H = 40;
   const NUM_W = 44;
-  const CARD = 128;
+  const CARD = 154;
 
   const handleEnter = () => {
     setHovered(true);
@@ -75,13 +56,13 @@ function ItemLabel({ num, name, video }: { num: string; name: string; video: str
         cursor: "pointer",
         position: "relative",
         width: CARD,
-        height: hovered ? CARD : BAR_H,
+        height: hovered ? CARD + BAR_H : BAR_H,
         border: `1px solid ${HUD_COLOR}`,
         overflow: "hidden",
         transition: "height 0.35s ease",
       }}
     >
-      {/* Video — fills above the bar */}
+      {/* Video — padded above the bar */}
       <video
         ref={videoRef}
         src={video}
@@ -90,20 +71,16 @@ function ItemLabel({ num, name, video }: { num: string; name: string; video: str
         playsInline
         style={{
           position: "absolute",
-          top: 0, left: 0, right: 0,
-          width: "100%",
-          height: `calc(100% - ${BAR_H}px)`,
+          top: 8, left: 8, right: 8,
+          bottom: BAR_H + 8,
+          width: `calc(100% - 16px)`,
+          height: `calc(100% - ${BAR_H + 16}px)`,
           objectFit: "cover",
           display: "block",
           opacity: hovered ? 1 : 0,
           transition: "opacity 0.2s ease 0.2s",
         }}
       />
-
-      {/* HUD corners — only visible area above bar */}
-      <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: BAR_H, pointerEvents: "none", opacity: hovered ? 1 : 0, transition: "opacity 0.2s ease 0.25s" }}>
-        <HudCorners inset={10} />
-      </div>
 
       {/* Label bar — pinned to bottom, always visible */}
       <div
