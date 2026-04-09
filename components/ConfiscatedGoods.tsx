@@ -123,6 +123,7 @@ function ItemLabel({ num, name, video }: { num: string; name: string; video: str
         position: "relative",
         width: CARD,
         height: hovered ? CARD + BAR_H : BAR_H,
+        whiteSpace: "nowrap",
         border: `1px solid ${HUD_COLOR}`,
         backgroundColor: "#ffffff",
         overflow: "hidden",
