@@ -34,7 +34,7 @@ export default function Footer() {
         position: "relative",
         overflow: "hidden",
         display: "grid",
-        gridTemplateColumns: "1fr 1fr clamp(140px, 14vw, 220px)",
+        gridTemplateColumns: "1fr 1.4fr clamp(140px, 14vw, 220px)",
         gridTemplateRows: "auto 1fr",
       }}
     >
