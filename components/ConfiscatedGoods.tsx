@@ -32,7 +32,7 @@ const ITEMS = [
     shadow: "/images/sieve-shadow.png",
     video: "/videos/Bowl.mp4",
     cx: "15%", cy: "65%",
-    width: "clamp(180px, 20vw, 310px)",
+    width: "clamp(252px, 28vw, 434px)",
     z: 4,
     labelCx: "5%", labelCy: "78%",
   },
