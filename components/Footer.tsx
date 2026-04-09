@@ -143,7 +143,7 @@ export default function Footer() {
         <div
           className="font-mono-frag"
           style={{
-            fontSize: 18,
+            fontSize: 24,
             letterSpacing: "0.12em",
             color: INK,
             paddingBottom: 8,
@@ -182,7 +182,7 @@ export default function Footer() {
         <div
           className="font-mono-frag"
           style={{
-            fontSize: 18,
+            fontSize: 24,
             letterSpacing: "0.12em",
             color: INK,
             paddingBottom: 8,
@@ -243,7 +243,7 @@ export default function Footer() {
         <div
           className="font-mono-frag"
           style={{
-            fontSize: 18,
+            fontSize: 24,
             letterSpacing: "0.12em",
             color: INK,
             paddingBottom: 8,
