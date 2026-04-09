@@ -46,7 +46,7 @@ export default function Footer() {
         style={{
           position: "absolute", inset: 0, width: "100%", height: "100%",
           objectFit: "cover", mixBlendMode: "exclusion",
-          pointerEvents: "none", zIndex: 10,
+          pointerEvents: "none", zIndex: 100,
         }}
       />
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -56,7 +56,7 @@ export default function Footer() {
         style={{
           position: "absolute", inset: 0, width: "100%", height: "100%",
           objectFit: "cover", mixBlendMode: "multiply", opacity: 0.5,
-          pointerEvents: "none", zIndex: 11,
+          pointerEvents: "none", zIndex: 101,
         }}
       />
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -66,7 +66,7 @@ export default function Footer() {
         style={{
           position: "absolute", right: 0, top: 0, height: "100%", width: "auto",
           mixBlendMode: "multiply", opacity: 0.5,
-          pointerEvents: "none", zIndex: 11,
+          pointerEvents: "none", zIndex: 102,
         }}
       />
 
@@ -206,7 +206,6 @@ export default function Footer() {
                   width: "clamp(70px, 8vw, 115px)",
                   height: "clamp(85px, 10vw, 140px)",
                   overflow: "hidden",
-                  mixBlendMode: "multiply",
                 }}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -218,6 +217,7 @@ export default function Footer() {
                     objectFit: "cover", objectPosition: "top center",
                     display: "block",
                     filter: "grayscale(100%) contrast(1.1)",
+                    mixBlendMode: "multiply",
                   }}
                 />
               </div>
