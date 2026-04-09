@@ -34,7 +34,7 @@ export default function Footer() {
         position: "relative",
         overflow: "hidden",
         display: "grid",
-        gridTemplateColumns: "1fr 1fr 1fr clamp(140px, 14vw, 220px)",
+        gridTemplateColumns: "1fr 1fr clamp(140px, 14vw, 220px)",
         gridTemplateRows: "auto 1fr",
       }}
     >
@@ -73,7 +73,7 @@ export default function Footer() {
       {/* ── ROW 1 Col 1–3: Logo block ── */}
       <div
         style={{
-          gridColumn: "1 / 4",
+          gridColumn: "1 / 3",
           gridRow: "1",
           borderRight: BORDER,
           padding: "10px 16px 14px",
@@ -103,7 +103,7 @@ export default function Footer() {
       {/* ── ROW 1 Col 4: Copyright ── */}
       <div
         style={{
-          gridColumn: "4",
+          gridColumn: "3",
           gridRow: "1",
           padding: "12px 14px",
           display: "flex",
@@ -173,6 +173,7 @@ export default function Footer() {
           gridColumn: "2",
           gridRow: "2",
           padding: "16px 18px 24px",
+
           display: "flex",
           flexDirection: "column",
           justifyContent: "flex-end",
@@ -211,7 +212,7 @@ export default function Footer() {
                     objectFit: "cover", objectPosition: "top center",
                     display: "block",
                     filter: "grayscale(100%) contrast(1.1)",
-                    mixBlendMode: "multiply",
+                    mixBlendMode: "overlay",
                   }}
                 />
               </div>
@@ -238,7 +239,7 @@ export default function Footer() {
       {/* ── ROW 2 Col 3: Syndicates ── */}
       <div
         style={{
-          gridColumn: "4",
+          gridColumn: "3",
           gridRow: "2",
           padding: "16px 18px 24px",
           display: "flex",
