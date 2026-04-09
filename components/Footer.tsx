@@ -154,13 +154,13 @@ export default function Footer() {
         </div>
         <p
           className="font-mono-frag"
-          style={{ fontSize: 14, lineHeight: 1.75, color: INK, margin: "0 0 16px 0" }}
+          style={{ fontSize: 14, lineHeight: 1.2, color: INK, margin: "0 0 16px 0" }}
         >
           Matcha Cartel began as a shared interest in matcha and an observation of its rapid rise as a global trend. As demand grew, scarcity followed, shifting matcha from ritual ingredient to high-value commodity.
         </p>
         <p
           className="font-mono-frag"
-          style={{ fontSize: 14, lineHeight: 1.75, color: INK, margin: 0 }}
+          style={{ fontSize: 14, lineHeight: 1.2, color: INK, margin: 0 }}
         >
           This project reframes matcha through a darker visual language, presenting it as something controlled, traded, and desired rather than purely ceremonial. Familiar wellness aesthetics are replaced with systems of restriction, excess, and spectacle.
         </p>
@@ -218,7 +218,7 @@ export default function Footer() {
                 </div>
                 <p
                   className="font-mono-frag"
-                  style={{ fontSize: 14, color: INK, lineHeight: 1.75, margin: 0 }}
+                  style={{ fontSize: 14, color: INK, lineHeight: 1.2, margin: 0 }}
                 >
                   {d.bio}
                 </p>
