@@ -1,16 +1,16 @@
 "use client";
 
-// Each item: position as % of the left panel, z-index, sizes.
-// shadowOffset: how far the shadow shifts relative to the item center (should be ~0 so shadow sits under item)
+import { useState, useRef } from "react";
+
 const ITEMS = [
   {
     num: "01",
     name: "CHAWAN",
     item:   "/images/chawan.png",
     shadow: "/images/chawan-shadow.png",
+    video:  "/videos/Bowl.mp4",
     cx: "28%", cy: "44%",
     width: "clamp(323px, 36.96vw, 554px)",
-    shadowOffsetX: "0%", shadowOffsetY: "0%",
     z: 3,
     labelCx: "19%", labelCy: "64%",
   },
@@ -26,34 +26,171 @@ const ASSEMBLY_LIST = [
   "07.  CHASHAKU",
 ];
 
-function ItemLabel({ num, name }: { num: string; name: string }) {
+const HUD_SIZE = 14;
+const HUD_THICK = 1.5;
+const HUD_COLOR = "#8A96A0";
+
+function HudCorners({ inset = 10 }: { inset?: number }) {
+  const corner = (pos: React.CSSProperties): React.CSSProperties => ({
+    position: "absolute",
+    width: HUD_SIZE,
+    height: HUD_SIZE,
+    ...pos,
+  });
+  return (
+    <>
+      <div style={corner({ top: inset, left: inset, borderTop: `${HUD_THICK}px solid ${HUD_COLOR}`, borderLeft: `${HUD_THICK}px solid ${HUD_COLOR}` })} />
+      <div style={corner({ top: inset, right: inset, borderTop: `${HUD_THICK}px solid ${HUD_COLOR}`, borderRight: `${HUD_THICK}px solid ${HUD_COLOR}` })} />
+      <div style={corner({ bottom: inset, left: inset, borderBottom: `${HUD_THICK}px solid ${HUD_COLOR}`, borderLeft: `${HUD_THICK}px solid ${HUD_COLOR}` })} />
+      <div style={corner({ bottom: inset, right: inset, borderBottom: `${HUD_THICK}px solid ${HUD_COLOR}`, borderRight: `${HUD_THICK}px solid ${HUD_COLOR}` })} />
+    </>
+  );
+}
+
+function ItemLabel({ num, name, video }: { num: string; name: string; video: string }) {
+  const [hovered, setHovered] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const BAR_H = 40;
+  const NUM_W = 44;
+  const CARD = 280;
+
+  const handleEnter = () => {
+    setHovered(true);
+    const v = videoRef.current;
+    if (v) { v.currentTime = 0; v.play(); }
+  };
+
+  const handleLeave = () => {
+    setHovered(false);
+    videoRef.current?.pause();
+  };
+
   return (
     <div
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        backgroundColor: "rgba(255,255,255,0.88)",
-        backdropFilter: "blur(4px)",
-        padding: "3px 8px 3px 6px",
-        gap: 0,
-        whiteSpace: "nowrap",
-        pointerEvents: "none",
-        userSelect: "none",
-      }}
+      onMouseEnter={handleEnter}
+      onMouseLeave={handleLeave}
+      style={{ userSelect: "none", cursor: "pointer" }}
     >
-      <span
-        className="font-mono-frag"
-        style={{ fontSize: 10, color: "#1a1a1a", letterSpacing: "0.04em", paddingRight: 7 }}
-      >
-        {num}
-      </span>
-      <div style={{ width: 1, height: 12, backgroundColor: "rgba(0,0,0,0.25)", marginRight: 7 }} />
-      <span
-        className="font-mono-frag"
-        style={{ fontSize: 10, color: "#1a1a1a", letterSpacing: "0.08em" }}
-      >
-        {name}
-      </span>
+      {hovered ? (
+        /* ── Expanded square card ── */
+        <div
+          style={{
+            width: CARD,
+            height: CARD,
+            border: `1px solid ${HUD_COLOR}`,
+            position: "relative",
+            overflow: "hidden",
+            backdropFilter: "blur(6px)",
+          }}
+        >
+          {/* Video */}
+          <video
+            ref={videoRef}
+            src={video}
+            muted
+            loop
+            playsInline
+            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+          />
+
+          {/* HUD corners — inset from top, above the bottom bar */}
+          <div style={{ position: "absolute", inset: 0, bottom: BAR_H }}>
+            <HudCorners inset={10} />
+          </div>
+
+          {/* Bottom label bar */}
+          <div
+            style={{
+              position: "absolute",
+              bottom: 0, left: 0, right: 0,
+              height: BAR_H,
+              display: "flex",
+              borderTop: `1px solid ${HUD_COLOR}`,
+            }}
+          >
+            <div
+              style={{
+                width: NUM_W,
+                backgroundColor: "#8A96A0",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
+              }}
+            >
+              <span
+                className="font-mono-frag"
+                style={{ fontSize: 11, color: "#ffffff", letterSpacing: "0.06em" }}
+              >
+                {num}
+              </span>
+            </div>
+            <div
+              style={{
+                flex: 1,
+                backgroundColor: "rgba(220, 228, 234, 0.95)",
+                display: "flex",
+                alignItems: "center",
+                paddingLeft: 12,
+                borderLeft: `1px solid ${HUD_COLOR}`,
+              }}
+            >
+              <span
+                className="font-mono-frag"
+                style={{ fontSize: 11, color: "#4a5560", letterSpacing: "0.1em" }}
+              >
+                {name}
+              </span>
+            </div>
+          </div>
+        </div>
+      ) : (
+        /* ── Default horizontal bar ── */
+        <div
+          style={{
+            display: "inline-flex",
+            alignItems: "stretch",
+            border: `1px solid ${HUD_COLOR}`,
+            whiteSpace: "nowrap",
+            height: BAR_H,
+          }}
+        >
+          <div
+            style={{
+              width: NUM_W,
+              backgroundColor: "#8A96A0",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
+            }}
+          >
+            <span
+              className="font-mono-frag"
+              style={{ fontSize: 11, color: "#ffffff", letterSpacing: "0.06em" }}
+            >
+              {num}
+            </span>
+          </div>
+          <div
+            style={{
+              backgroundColor: "rgba(220, 228, 234, 0.92)",
+              display: "flex",
+              alignItems: "center",
+              padding: "0 18px",
+              borderLeft: `1px solid ${HUD_COLOR}`,
+            }}
+          >
+            <span
+              className="font-mono-frag"
+              style={{ fontSize: 11, color: "#4a5560", letterSpacing: "0.1em" }}
+            >
+              {name}
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -110,13 +247,13 @@ export default function ConfiscatedGoods() {
         {/* Items */}
         {ITEMS.map((item) => (
           <div key={item.num}>
-            {/* Shadow — same center as item, sits directly under it */}
+            {/* Shadow */}
             {item.shadow && (
               <div
                 style={{
                   position: "absolute",
                   left: item.cx,
-                  top:  item.cy,
+                  top: item.cy,
                   transform: "translate(-50%, -50%)",
                   width: item.width,
                   zIndex: item.z,
@@ -124,20 +261,16 @@ export default function ConfiscatedGoods() {
                 }}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={item.shadow}
-                  alt=""
-                  style={{ width: "100%", height: "auto", display: "block", opacity: 0.7 }}
-                />
+                <img src={item.shadow} alt="" style={{ width: "100%", height: "auto", display: "block", opacity: 0.7 }} />
               </div>
             )}
 
-            {/* Item image — same center, higher z within same z band via isolation */}
+            {/* Item image */}
             <div
               style={{
                 position: "absolute",
                 left: item.cx,
-                top:  item.cy,
+                top: item.cy,
                 transform: "translate(-50%, -50%)",
                 width: item.width,
                 zIndex: item.z,
@@ -152,17 +285,17 @@ export default function ConfiscatedGoods() {
               />
             </div>
 
-            {/* Label */}
+            {/* Label — anchored bottom-left, grows upward on hover */}
             <div
               style={{
                 position: "absolute",
                 left: item.labelCx,
-                top:  item.labelCy,
-                transform: "translate(-50%, -50%)",
+                top: item.labelCy,
+                transform: "translate(0, -50%)",
                 zIndex: 40,
               }}
             >
-              <ItemLabel num={item.num} name={item.name} />
+              <ItemLabel num={item.num} name={item.name} video={item.video} />
             </div>
           </div>
         ))}
@@ -180,7 +313,6 @@ export default function ConfiscatedGoods() {
           flexShrink: 0,
         }}
       >
-        {/* "ASSEMBLY PROTOCOL" heading */}
         <h2
           className="font-lockscreen"
           style={{
@@ -193,8 +325,6 @@ export default function ConfiscatedGoods() {
         >
           ASSEMBLY<br />PROTOCOL
         </h2>
-
-        {/* Numbered list */}
         <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
           {ASSEMBLY_LIST.map((line) => (
             <div
