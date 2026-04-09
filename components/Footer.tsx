@@ -205,7 +205,7 @@ export default function Footer() {
                   objectFit: "cover", objectPosition: "top center",
                   display: "block",
                   filter: "grayscale(100%) contrast(1.1)",
-                  mixBlendMode: "overlay",
+                  mixBlendMode: "multiply",
                 }}
               />
               <div style={{ flex: 1 }}>
