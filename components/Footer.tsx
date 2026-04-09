@@ -81,7 +81,6 @@ export default function Footer() {
           flexDirection: "column",
           justifyContent: "flex-start",
           position: "relative",
-          zIndex: 20,
         }}
       >
         {/* English logo */}
@@ -109,7 +108,7 @@ export default function Footer() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "flex-end",
-          zIndex: 20,
+          position: "relative",
         }}
       >
         <div
@@ -138,7 +137,7 @@ export default function Footer() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "flex-end",
-          zIndex: 20,
+          position: "relative",
         }}
       >
         <div
@@ -177,7 +176,7 @@ export default function Footer() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "flex-end",
-          zIndex: 20,
+          position: "relative",
         }}
       >
         <div
@@ -238,7 +237,7 @@ export default function Footer() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "flex-end",
-          zIndex: 20,
+          position: "relative",
         }}
       >
         <div
