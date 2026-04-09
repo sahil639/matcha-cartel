@@ -170,7 +170,7 @@ function ItemLabel({ num, name, video }: { num: string; name: string; video: str
             flexShrink: 0,
           }}
         >
-          <span className="font-mono-frag" style={{ fontSize: 13, color: "#8796a1", letterSpacing: "0.06em" }}>
+          <span className="font-mono-frag" style={{ fontSize: 13, color: "#ffffff", letterSpacing: "0.06em" }}>
             {num}
           </span>
         </div>
