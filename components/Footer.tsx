@@ -195,27 +195,20 @@ export default function Footer() {
         <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
           {DEALERS.map((d) => (
             <div key={d.num} style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
-              <div
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={d.photo}
+                alt={d.name}
                 style={{
                   flexShrink: 0,
                   width: "clamp(70px, 8vw, 115px)",
                   height: "clamp(85px, 10vw, 140px)",
-                  overflow: "hidden",
+                  objectFit: "cover", objectPosition: "top center",
+                  display: "block",
+                  filter: "grayscale(100%) contrast(1.1)",
+                  mixBlendMode: "overlay",
                 }}
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={d.photo}
-                  alt={d.name}
-                  style={{
-                    width: "100%", height: "100%",
-                    objectFit: "cover", objectPosition: "top center",
-                    display: "block",
-                    filter: "grayscale(100%) contrast(1.1)",
-                    mixBlendMode: "overlay",
-                  }}
-                />
-              </div>
+              />
               <div style={{ flex: 1 }}>
                 <div
                   className="font-mono-frag"
