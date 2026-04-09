@@ -53,7 +53,7 @@ function ItemLabel({ num, name, video }: { num: string; name: string; video: str
 
   const BAR_H = 40;
   const NUM_W = 44;
-  const CARD = 280;
+  const CARD = 128;
 
   const handleEnter = () => {
     setHovered(true);
