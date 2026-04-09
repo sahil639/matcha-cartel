@@ -29,10 +29,13 @@ export default function Footer() {
     <footer
       style={{
         width: "100%",
+        height: "100vh",
         backgroundColor: GREEN,
         color: INK,
         position: "relative",
         overflow: "hidden",
+        display: "flex",
+        flexDirection: "column",
       }}
     >
       {/* ── Top band: title + copyright ── */}
@@ -106,7 +109,8 @@ export default function Footer() {
         style={{
           display: "grid",
           gridTemplateColumns: "1fr 1fr 1fr",
-          minHeight: "clamp(260px, 36vh, 480px)",
+          flex: 1,
+          minHeight: 0,
         }}
       >
         {/* ── Col 1: Behind the Cartels ── */}
