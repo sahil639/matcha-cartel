@@ -6,13 +6,13 @@ const ITEMS = [
   {
     num: "01",
     name: "CHAWAN",
-    item:   "/images/chawan.png",
+    item: "/images/chawan.png",
     shadow: "/images/chawan-shadow.png",
-    video:  "/videos/Bowl.mp4",
+    video: "/videos/Bowl.mp4",
     cx: "28%", cy: "44%",
     width: "clamp(323px, 36.96vw, 554px)",
     z: 3,
-    labelCx: "19%", labelCy: "64%",
+    labelCx: "19%", labelCy: "44%",
   },
 ] as const;
 
@@ -70,127 +70,81 @@ function ItemLabel({ num, name, video }: { num: string; name: string; video: str
     <div
       onMouseEnter={handleEnter}
       onMouseLeave={handleLeave}
-      style={{ userSelect: "none", cursor: "pointer" }}
+      style={{
+        userSelect: "none",
+        cursor: "pointer",
+        position: "relative",
+        width: hovered ? CARD : "max-content",
+        height: hovered ? CARD : BAR_H,
+        border: `1px solid ${HUD_COLOR}`,
+        overflow: "hidden",
+        transition: "width 0.35s ease, height 0.35s ease",
+      }}
     >
-      {hovered ? (
-        /* ── Expanded square card ── */
+      {/* Video — fills above the bar */}
+      <video
+        ref={videoRef}
+        src={video}
+        muted
+        loop
+        playsInline
+        style={{
+          position: "absolute",
+          top: 0, left: 0, right: 0,
+          width: "100%",
+          height: `calc(100% - ${BAR_H}px)`,
+          objectFit: "cover",
+          display: "block",
+          opacity: hovered ? 1 : 0,
+          transition: "opacity 0.2s ease 0.2s",
+        }}
+      />
+
+      {/* HUD corners — only visible area above bar */}
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: BAR_H, pointerEvents: "none", opacity: hovered ? 1 : 0, transition: "opacity 0.2s ease 0.25s" }}>
+        <HudCorners inset={10} />
+      </div>
+
+      {/* Label bar — pinned to bottom, always visible */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: 0, left: 0, right: 0,
+          height: BAR_H,
+          display: "flex",
+          borderTop: hovered ? `1px solid ${HUD_COLOR}` : "none",
+        }}
+      >
         <div
           style={{
-            width: CARD,
-            height: CARD,
-            border: `1px solid ${HUD_COLOR}`,
-            position: "relative",
-            overflow: "hidden",
-            backdropFilter: "blur(6px)",
+            width: NUM_W,
+            backgroundColor: "#8A96A0",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexShrink: 0,
           }}
         >
-          {/* Video */}
-          <video
-            ref={videoRef}
-            src={video}
-            muted
-            loop
-            playsInline
-            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-          />
-
-          {/* HUD corners — inset from top, above the bottom bar */}
-          <div style={{ position: "absolute", inset: 0, bottom: BAR_H }}>
-            <HudCorners inset={10} />
-          </div>
-
-          {/* Bottom label bar */}
-          <div
-            style={{
-              position: "absolute",
-              bottom: 0, left: 0, right: 0,
-              height: BAR_H,
-              display: "flex",
-              borderTop: `1px solid ${HUD_COLOR}`,
-            }}
-          >
-            <div
-              style={{
-                width: NUM_W,
-                backgroundColor: "#8A96A0",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexShrink: 0,
-              }}
-            >
-              <span
-                className="font-mono-frag"
-                style={{ fontSize: 11, color: "#ffffff", letterSpacing: "0.06em" }}
-              >
-                {num}
-              </span>
-            </div>
-            <div
-              style={{
-                flex: 1,
-                backgroundColor: "rgba(220, 228, 234, 0.95)",
-                display: "flex",
-                alignItems: "center",
-                paddingLeft: 12,
-                borderLeft: `1px solid ${HUD_COLOR}`,
-              }}
-            >
-              <span
-                className="font-mono-frag"
-                style={{ fontSize: 11, color: "#4a5560", letterSpacing: "0.1em" }}
-              >
-                {name}
-              </span>
-            </div>
-          </div>
+          <span className="font-mono-frag" style={{ fontSize: 11, color: "#ffffff", letterSpacing: "0.06em" }}>
+            {num}
+          </span>
         </div>
-      ) : (
-        /* ── Default horizontal bar ── */
         <div
           style={{
-            display: "inline-flex",
-            alignItems: "stretch",
-            border: `1px solid ${HUD_COLOR}`,
-            whiteSpace: "nowrap",
-            height: BAR_H,
+            flex: 1,
+            minWidth: 120,
+            backgroundColor: "rgba(220, 228, 234, 0.95)",
+            display: "flex",
+            alignItems: "center",
+            paddingLeft: 12,
+            borderLeft: `1px solid ${HUD_COLOR}`,
           }}
         >
-          <div
-            style={{
-              width: NUM_W,
-              backgroundColor: "#8A96A0",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexShrink: 0,
-            }}
-          >
-            <span
-              className="font-mono-frag"
-              style={{ fontSize: 11, color: "#ffffff", letterSpacing: "0.06em" }}
-            >
-              {num}
-            </span>
-          </div>
-          <div
-            style={{
-              backgroundColor: "rgba(220, 228, 234, 0.92)",
-              display: "flex",
-              alignItems: "center",
-              padding: "0 18px",
-              borderLeft: `1px solid ${HUD_COLOR}`,
-            }}
-          >
-            <span
-              className="font-mono-frag"
-              style={{ fontSize: 11, color: "#4a5560", letterSpacing: "0.1em" }}
-            >
-              {name}
-            </span>
-          </div>
+          <span className="font-mono-frag" style={{ fontSize: 11, color: "#4a5560", letterSpacing: "0.1em" }}>
+            {name}
+          </span>
         </div>
-      )}
+      </div>
     </div>
   );
 }
@@ -285,13 +239,13 @@ export default function ConfiscatedGoods() {
               />
             </div>
 
-            {/* Label — anchored bottom-left, grows upward on hover */}
+            {/* Label — bottom edge fixed at labelCy, grows upward on hover */}
             <div
               style={{
                 position: "absolute",
                 left: item.labelCx,
                 top: item.labelCy,
-                transform: "translate(0, -50%)",
+                transform: "translateY(-100%)",
                 zIndex: 40,
               }}
             >
