@@ -48,6 +48,17 @@ const ITEMS = [
     labelCx: "45%", labelCy: "74%",
   },
   {
+    num: "04",
+    name: "CHASEN STAND",
+    item: "/images/chasen-stand.png",
+    shadow: null,
+    video: "/videos/Bowl.mp4",
+    cx: "40%", cy: "65%",
+    width: "clamp(120px, 13vw, 200px)",
+    z: 5,
+    labelCx: "33%", labelCy: "78%",
+  },
+  {
     num: "02",
     name: "MATCHA POWDER",
     item: "/images/matcha powder.png",
