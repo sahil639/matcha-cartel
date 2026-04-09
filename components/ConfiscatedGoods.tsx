@@ -50,8 +50,8 @@ const ITEMS = [
   {
     num: "04",
     name: "CHASEN STAND",
-    item: "/images/chasen-stand.png",
-    shadow: null,
+    item: "/images/chasenstand.png",
+    shadow: "/images/chasenstandshadow.png",
     video: "/videos/Bowl.mp4",
     cx: "40%", cy: "65%",
     width: "clamp(200px, 22vw, 340px)",
