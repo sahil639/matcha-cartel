@@ -169,7 +169,7 @@ function ItemLabel({ num, name, video }: { num: string; name: string; video: str
             flexShrink: 0,
           }}
         >
-          <span className="font-mono-frag" style={{ fontSize: 13, color: "#ffffff", letterSpacing: "0.06em" }}>
+          <span className="font-mono-frag" style={{ fontSize: 13, color: "#8796a1", letterSpacing: "0.06em" }}>
             {num}
           </span>
         </div>
@@ -184,7 +184,7 @@ function ItemLabel({ num, name, video }: { num: string; name: string; video: str
             borderLeft: `1px solid ${HUD_COLOR}`,
           }}
         >
-          <span className="font-mono-frag" style={{ fontSize: 13, color: "#4a5560", letterSpacing: "0.1em" }}>
+          <span className="font-mono-frag" style={{ fontSize: 13, color: "#8796a1", letterSpacing: "0.1em" }}>
             {name}
           </span>
         </div>
