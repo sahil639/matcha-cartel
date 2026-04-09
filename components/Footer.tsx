@@ -1,8 +1,7 @@
 "use client";
 
-
-const GREEN  = "#8dff00";
-const INK    = "#111111";
+const GREEN = "#8ccc00";
+const INK = "#111111";
 const BORDER = `1px solid ${INK}`;
 
 const DEALERS = [
@@ -34,242 +33,275 @@ export default function Footer() {
         color: INK,
         position: "relative",
         overflow: "hidden",
-        display: "flex",
-        flexDirection: "column",
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr 1fr clamp(140px, 14vw, 220px)",
+        gridTemplateRows: "auto 1fr",
       }}
     >
-      {/* ── Top band: title + copyright ── */}
+      {/* ── Textures ── */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/images/foot1.png"
+        alt=""
+        style={{
+          position: "absolute", inset: 0, width: "100%", height: "100%",
+          objectFit: "cover", mixBlendMode: "exclusion",
+          pointerEvents: "none", zIndex: 10,
+        }}
+      />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/images/foot2.png"
+        alt=""
+        style={{
+          position: "absolute", inset: 0, width: "100%", height: "100%",
+          objectFit: "cover", mixBlendMode: "multiply", opacity: 0.5,
+          pointerEvents: "none", zIndex: 11,
+        }}
+      />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/images/foot3.png"
+        alt=""
+        style={{
+          position: "absolute", right: 0, top: 0, height: "100%", width: "auto",
+          mixBlendMode: "multiply", opacity: 0.5,
+          pointerEvents: "none", zIndex: 11,
+        }}
+      />
+
+      {/* ── ROW 1 Col 1–3: Logo block ── */}
       <div
         style={{
-          display: "grid",
-          gridTemplateColumns: "1fr auto",
+          gridColumn: "1 / 4",
+          gridRow: "1",
           borderBottom: BORDER,
+          borderRight: BORDER,
+          padding: "10px 16px 14px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-start",
+          position: "relative",
+          zIndex: 20,
         }}
       >
-        {/* Title block */}
-        <div style={{ padding: "10px 16px 8px" }}>
-          <div
-            className="font-hubot"
-            style={{
-              fontSize: "clamp(64px, 11.5vw, 180px)",
-              lineHeight: 0.92,
-              letterSpacing: "-0.02em",
-              color: INK,
-              userSelect: "none",
-            }}
-          >
-            MatchaCartel
-          </div>
-          <div
-            className="font-hubot"
-            style={{
-              fontSize: "clamp(32px, 5.8vw, 90px)",
-              lineHeight: 1.0,
-              letterSpacing: "-0.01em",
-              color: INK,
-              marginTop: 6,
-              userSelect: "none",
-            }}
-          >
-            抹茶カルテル
-          </div>
-        </div>
-
-        {/* Copyright + nav dots */}
-        <div
-          style={{
-            borderLeft: BORDER,
-            padding: "12px 14px",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            minWidth: "clamp(180px, 18vw, 280px)",
-          }}
-        >
-          <div
-            className="font-mono-frag"
-            style={{
-              fontSize: "clamp(8px, 0.75vw, 11px)",
-              lineHeight: 1.8,
-              letterSpacing: "0.04em",
-              color: INK,
-              textTransform: "uppercase",
-            }}
-          >
-            ©2026 Matcha Cartel.<br />
-            All Rights Reserved.<br />
-            Distributed Under Strict Control.<br />
-            Non-Transferable.
-          </div>
-        </div>
+        {/* English logo */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/svgs/logo-en.svg"
+          alt="MatchaCartel"
+          style={{ width: "100%", height: "auto", display: "block", filter: "brightness(0)" }}
+        />
+        {/* Japanese logo */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/svgs/logo-jp.svg"
+          alt="抹茶カルテル"
+          style={{ width: "42%", height: "auto", display: "block", filter: "brightness(0)", marginTop: 6 }}
+        />
       </div>
 
-      {/* ── Bottom band: 3 columns ── */}
+      {/* ── ROW 1 Col 4: Copyright ── */}
       <div
         style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr 1fr",
-          flex: 1,
-          minHeight: 0,
+          gridColumn: "4",
+          gridRow: "1",
+          borderBottom: BORDER,
+          padding: "12px 14px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-end",
+          zIndex: 20,
         }}
       >
-        {/* ── Col 1: Behind the Cartels ── */}
         <div
+          className="font-lockscreen"
           style={{
-            borderRight: BORDER,
-            padding: "20px 18px 24px",
-            display: "flex",
-            flexDirection: "column",
-            gap: 0,
+            fontSize: "clamp(7px, 0.65vw, 10px)",
+            lineHeight: 1.85,
+            letterSpacing: "0.04em",
+            color: INK,
+            textTransform: "uppercase",
           }}
         >
-          <div
-            className="font-mono-frag"
-            style={{
-              fontSize: "clamp(9px, 0.85vw, 13px)",
-              letterSpacing: "0.12em",
-              color: INK,
-              borderBottom: BORDER,
-              paddingBottom: 8,
-              marginBottom: 16,
-            }}
-          >
-            BEHIND THE CARTELS
-          </div>
-
-          <p
-            className="font-mono-frag"
-            style={{ fontSize: "clamp(9px, 0.8vw, 12px)", lineHeight: 1.75, color: INK, margin: "0 0 16px 0" }}
-          >
-            Matcha Cartel began as a shared interest in matcha and an observation of its rapid rise as a global trend. As demand grew, scarcity followed, shifting matcha from ritual ingredient to high-value commodity.
-          </p>
-          <p
-            className="font-mono-frag"
-            style={{ fontSize: "clamp(9px, 0.8vw, 12px)", lineHeight: 1.75, color: INK, margin: 0 }}
-          >
-            This project reframes matcha through a darker visual language, presenting it as something controlled, traded, and desired rather than purely ceremonial. Familiar wellness aesthetics are replaced with systems of restriction, excess, and spectacle.
-          </p>
-        </div>
-
-        {/* ── Col 2: The Dealers ── */}
-        <div
-          style={{
-            borderRight: BORDER,
-            padding: "20px 18px 24px",
-            display: "flex",
-            flexDirection: "column",
-            gap: 0,
-          }}
-        >
-          <div
-            className="font-mono-frag"
-            style={{
-              fontSize: "clamp(9px, 0.85vw, 13px)",
-              letterSpacing: "0.12em",
-              color: INK,
-              borderBottom: BORDER,
-              paddingBottom: 8,
-              marginBottom: 16,
-            }}
-          >
-            THE DEALERS
-          </div>
-
-          <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-            {DEALERS.map((d) => (
-              <div key={d.num} style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
-                {/* Photo with multiply blend */}
-                <div
-                  style={{
-                    flexShrink: 0,
-                    width: "clamp(70px, 8vw, 115px)",
-                    height: "clamp(85px, 10vw, 140px)",
-                    overflow: "hidden",
-                    mixBlendMode: "multiply",
-                  }}
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={d.photo}
-                    alt={d.name}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      objectPosition: "top center",
-                      display: "block",
-                      filter: "grayscale(100%) contrast(1.1)",
-                    }}
-                  />
-                </div>
-
-                {/* Info */}
-                <div style={{ flex: 1 }}>
-                  <div
-                    className="font-mono-frag"
-                    style={{ fontSize: "clamp(8px, 0.75vw, 11px)", color: INK, lineHeight: 1.9, marginBottom: 4 }}
-                  >
-                    DEALER {d.num}:<br />
-                    {d.name} ({d.role})
-                  </div>
-                  <p
-                    className="font-mono-frag"
-                    style={{ fontSize: "clamp(8px, 0.72vw, 11px)", color: INK, lineHeight: 1.75, margin: 0 }}
-                  >
-                    {d.bio}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* ── Col 3: Syndicates ── */}
-        <div
-          style={{
-            padding: "20px 18px 24px",
-            display: "flex",
-            flexDirection: "column",
-            gap: 0,
-          }}
-        >
-          <div
-            className="font-mono-frag"
-            style={{
-              fontSize: "clamp(9px, 0.85vw, 13px)",
-              letterSpacing: "0.12em",
-              color: INK,
-              borderBottom: BORDER,
-              paddingBottom: 8,
-              marginBottom: 16,
-            }}
-          >
-            SYNDICATES
-          </div>
-
-          <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
-            {DEALERS.map((d) => (
-              <div key={d.num} style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                {d.links.map((link) => (
-                  <span
-                    key={link}
-                    className="font-mono-frag"
-                    style={{
-                      fontSize: "clamp(9px, 0.8vw, 12px)",
-                      color: INK,
-                      lineHeight: 1.9,
-                      cursor: "pointer",
-                      textDecoration: "none",
-                    }}
-                  >
-                    {link}
-                  </span>
-                ))}
-              </div>
-            ))}
-          </div>
+          ©2026 Matcha Cartel.<br />
+          All Rights Reserved.<br />
+          Distributed Under Strict Control.<br />
+          Non-Transferable.
         </div>
       </div>
+
+      {/* ── ROW 2 Col 1: Behind the Cartels ── */}
+      <div
+        style={{
+          gridColumn: "1",
+          gridRow: "2",
+          borderRight: BORDER,
+          borderBottom: BORDER,
+          padding: "16px 18px 24px",
+          display: "flex",
+          flexDirection: "column",
+          zIndex: 20,
+        }}
+      >
+        <div
+          className="font-mono-frag"
+          style={{
+            fontSize: "clamp(9px, 0.85vw, 13px)",
+            letterSpacing: "0.12em",
+            color: INK,
+            borderBottom: BORDER,
+            paddingBottom: 8,
+            marginBottom: 16,
+          }}
+        >
+          BEHIND THE CARTELS
+        </div>
+        <p
+          className="font-mono-frag"
+          style={{ fontSize: "clamp(9px, 0.8vw, 12px)", lineHeight: 1.75, color: INK, margin: "0 0 16px 0" }}
+        >
+          Matcha Cartel began as a shared interest in matcha and an observation of its rapid rise as a global trend. As demand grew, scarcity followed, shifting matcha from ritual ingredient to high-value commodity.
+        </p>
+        <p
+          className="font-mono-frag"
+          style={{ fontSize: "clamp(9px, 0.8vw, 12px)", lineHeight: 1.75, color: INK, margin: 0 }}
+        >
+          This project reframes matcha through a darker visual language, presenting it as something controlled, traded, and desired rather than purely ceremonial. Familiar wellness aesthetics are replaced with systems of restriction, excess, and spectacle.
+        </p>
+      </div>
+
+      {/* ── ROW 2 Col 2: The Dealers ── */}
+      <div
+        style={{
+          gridColumn: "2",
+          gridRow: "2",
+          borderRight: BORDER,
+          borderBottom: BORDER,
+          padding: "16px 18px 24px",
+          display: "flex",
+          flexDirection: "column",
+          zIndex: 20,
+        }}
+      >
+        <div
+          className="font-mono-frag"
+          style={{
+            fontSize: "clamp(9px, 0.85vw, 13px)",
+            letterSpacing: "0.12em",
+            color: INK,
+            borderBottom: BORDER,
+            paddingBottom: 8,
+            marginBottom: 16,
+          }}
+        >
+          THE DEALERS
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+          {DEALERS.map((d) => (
+            <div key={d.num} style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
+              <div
+                style={{
+                  flexShrink: 0,
+                  width: "clamp(70px, 8vw, 115px)",
+                  height: "clamp(85px, 10vw, 140px)",
+                  overflow: "hidden",
+                  mixBlendMode: "multiply",
+                }}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={d.photo}
+                  alt={d.name}
+                  style={{
+                    width: "100%", height: "100%",
+                    objectFit: "cover", objectPosition: "top center",
+                    display: "block",
+                    filter: "grayscale(100%) contrast(1.1)",
+                  }}
+                />
+              </div>
+              <div style={{ flex: 1 }}>
+                <div
+                  className="font-mono-frag"
+                  style={{ fontSize: "clamp(8px, 0.75vw, 11px)", color: INK, lineHeight: 1.9, marginBottom: 4 }}
+                >
+                  DEALER {d.num}:<br />
+                  {d.name} ({d.role})
+                </div>
+                <p
+                  className="font-mono-frag"
+                  style={{ fontSize: "clamp(8px, 0.72vw, 11px)", color: INK, lineHeight: 1.75, margin: 0 }}
+                >
+                  {d.bio}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ── ROW 2 Col 3: Syndicates ── */}
+      <div
+        style={{
+          gridColumn: "3",
+          gridRow: "2",
+          borderRight: BORDER,
+          borderBottom: BORDER,
+          padding: "16px 18px 24px",
+          display: "flex",
+          flexDirection: "column",
+          zIndex: 20,
+        }}
+      >
+        <div
+          className="font-mono-frag"
+          style={{
+            fontSize: "clamp(9px, 0.85vw, 13px)",
+            letterSpacing: "0.12em",
+            color: INK,
+            borderBottom: BORDER,
+            paddingBottom: 8,
+            marginBottom: 16,
+          }}
+        >
+          SYNDICATES
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+          {DEALERS.map((d) => (
+            <div key={d.num} style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+              {d.links.map((link) => (
+                <span
+                  key={link}
+                  className="font-mono-frag"
+                  style={{
+                    fontSize: "clamp(9px, 0.8vw, 12px)",
+                    color: INK,
+                    lineHeight: 2,
+                    cursor: "pointer",
+                    textDecoration: "none",
+                    display: "inline-block",
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.textDecoration = "underline")}
+                  onMouseLeave={(e) => (e.currentTarget.style.textDecoration = "none")}
+                >
+                  {link}
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ── ROW 2 Col 4: Empty (nav dots overlay here) ── */}
+      <div
+        style={{
+          gridColumn: "4",
+          gridRow: "2",
+          borderBottom: BORDER,
+          zIndex: 20,
+        }}
+      />
     </footer>
   );
 }
