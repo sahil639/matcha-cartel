@@ -69,6 +69,17 @@ const ITEMS = [
     z: 4,
     labelCx: "67%", labelCy: "75%",
   },
+  {
+    num: "07",
+    name: "CHASHAKU",
+    item: "/images/chashaku.png",
+    shadow: "/images/chashaku-shadow.png",
+    video: "/videos/Bowl.mp4",
+    cx: "50%", cy: "80%",
+    width: "clamp(380px, 44vw, 660px)",
+    z: 1,
+    labelCx: "40%", labelCy: "90%",
+  },
 ] as const;
 
 const ASSEMBLY_LIST = [
