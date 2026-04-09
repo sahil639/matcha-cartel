@@ -54,7 +54,7 @@ const ITEMS = [
     shadow: "/images/chasenstandshadow.png",
     video: "/videos/Bowl.mp4",
     cx: "40%", cy: "65%",
-    width: "clamp(200px, 22vw, 340px)",
+    width: "clamp(310px, 34.1vw, 527px)",
     z: 7,
     labelCx: "33%", labelCy: "78%",
   },
