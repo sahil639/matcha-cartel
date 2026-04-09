@@ -9,7 +9,7 @@ const ITEMS = [
     item:   "/images/chawan.png",
     shadow: "/images/chawan-shadow.png",
     cx: "28%", cy: "44%",
-    width: "clamp(308px, 35.2vw, 528px)",
+    width: "clamp(323px, 36.96vw, 554px)",
     shadowOffsetX: "0%", shadowOffsetY: "0%",
     z: 3,
     labelCx: "19%", labelCy: "64%",
