@@ -47,6 +47,28 @@ const ITEMS = [
     z: 5,
     labelCx: "33%", labelCy: "78%",
   },
+  {
+    num: "03",
+    name: "CHASEN",
+    item: "/images/chasen.png",
+    shadow: "/images/chasen-shadow.png",
+    video: "/videos/Bowl.mp4",
+    cx: "52%", cy: "58%",
+    width: "clamp(160px, 18vw, 270px)",
+    z: 6,
+    labelCx: "45%", labelCy: "74%",
+  },
+  {
+    num: "02",
+    name: "MATCHA POWDER",
+    item: "/images/matcha powder.png",
+    shadow: "/images/matcha powder-shadow.png",
+    video: "/videos/Bowl.mp4",
+    cx: "75%", cy: "62%",
+    width: "clamp(160px, 18vw, 280px)",
+    z: 4,
+    labelCx: "67%", labelCy: "75%",
+  },
 ] as const;
 
 const ASSEMBLY_LIST = [
