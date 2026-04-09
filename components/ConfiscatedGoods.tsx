@@ -12,7 +12,7 @@ const ITEMS = [
     cx: "28%", cy: "44%",
     width: "clamp(323px, 36.96vw, 554px)",
     z: 3,
-    labelCx: "19%", labelCy: "44%",
+    labelCx: "9%", labelCy: "54%",
   },
 ] as const;
 
@@ -58,6 +58,7 @@ function ItemLabel({ num, name, video }: { num: string; name: string; video: str
         width: CARD,
         height: hovered ? CARD + BAR_H : BAR_H,
         border: `1px solid ${HUD_COLOR}`,
+        backgroundColor: "#ffffff",
         overflow: "hidden",
         transition: "height 0.35s ease",
       }}
