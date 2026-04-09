@@ -74,11 +74,11 @@ function ItemLabel({ num, name, video }: { num: string; name: string; video: str
         userSelect: "none",
         cursor: "pointer",
         position: "relative",
-        width: hovered ? CARD : "max-content",
+        width: CARD,
         height: hovered ? CARD : BAR_H,
         border: `1px solid ${HUD_COLOR}`,
         overflow: "hidden",
-        transition: "width 0.35s ease, height 0.35s ease",
+        transition: "height 0.35s ease",
       }}
     >
       {/* Video — fills above the bar */}
