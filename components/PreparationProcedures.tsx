@@ -106,8 +106,8 @@ export default function PreparationProcedures() {
         <h2
           className="font-lockscreen"
           style={{
-            fontSize: "clamp(16px, 2.2vw, 34px)",
-            color: "#ffffff",
+            fontSize: 42,
+            color: "#dbe3ea",
             margin: 0,
             lineHeight: 1,
             letterSpacing: "0.01em",
@@ -179,7 +179,7 @@ export default function PreparationProcedures() {
       >
         <span
           className="font-mono-frag"
-          style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", letterSpacing: "0.12em" }}
+          style={{ fontSize: 13, color: "#dbe3ea", letterSpacing: "0.12em" }}
         >
           (move here to turn on flashlight)
         </span>
@@ -200,8 +200,8 @@ export default function PreparationProcedures() {
         <div
           className="font-mono-frag"
           style={{
-            fontSize: 14,
-            color: "#ffffff",
+            fontSize: 20,
+            color: "#dbe3ea",
             letterSpacing: "0.18em",
             lineHeight: 1.8,
           }}
@@ -211,8 +211,8 @@ export default function PreparationProcedures() {
         <div
           className="font-mono-frag"
           style={{
-            fontSize: 14,
-            color: "#ffffff",
+            fontSize: 20,
+            color: "#dbe3ea",
             letterSpacing: "0.18em",
             lineHeight: 1.8,
             marginBottom: 14,
@@ -223,7 +223,7 @@ export default function PreparationProcedures() {
         <p
           className="font-mono-frag"
           style={{
-            fontSize: 11,
+            fontSize: 16,
             color: "#dbe3ea",
             lineHeight: 1.75,
             whiteSpace: "pre-line",
@@ -249,7 +249,7 @@ export default function PreparationProcedures() {
         >
           <span
             className="font-mono-frag"
-            style={{ fontSize: 11, color: "rgba(255,255,255,0.25)", letterSpacing: "0.1em" }}
+            style={{ fontSize: 13, color: "#dbe3ea", letterSpacing: "0.1em" }}
           >
             (scroll down)
           </span>
