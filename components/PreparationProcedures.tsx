@@ -130,24 +130,32 @@ export default function PreparationProcedures() {
         }}
       >
         {STEPS.map((st, i) => (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            key={i}
-            src={st.src}
-            alt={st.name}
-            style={{
-              position: "absolute",
-              inset: 0,
-              width: "100%",
-              height: "100%",
-              objectFit: "contain",
-              display: "block",
-              opacity: i === step ? 1 : 0,
-              transition: "opacity 0.5s ease",
-              userSelect: "none",
-              pointerEvents: "none",
-            }}
-          />
+          <div key={i} style={{ position: "absolute", inset: 0, opacity: i === step ? 1 : 0, transition: "opacity 0.5s ease" }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={st.src}
+              alt={st.name}
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+                display: "block",
+                userSelect: "none",
+                pointerEvents: "none",
+              }}
+            />
+            {/* Radial gradient overlay matching image shape */}
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                background: "radial-gradient(50% 50% at 50% 50%, rgba(0, 0, 0, 0) 85.92%, #000000 100%)",
+                pointerEvents: "none",
+              }}
+            />
+          </div>
         ))}
       </div>
 
