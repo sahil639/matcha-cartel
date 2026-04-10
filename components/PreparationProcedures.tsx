@@ -33,11 +33,11 @@ const STEPS = [
 const TORCH_R = 300; // px radius of flashlight
 
 export default function PreparationProcedures() {
-  const sectionRef  = useRef<HTMLElement>(null);
-  const stepRef     = useRef(0);
-  const [step, setStep]           = useState(0);
-  const [mousePos, setMousePos]   = useState({ x: 0, y: 0 });
-  const [hovering, setHovering]   = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  const stepRef = useRef(0);
+  const [step, setStep] = useState(0);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [hovering, setHovering] = useState(false);
 
   // ── Mouse tracking ─────────────────────────────────────────────────────────
   const onMouseMove = useCallback((e: React.MouseEvent<HTMLElement>) => {
@@ -125,7 +125,7 @@ export default function PreparationProcedures() {
           left: "50%",
           transform: "translate(-50%, -50%) translateY(-8%)",
           width: "clamp(320px, 48vw, 680px)",
-          height: "clamp(280px, 44vh, 560px)",
+          height: "75vh",
           zIndex: 5,
         }}
       >
