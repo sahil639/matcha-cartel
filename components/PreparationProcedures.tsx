@@ -104,7 +104,7 @@ export default function PreparationProcedures() {
       {/* ── Always-visible heading ── */}
       <div style={{ position: "absolute", top: 20, left: 24, zIndex: 50 }}>
         <h2
-          className="font-hubot"
+          className="font-lockscreen"
           style={{
             fontSize: "clamp(16px, 2.2vw, 34px)",
             color: "#ffffff",
@@ -224,7 +224,7 @@ export default function PreparationProcedures() {
           className="font-mono-frag"
           style={{
             fontSize: 11,
-            color: "rgba(255,255,255,0.5)",
+            color: "#dbe3ea",
             lineHeight: 1.75,
             whiteSpace: "pre-line",
             margin: 0,
