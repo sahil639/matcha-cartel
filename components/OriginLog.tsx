@@ -1262,7 +1262,7 @@ function CardContent({ card }: { card: CardData }) {
 // ─── Draggable card ───────────────────────────────────────────────────────────
 
 function DraggableCard({
-  card, zIndex, onFocus, animateIn, animateInDelay, targetX, targetY,
+  card, zIndex, onFocus, animateIn, animateInDelay, targetX, targetY, canvasRef,
 }: {
   card: CardData;
   zIndex: number;
@@ -1271,6 +1271,7 @@ function DraggableCard({
   animateInDelay: number;
   targetX: number;
   targetY: number;
+  canvasRef: React.RefObject<HTMLDivElement | null>;
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
   // Start off-screen left, rotation 10deg
@@ -1289,6 +1290,18 @@ function DraggableCard({
         `translate(${posRef.current.x}px, ${posRef.current.y}px) rotate(${rotRef.current}deg)`;
     }
   }, []);
+
+  const getBounds = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return { minX: 0, maxX: 9999, minY: 0, maxY: 9999 };
+    const NAV_H = 80;
+    return {
+      minX: 0,
+      maxX: Math.max(0, canvas.clientWidth - card.width),
+      minY: 0,
+      maxY: Math.max(0, canvas.clientHeight - card.height - NAV_H),
+    };
+  }, [canvasRef, card.width, card.height]);
 
   // Set initial off-screen position
   useEffect(() => {
@@ -1361,26 +1374,50 @@ function DraggableCard({
     const dx = e.clientX - lastPtr.current.x;
     const dy = e.clientY - lastPtr.current.y;
     if (dt > 0) velRef.current = { x: (dx / dt) * 16, y: (dy / dt) * 16 };
-    posRef.current.x += dx;
-    posRef.current.y += dy;
+    const b = getBounds();
+    posRef.current.x = Math.max(b.minX, Math.min(b.maxX, posRef.current.x + dx));
+    posRef.current.y = Math.max(b.minY, Math.min(b.maxY, posRef.current.y + dy));
     applyTransform();
     lastPtr.current = { x: e.clientX, y: e.clientY, t: now };
-  }, [applyTransform]);
+  }, [applyTransform, getBounds]);
 
   const onPointerUp = useCallback(() => {
     dragging.current = false;
     setIsDragging(false);
     const animate = () => {
-      velRef.current.x *= 0.9;
-      velRef.current.y *= 0.9;
-      if (Math.abs(velRef.current.x) < 0.15 && Math.abs(velRef.current.y) < 0.15) return;
+      const b = getBounds();
+      const x = posRef.current.x;
+      const y = posRef.current.y;
+      const clampX = Math.max(b.minX, Math.min(b.maxX, x));
+      const clampY = Math.max(b.minY, Math.min(b.maxY, y));
+      const oob = Math.abs(clampX - x) > 0.5 || Math.abs(clampY - y) > 0.5;
+
+      if (oob) {
+        // Spring back toward nearest valid position
+        velRef.current.x += (clampX - x) * 0.12;
+        velRef.current.y += (clampY - y) * 0.12;
+        velRef.current.x *= 0.7;
+        velRef.current.y *= 0.7;
+      } else {
+        velRef.current.x *= 0.9;
+        velRef.current.y *= 0.9;
+      }
+
       posRef.current.x += velRef.current.x;
       posRef.current.y += velRef.current.y;
       applyTransform();
+
+      const settled = Math.abs(velRef.current.x) < 0.15 && Math.abs(velRef.current.y) < 0.15 && !oob;
+      if (settled) {
+        posRef.current.x = Math.max(b.minX, Math.min(b.maxX, posRef.current.x));
+        posRef.current.y = Math.max(b.minY, Math.min(b.maxY, posRef.current.y));
+        applyTransform();
+        return;
+      }
       rafRef.current = requestAnimationFrame(animate);
     };
     rafRef.current = requestAnimationFrame(animate);
-  }, [applyTransform]);
+  }, [applyTransform, getBounds]);
 
   return (
     <div
@@ -1551,6 +1588,7 @@ export default function OriginLog() {
             animateInDelay={idx * 100}
             targetX={targets.current[idx]?.x ?? card.initialX}
             targetY={targets.current[idx]?.y ?? card.initialY}
+            canvasRef={canvasRef}
           />
         ))}
 

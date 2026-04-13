@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 
 const ITEMS = [
   {
@@ -94,129 +94,6 @@ const ASSEMBLY_LIST = [
 
 const HUD_COLOR = "#8A96A0";
 
-// Spring constants
-const K = 0.055;
-const D = 0.72;
-const INITIAL_X = -900;
-const INITIAL_ROT = 24;
-
-// Delay: items on the left (low cx%) get less delay, right (high cx%) get more
-function getDelay(cx: string): number {
-  const pct = parseFloat(cx); // 0–100
-  return pct * 6; // 0–600ms
-}
-
-function useSpringEntry(delay: number, triggered: boolean) {
-  const [transform, setTransform] = useState(
-    `translateX(${INITIAL_X}px) rotate(${INITIAL_ROT}deg)`
-  );
-  const [opacity, setOpacity] = useState(0);
-  const rafRef = useRef<number>(0);
-  const state = useRef({ x: INITIAL_X, rot: INITIAL_ROT, vx: 0, vrot: 0 });
-  const started = useRef(false);
-
-  useEffect(() => {
-    if (!triggered || started.current) return;
-    const timer = setTimeout(() => {
-      started.current = true;
-      const tick = () => {
-        const s = state.current;
-        const ax = -K * s.x - D * s.vx;
-        const arot = -K * s.rot - D * s.vrot;
-        s.vx += ax;
-        s.vrot += arot;
-        s.x += s.vx;
-        s.rot += s.vrot;
-
-        const op = Math.min(1, Math.max(0, 1 - Math.abs(s.x) / Math.abs(INITIAL_X)));
-        setTransform(`translateX(${s.x.toFixed(2)}px) rotate(${s.rot.toFixed(2)}deg)`);
-        setOpacity(op);
-
-        if (Math.abs(s.x) > 0.3 || Math.abs(s.vx) > 0.1) {
-          rafRef.current = requestAnimationFrame(tick);
-        } else {
-          setTransform("translateX(0px) rotate(0deg)");
-          setOpacity(1);
-        }
-      };
-      rafRef.current = requestAnimationFrame(tick);
-    }, delay);
-
-    return () => {
-      clearTimeout(timer);
-      cancelAnimationFrame(rafRef.current);
-    };
-  }, [triggered, delay]);
-
-  return { transform, opacity };
-}
-
-function AnimatedItem({
-  item,
-  triggered,
-}: {
-  item: typeof ITEMS[number];
-  triggered: boolean;
-}) {
-  const delay = getDelay(item.cx);
-  const { transform, opacity } = useSpringEntry(delay, triggered);
-
-  return (
-    <div key={item.num} style={{ transform, opacity, willChange: "transform, opacity" }}>
-      {/* Shadow */}
-      {item.shadow && (
-        <div
-          style={{
-            position: "absolute",
-            left: item.cx,
-            top: item.cy,
-            transform: "translate(-50%, -50%)",
-            width: item.width,
-            zIndex: item.z,
-            pointerEvents: "none",
-          }}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={item.shadow} alt="" style={{ width: "100%", height: "auto", display: "block", opacity: 0.7 }} />
-        </div>
-      )}
-
-      {/* Item image */}
-      <div
-        style={{
-          position: "absolute",
-          left: item.cx,
-          top: item.cy,
-          transform: "translate(-50%, -50%)",
-          width: item.width,
-          zIndex: item.z,
-          pointerEvents: "none",
-        }}
-      >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={item.item}
-          alt={item.name}
-          style={{ width: "100%", height: "auto", display: "block", position: "relative", zIndex: 1 }}
-        />
-      </div>
-
-      {/* Label */}
-      <div
-        style={{
-          position: "absolute",
-          left: item.labelCx,
-          top: item.labelCy,
-          transform: "translateY(-100%)",
-          zIndex: 40,
-        }}
-      >
-        <ItemLabel num={item.num} name={item.name} video={item.video} />
-      </div>
-    </div>
-  );
-}
-
 function ItemLabel({ num, name, video }: { num: string; name: string; video: string }) {
   const [hovered, setHovered] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -253,6 +130,7 @@ function ItemLabel({ num, name, video }: { num: string; name: string; video: str
         transition: "height 0.35s ease",
       }}
     >
+      {/* Video — padded above the bar */}
       <video
         ref={videoRef}
         src={video}
@@ -272,6 +150,7 @@ function ItemLabel({ num, name, video }: { num: string; name: string; video: str
         }}
       />
 
+      {/* Label bar — pinned to bottom, always visible */}
       <div
         style={{
           position: "absolute",
@@ -316,31 +195,8 @@ function ItemLabel({ num, name, video }: { num: string; name: string; video: str
 }
 
 export default function ConfiscatedGoods() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const hasAnimated = useRef(false);
-  const [triggered, setTriggered] = useState(false);
-
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !hasAnimated.current) {
-          hasAnimated.current = true;
-          setTriggered(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.25 }
-    );
-    observer.observe(section);
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <section
-      ref={sectionRef}
       style={{
         width: "100%",
         height: "100vh",
@@ -387,9 +243,60 @@ export default function ConfiscatedGoods() {
           </span>
         </div>
 
-        {/* Items — each animates independently with spring */}
+        {/* Items */}
         {ITEMS.map((item) => (
-          <AnimatedItem key={item.num} item={item} triggered={triggered} />
+          <div key={item.num}>
+            {/* Shadow */}
+            {item.shadow && (
+              <div
+                style={{
+                  position: "absolute",
+                  left: item.cx,
+                  top: item.cy,
+                  transform: "translate(-50%, -50%)",
+                  width: item.width,
+                  zIndex: item.z,
+                  pointerEvents: "none",
+                }}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={item.shadow} alt="" style={{ width: "100%", height: "auto", display: "block", opacity: 0.7 }} />
+              </div>
+            )}
+
+            {/* Item image */}
+            <div
+              style={{
+                position: "absolute",
+                left: item.cx,
+                top: item.cy,
+                transform: "translate(-50%, -50%)",
+                width: item.width,
+                zIndex: item.z,
+                pointerEvents: "none",
+              }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={item.item}
+                alt={item.name}
+                style={{ width: "100%", height: "auto", display: "block", position: "relative", zIndex: 1 }}
+              />
+            </div>
+
+            {/* Label — bottom edge fixed at labelCy, grows upward on hover */}
+            <div
+              style={{
+                position: "absolute",
+                left: item.labelCx,
+                top: item.labelCy,
+                transform: "translateY(-100%)",
+                zIndex: 40,
+              }}
+            >
+              <ItemLabel num={item.num} name={item.name} video={item.video} />
+            </div>
+          </div>
         ))}
       </div>
 
