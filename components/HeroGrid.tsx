@@ -200,8 +200,8 @@ function MobileHeroGrid() {
           flex: 1,
           minHeight: 0,
           display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gridTemplateRows: "repeat(5, 1fr)",
+          gridTemplateColumns: "repeat(5, 1fr)",
+          gridTemplateRows: "repeat(3, 1fr)",
           position: "relative",
           overflow: "visible",
         }}
@@ -212,11 +212,11 @@ function MobileHeroGrid() {
             num={num}
             src={src}
             isGlitch={GLITCH_NUMS.has(num)}
-            row={Math.floor(idx / 3)}
-            col={idx % 3}
+            row={Math.floor(idx / 5)}
+            col={idx % 5}
           />
         ))}
-        <CrossMarkers rows={5} cols={3} />
+        <CrossMarkers rows={3} cols={5} />
       </div>
 
       {/* Extra text row — no column dividers */}
