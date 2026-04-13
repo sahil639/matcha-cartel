@@ -67,7 +67,7 @@ function ImageCell({
           style={{
             position: "relative",
             height: hovered ? "56%" : "40%",   // 40% × 1.4 = 56% on hover
-            aspectRatio: hovered ? "4 / 3" : "1 / 1",
+            aspectRatio: hovered ? "23 / 15" : "1 / 1",
             transition: "height 0.35s ease, aspect-ratio 0.35s ease",
             overflow: "hidden",
           }}
@@ -124,7 +124,7 @@ function ImageCell({
       <div
         style={{
           position: "absolute",
-          top: "72%",
+          top: "calc(78% + 4px)",
           left: "50%",
           transform: "translateX(-50%)",
           opacity: hovered ? 1 : 0,

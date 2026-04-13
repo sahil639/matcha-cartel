@@ -162,18 +162,30 @@ export default function Hyperfixation() {
         },
       });
 
-      // ── Stage 1: All 6 images visible at t=0, exit one-by-one over 3 units each
-      // Set initial position (images start at ix/iy, already visible)
+      // ── Stage 1: Images burst from center → ix/iy, then exit to tx/ty ──────
+      // Start all images at center, invisible and scaled to 0
       BURST.forEach((conf, i) => {
         const el = imageRefs.current[i];
         if (!el) return;
-        gsap.set(el, { x: conf.ix, y: conf.iy, opacity: 1, scale: 1 });
+        gsap.set(el, { x: 0, y: 0, scale: 0, opacity: 0 });
       });
 
-      // t=0→1.5: Hold — all 6 visible, nothing animating
-      tl.to({}, { duration: 1.5 });
+      // t=0→1.35: Staggered burst-in — each image flies from center to its position
+      // img0: 0→0.6, img1: 0.15→0.75, ..., img5: 0.75→1.35
+      BURST.forEach((conf, i) => {
+        const el = imageRefs.current[i];
+        if (!el) return;
+        tl.to(
+          el,
+          { x: conf.ix, y: conf.iy, scale: 1, opacity: 1, duration: 0.6, ease: "power2.out" },
+          i * 0.15
+        );
+      });
 
-      // t=1.5: Staggered exit — each image takes 3 units, 0.5 stagger between starts
+      // t=1.35→1.5: Hold — all 6 visible at their positions
+      tl.to({}, { duration: 0.15 });
+
+      // t=1.5: Staggered exit — each image drifts to tx/ty and fades
       // img0: 1.5→4.5, img1: 2→5, img2: 2.5→5.5, img3: 3→6, img4: 3.5→6.5, img5: 4→7
       BURST.forEach((conf, i) => {
         const el = imageRefs.current[i];
@@ -233,7 +245,7 @@ export default function Hyperfixation() {
             left: "50%", top: "50%",
             width: img.w, height: img.h,
             marginLeft: -img.w / 2, marginTop: -img.h / 2,
-            opacity: 1, overflow: "hidden", zIndex: 20,
+            opacity: 0, overflow: "hidden", zIndex: 20,
           }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
