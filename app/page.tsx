@@ -25,8 +25,9 @@ export default function Home() {
         <div className="flex-1" style={{ minHeight: 0 }}>
           <HeroGrid />
         </div>
+        {/* Desktop-only bottom bar — hidden on mobile (HeroGrid handles its own bottom bar) */}
         <div
-          className="relative w-full flex items-center"
+          className="relative w-full items-center hidden md:flex"
           style={{ borderTop: "0.5px solid var(--text)", gap: 24, paddingRight: 24 }}
         >
           <LogoSwap />

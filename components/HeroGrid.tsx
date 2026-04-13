@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import GlitchNumber from "./GlitchNumber";
 
 const GLITCH_NUMS = new Set(["01", "07", "10", "14"]);
@@ -28,6 +28,8 @@ const CORNERS: { pos: React.CSSProperties; border: React.CSSProperties }[] = [
   { pos: { bottom: -6, left: -6 }, border: { borderBottom: HUD_BORDER, borderLeft: HUD_BORDER } },
   { pos: { bottom: -6, right: -6 }, border: { borderBottom: HUD_BORDER, borderRight: HUD_BORDER } },
 ];
+
+// ─── Desktop image cell ───────────────────────────────────────────────────────
 
 function ImageCell({
   num, src, lot, isGlitch, row, col,
@@ -58,21 +60,15 @@ function ImageCell({
 
       {/* Centered image area */}
       <div className="absolute inset-0 flex items-center justify-center">
-        {/*
-          Wrapper: 40% cell height (15% bigger than before).
-          Default: square (1:1). Hover: rectangle (4:3), clipped.
-          No scaling — image fills the shape via objectFit cover.
-        */}
         <div
           style={{
             position: "relative",
-            height: hovered ? "56%" : "40%",   // 40% × 1.4 = 56% on hover
+            height: hovered ? "56%" : "40%",
             aspectRatio: hovered ? "23 / 15" : "1 / 1",
             transition: "height 0.35s ease, aspect-ratio 0.35s ease",
             overflow: "hidden",
           }}
         >
-          {/* Image — fills wrapper, no scale transform */}
           <Image
             src={src}
             alt={`Matcha ${num}`}
@@ -82,11 +78,7 @@ function ImageCell({
             sizes="15vw"
           />
 
-          {/*
-            Color blend overlay: #8796a1 with mix-blend-mode color
-            replaces old grayscale filter.
-            Fades out on hover to reveal natural color.
-          */}
+          {/* Color blend overlay */}
           <div
             style={{
               position: "absolute",
@@ -100,7 +92,7 @@ function ImageCell({
             }}
           />
 
-          {/* HUD corner brackets (inside clipped area, anchored to corners) */}
+          {/* HUD corner brackets */}
           {CORNERS.map((c, i) => (
             <div
               key={i}
@@ -120,7 +112,7 @@ function ImageCell({
         </div>
       </div>
 
-      {/* LOT label — appears below image on hover, black text */}
+      {/* LOT label */}
       <div
         style={{
           position: "absolute",
@@ -145,7 +137,164 @@ function ImageCell({
   );
 }
 
+// ─── Mobile image cell ────────────────────────────────────────────────────────
+
+function MobileImageCell({
+  num, src, isGlitch, row, col,
+}: {
+  num: string; src: string; isGlitch: boolean; row: number; col: number;
+}) {
+  return (
+    <div
+      className="relative"
+      style={{
+        gridColumn: col + 1,
+        gridRow: row + 1,
+        borderRight: BORDER,
+        borderBottom: BORDER,
+        borderLeft: col === 0 ? BORDER : undefined,
+        borderTop: row === 0 ? BORDER : undefined,
+        overflow: "hidden",
+      }}
+    >
+      {/* Number label */}
+      <div style={{ position: "absolute", top: 4, left: 4, zIndex: 10 }}>
+        <GlitchNumber label={`(${num})`} glitch={isGlitch} />
+      </div>
+
+      {/* Image — natural green, no grey overlay, no hover */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div style={{ position: "relative", width: "68%", aspectRatio: "1 / 1", overflow: "hidden" }}>
+          <Image
+            src={src}
+            alt={`Matcha ${num}`}
+            fill
+            priority
+            className="object-cover"
+            sizes="33vw"
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Mobile layout ────────────────────────────────────────────────────────────
+
+function MobileHeroGrid() {
+  return (
+    <div
+      style={{
+        width: "100%",
+        height: "100svh",
+        display: "flex",
+        flexDirection: "column",
+        backgroundColor: "var(--bg)",
+        overflow: "hidden",
+        position: "relative",
+      }}
+    >
+      {/* 3×5 image grid */}
+      <div
+        style={{
+          flex: 1,
+          minHeight: 0,
+          display: "grid",
+          gridTemplateColumns: "repeat(3, 1fr)",
+          gridTemplateRows: "repeat(5, 1fr)",
+          position: "relative",
+          overflow: "visible",
+        }}
+      >
+        {IMAGES.map(({ num, src }, idx) => (
+          <MobileImageCell
+            key={num}
+            num={num}
+            src={src}
+            isGlitch={GLITCH_NUMS.has(num)}
+            row={Math.floor(idx / 3)}
+            col={idx % 3}
+          />
+        ))}
+        <CrossMarkers rows={5} cols={3} />
+      </div>
+
+      {/* Extra text row — no column dividers */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr 1fr",
+          borderTop: BORDER,
+          borderBottom: BORDER,
+          borderLeft: BORDER,
+          borderRight: BORDER,
+          flexShrink: 0,
+        }}
+      >
+        <div style={{ padding: "6px 8px" }}>
+          <p
+            className="font-lockscreen uppercase"
+            style={{ fontSize: 9, lineHeight: 1.3, letterSpacing: ".3px", color: "var(--text)", margin: 0 }}
+          >
+            THE WORLD&apos;S MOST DESIRED GREEN POWDER.
+          </p>
+        </div>
+        {/* Center cell — empty, no dividers */}
+        <div />
+        <div style={{ padding: "6px 8px" }}>
+          <p
+            className="font-lockscreen uppercase"
+            style={{ fontSize: 9, lineHeight: 1.3, letterSpacing: ".3px", color: "var(--text)", margin: 0 }}
+          >
+            TRACKED. GRADED. DISTRIBUTED. WHAT LOOKS LIKE TEA MOVES LIKE A COMMODITY.
+          </p>
+        </div>
+      </div>
+
+      {/* MatchaCartel logo + scroll hint */}
+      <div
+        style={{
+          flexShrink: 0,
+          borderTop: BORDER,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "0 12px",
+          height: 48,
+        }}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/svgs/logo-en.svg"
+          alt="MatchaCartel"
+          style={{ height: 28, width: "auto", display: "block", objectFit: "contain" }}
+          draggable={false}
+        />
+        <span
+          className="font-mono-frag"
+          style={{ fontSize: 9, color: "var(--text)", letterSpacing: "0.12em" }}
+        >
+          (scroll down)
+        </span>
+      </div>
+    </div>
+  );
+}
+
+// ─── Desktop layout ───────────────────────────────────────────────────────────
+
 export default function HeroGrid() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  if (isMobile) return <MobileHeroGrid />;
+
   return (
     <div
       className="relative w-full"
@@ -172,7 +321,7 @@ export default function HeroGrid() {
 
       {/* Text column — col 6 */}
 
-      {/* Row 1: top tagline — font-lockscreen (78wPss3wDcm038Pbi4wdFX6Utkk.ttf) */}
+      {/* Row 1: top tagline */}
       <div
         className="relative"
         style={{
@@ -200,7 +349,7 @@ export default function HeroGrid() {
         }}
       />
 
-      {/* Row 3: bottom tagline — font-lockscreen (78wPss3wDcm038Pbi4wdFX6Utkk.ttf) */}
+      {/* Row 3: bottom tagline */}
       <div
         className="relative"
         style={{
