@@ -1443,9 +1443,145 @@ function DraggableCard({
   );
 }
 
+// ─── Mobile: stacked swipeable cards ─────────────────────────────────────────
+
+const DISPLAY_W = 280; // target card display width
+const DISPLAY_H = 370; // target card display height
+
+const STACK_CONFIGS = [
+  { scale: 1,    x:  0, y:   0, opacity: 1,    z: 50 },
+  { scale: 0.95, x: 12, y: -10, opacity: 0.85, z: 40 },
+  { scale: 0.90, x: 24, y: -20, opacity: 0.7,  z: 30 },
+  { scale: 0.85, x: 36, y: -30, opacity: 0.55, z: 20 },
+  { scale: 0.80, x: 48, y: -40, opacity: 0.4,  z: 10 },
+];
+
+function MobileOriginLog() {
+  const [order, setOrder] = useState(CARDS.map((_, i) => i));
+  const [swipeDir, setSwipeDir] = useState<"left" | "right" | null>(null);
+  const touchStartX = useRef(0);
+  const isAnimating = useRef(false);
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (isAnimating.current) return;
+    const delta = e.changedTouches[0].clientX - touchStartX.current;
+    if (Math.abs(delta) < 40) return;
+    isAnimating.current = true;
+    const dir = delta > 0 ? "right" : "left";
+    setSwipeDir(dir);
+    setTimeout(() => {
+      setOrder(prev => {
+        const next = [...prev];
+        const first = next.shift()!;
+        next.push(first);
+        return next;
+      });
+      setSwipeDir(null);
+      setTimeout(() => { isAnimating.current = false; }, 60);
+    }, 380);
+  };
+
+  return (
+    <section style={{ width: "100%", height: "100svh", display: "flex", flexDirection: "column", overflow: "hidden" }}>
+
+      {/* ── Header — white panel ── */}
+      <div style={{ backgroundColor: "#ffffff", padding: "24px 20px 20px", flexShrink: 0, borderBottom: "0.5px solid rgba(0,0,0,0.08)" }}>
+        <h1 className="font-lockscreen" style={{ fontSize: "clamp(32px, 9vw, 56px)", color: "#111", lineHeight: 1, margin: "0 0 14px 0" }}>
+          ORIGIN LOG: MATCHA
+        </h1>
+        <h2 className="font-mono-frag" style={{ fontSize: "clamp(13px, 3.5vw, 18px)", color: "#111", lineHeight: 1.4, margin: "0 0 14px 0", fontWeight: 400 }}>
+          DOCUMENTED HISTORY OF THE GREEN POWDER
+        </h2>
+        <p className="font-mono-frag" style={{ fontSize: 12, color: "#333", lineHeight: 1.7, margin: 0 }}>
+          An overview of matcha&apos;s early development, including changes in production methods, use, and standardization.
+        </p>
+      </div>
+
+      {/* ── Canvas — black, stacked cards ── */}
+      <div
+        style={{ flex: 1, minHeight: 0, backgroundColor: "#000", position: "relative" }}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+      >
+        {/* Swipe hint */}
+        <div style={{ position: "absolute", top: 14, left: "50%", transform: "translateX(-50%)", zIndex: 200, pointerEvents: "none", whiteSpace: "nowrap" }}>
+          <GlitchLabel text="(swipe to browse)" color={LIME} />
+        </div>
+
+        {/* Cards — rendered back to front */}
+        {[...order].reverse().map((cardIdx, revIdx) => {
+          const stackPos = order.length - 1 - revIdx; // 0 = front
+          const card = CARDS[cardIdx];
+          const isTop = stackPos === 0;
+          const cfg = STACK_CONFIGS[Math.min(stackPos, STACK_CONFIGS.length - 1)];
+
+          // Scale card content to fit DISPLAY_W × DISPLAY_H
+          const scaleX = DISPLAY_W / card.width;
+          const scaleY = DISPLAY_H / card.height;
+          const contentScale = Math.min(scaleX, scaleY);
+          const displayW = card.width * contentScale;
+          const displayH = card.height * contentScale;
+
+          // Swipe-off transform for the top card
+          const swipeTransform = isTop && swipeDir
+            ? swipeDir === "left"
+              ? `translate(calc(-50% + ${cfg.x}px), calc(-50% + ${cfg.y}px)) scale(${cfg.scale}) translateX(-140%) rotate(-12deg)`
+              : `translate(calc(-50% + ${cfg.x}px), calc(-50% + ${cfg.y}px)) scale(${cfg.scale}) translateX(140%) rotate(12deg)`
+            : `translate(calc(-50% + ${cfg.x}px), calc(-50% + ${cfg.y}px)) scale(${cfg.scale})`;
+
+          return (
+            <div
+              key={card.id}
+              style={{
+                position: "absolute",
+                left: "50%",
+                top: "52%",
+                width: displayW,
+                height: displayH,
+                overflow: "hidden",
+                zIndex: cfg.z,
+                transform: swipeTransform,
+                opacity: cfg.opacity,
+                transition: isTop && swipeDir
+                  ? "transform 0.38s cubic-bezier(0.4,0,0.6,1)"
+                  : "transform 0.4s ease, opacity 0.4s ease",
+                backgroundColor: card.bg,
+              }}
+            >
+              {/* CardContent scaled to fit display size */}
+              <div style={{
+                width: card.width,
+                height: card.height,
+                transform: `scale(${contentScale})`,
+                transformOrigin: "top left",
+              }}>
+                <CardContent card={card} />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
 // ─── Main section ─────────────────────────────────────────────────────────────
 
 export default function OriginLog() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  if (isMobile) return <MobileOriginLog />;
   const maxZRef = useRef(CARDS.length);
   const [zIndexes, setZIndexes] = useState<Record<string, number>>(() =>
     Object.fromEntries(CARDS.map((c) => [c.id, c.initialZ]))
