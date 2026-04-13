@@ -56,13 +56,14 @@ function GlitchChar({ char, active }: { char: string; active: boolean }) {
 interface GlitchNumberProps {
   label: string;
   glitch?: boolean;
+  fontSize?: number;
 }
 
-export default function GlitchNumber({ label, glitch = false }: GlitchNumberProps) {
+export default function GlitchNumber({ label, glitch = false, fontSize = 10 }: GlitchNumberProps) {
   return (
     <span
       className="font-mono-frag"
-      style={{ color: "#000", fontSize: 10, letterSpacing: "0.04em" }}
+      style={{ color: "#000", fontSize, letterSpacing: "0.04em" }}
     >
       {label.split("").map((char, i) => (
         <GlitchChar key={i} char={char} active={glitch} />

@@ -159,12 +159,12 @@ function MobileImageCell({
     >
       {/* Number label */}
       <div style={{ position: "absolute", top: 4, left: 4, zIndex: 10 }}>
-        <GlitchNumber label={`(${num})`} glitch={isGlitch} />
+        <GlitchNumber label={`(${num})`} glitch={isGlitch} fontSize={14} />
       </div>
 
       {/* Image — natural green, no grey overlay, no hover */}
       <div className="absolute inset-0 flex items-center justify-center">
-        <div style={{ position: "relative", width: "68%", aspectRatio: "1 / 1", overflow: "hidden" }}>
+        <div style={{ position: "relative", width: "56%", aspectRatio: "1 / 1", overflow: "hidden" }}>
           <Image
             src={src}
             alt={`Matcha ${num}`}
@@ -260,14 +260,14 @@ function MobileHeroGrid() {
           alignItems: "center",
           justifyContent: "space-between",
           padding: "0 12px",
-          height: 48,
+          height: 60,
         }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/svgs/logo-en.svg"
           alt="MatchaCartel"
-          style={{ height: 28, width: "auto", display: "block", objectFit: "contain" }}
+          style={{ height: 40, width: "auto", display: "block", objectFit: "contain" }}
           draggable={false}
         />
         <span
