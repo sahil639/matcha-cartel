@@ -260,14 +260,14 @@ function MobileHeroGrid() {
           alignItems: "center",
           justifyContent: "space-between",
           padding: "0 12px",
-          height: 60,
+          height: 100,
         }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/svgs/logo-en.svg"
           alt="MatchaCartel"
-          style={{ height: 40, width: "auto", display: "block", objectFit: "contain" }}
+          style={{ height: 84, width: "auto", display: "block", objectFit: "contain" }}
           draggable={false}
         />
         <span
