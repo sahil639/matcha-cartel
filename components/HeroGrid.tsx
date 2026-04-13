@@ -257,10 +257,12 @@ function MobileHeroGrid() {
           flexShrink: 0,
           borderTop: BORDER,
           display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "0 12px",
-          height: 100,
+          flexDirection: "column",
+          alignItems: "flex-start",
+          justifyContent: "center",
+          padding: "12px 12px",
+          height: 110,
+          gap: 6,
         }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
