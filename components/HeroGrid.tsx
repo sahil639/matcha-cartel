@@ -234,7 +234,7 @@ function MobileHeroGrid() {
         <div style={{ padding: "6px 8px" }}>
           <p
             className="font-lockscreen uppercase"
-            style={{ fontSize: 15, lineHeight: 1.3, letterSpacing: ".3px", color: "var(--text)", margin: 0 }}
+            style={{ fontSize: 14, lineHeight: 1.3, letterSpacing: ".3px", color: "var(--text)", margin: 0 }}
           >
             THE WORLD&apos;S MOST DESIRED GREEN POWDER.
           </p>
@@ -244,7 +244,7 @@ function MobileHeroGrid() {
         <div style={{ padding: "6px 8px" }}>
           <p
             className="font-lockscreen uppercase"
-            style={{ fontSize: 15, lineHeight: 1.3, letterSpacing: ".3px", color: "var(--text)", margin: 0 }}
+            style={{ fontSize: 14, lineHeight: 1.3, letterSpacing: ".3px", color: "var(--text)", margin: 0 }}
           >
             TRACKED. GRADED. DISTRIBUTED. WHAT LOOKS LIKE TEA MOVES LIKE A COMMODITY.
           </p>
@@ -274,7 +274,7 @@ function MobileHeroGrid() {
         />
         <span
           className="font-mono-frag"
-          style={{ fontSize: 15, color: "var(--text)", letterSpacing: "0.12em" }}
+          style={{ fontSize: 14, color: "var(--text)", letterSpacing: "0.12em" }}
         >
           (scroll down)
         </span>
