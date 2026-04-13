@@ -1445,8 +1445,8 @@ function DraggableCard({
 
 // ─── Mobile: stacked swipeable cards ─────────────────────────────────────────
 
-const DISPLAY_W = 280; // target card display width
-const DISPLAY_H = 370; // target card display height
+const DISPLAY_W = 320; // target card display width
+const DISPLAY_H = 430; // target card display height
 
 const STACK_CONFIGS = [
   { scale: 1,    x:  0, y:   0, opacity: 1,    z: 50 },
@@ -1523,8 +1523,6 @@ function MobileOriginLog() {
           const scaleX = DISPLAY_W / card.width;
           const scaleY = DISPLAY_H / card.height;
           const contentScale = Math.min(scaleX, scaleY);
-          const displayW = card.width * contentScale;
-          const displayH = card.height * contentScale;
 
           // Swipe-off transform for the top card
           const swipeTransform = isTop && swipeDir
@@ -1540,24 +1538,21 @@ function MobileOriginLog() {
                 position: "absolute",
                 left: "50%",
                 top: "52%",
-                width: displayW,
-                height: displayH,
-                overflow: "hidden",
                 zIndex: cfg.z,
                 transform: swipeTransform,
                 opacity: cfg.opacity,
                 transition: isTop && swipeDir
                   ? "transform 0.38s cubic-bezier(0.4,0,0.6,1)"
                   : "transform 0.4s ease, opacity 0.4s ease",
-                backgroundColor: card.bg,
               }}
             >
-              {/* CardContent scaled to fit display size */}
+              {/* zoom scales layout too, so the full card renders at display size */}
               <div style={{
                 width: card.width,
                 height: card.height,
-                transform: `scale(${contentScale})`,
-                transformOrigin: "top left",
+                zoom: contentScale,
+                backgroundColor: card.bg,
+                overflow: "hidden",
               }}>
                 <CardContent card={card} />
               </div>
