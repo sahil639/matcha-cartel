@@ -108,8 +108,8 @@ const CARDS: CardData[] = [
     figLabel: "DRIED\nTEA LEAF",
     bg: "#588309",
     color: "#a8c050",
-    width: 520,
-    height: 380,
+    width: 650,
+    height: 475,
     initialX: 180,
     initialY: 140,
     rotation: 0,
@@ -129,8 +129,8 @@ const CARDS: CardData[] = [
     figLabel: "MATCHA\nTEA SEEDS",
     bg: "#8CCC00",           // base color — change here
     color: "#000",
-    width: 356,              // width — change here
-    height: 480,
+    width: 445,              // width — change here
+    height: 600,
     initialX: 160,
     initialY: 80,
     rotation: 0,
@@ -151,8 +151,8 @@ const CARDS: CardData[] = [
     figLabel: "STONE\nGRINDER",
     bg: "#DBE3EA",           // base color — change here
     color: "#000",
-    width: 390,              // width — change here
-    height: 422,        // height — change here (~1:1 ratio)
+    width: 488,              // width — change here
+    height: 528,        // height — change here (~1:1 ratio)
     initialX: 260,
     initialY: 60,
     rotation: 0,
@@ -174,8 +174,8 @@ const CARDS: CardData[] = [
     figLabel: "CHASEN (MATCHA WHISK)",
     bg: "#8796A1",           // base color — change here
     color: "#000",
-    width: 620,              // width — change here (aspect ~1.82:1)
-    height: 340,             // height — change here
+    width: 775,              // width — change here (aspect ~1.82:1)
+    height: 425,             // height — change here
     initialX: 80,
     initialY: 200,
     rotation: 0,
@@ -197,8 +197,8 @@ const CARDS: CardData[] = [
     figLabel: "FRESH TEA LEAF",
     bg: "#8CCC00",
     color: "#000",
-    width: 380,
-    height: 520,
+    width: 475,
+    height: 650,
     initialX: 320,
     initialY: 90,
     rotation: 0,
