@@ -1581,7 +1581,6 @@ export default function OriginLog() {
     return () => window.removeEventListener("resize", check);
   }, []);
 
-  if (isMobile) return <MobileOriginLog />;
   const maxZRef = useRef(CARDS.length);
   const [zIndexes, setZIndexes] = useState<Record<string, number>>(() =>
     Object.fromEntries(CARDS.map((c) => [c.id, c.initialZ]))
@@ -1675,6 +1674,9 @@ export default function OriginLog() {
     });
     return () => timers.forEach(clearTimeout);
   }, [animateIn]);
+
+  // All hooks called above — safe to return early now
+  if (isMobile) return <MobileOriginLog />;
 
   return (
     <section
