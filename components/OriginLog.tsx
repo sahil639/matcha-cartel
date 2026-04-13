@@ -1572,14 +1572,6 @@ function MobileOriginLog() {
 // ─── Main section ─────────────────────────────────────────────────────────────
 
 export default function OriginLog() {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
 
   const maxZRef = useRef(CARDS.length);
   const [zIndexes, setZIndexes] = useState<Record<string, number>>(() =>
@@ -1675,20 +1667,22 @@ export default function OriginLog() {
     return () => timers.forEach(clearTimeout);
   }, [animateIn]);
 
-  // All hooks called above — safe to return early now
-  if (isMobile) return <MobileOriginLog />;
-
   return (
-    <section
-      ref={sectionRef}
-      style={{
-        width: "100%",
-        height: "100svh",
-        display: "flex",
-        backgroundColor: "#000",
-        overflow: "hidden",
-      }}
-    >
+    <>
+      <div className="block md:hidden">
+        <MobileOriginLog />
+      </div>
+      <div className="hidden md:block">
+      <section
+        ref={sectionRef}
+        style={{
+          width: "100%",
+          height: "100svh",
+          display: "flex",
+          backgroundColor: "#000",
+          overflow: "hidden",
+        }}
+      >
       {/* ── Left canvas ── */}
       <div
         ref={canvasRef}
@@ -1807,6 +1801,8 @@ export default function OriginLog() {
           </p>
         </div>
       </div>
-    </section>
+      </section>
+      </div>
+    </>
   );
 }
