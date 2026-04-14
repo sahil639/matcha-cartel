@@ -32,6 +32,148 @@ const STEPS = [
 
 const TORCH_R = 300; // px radius of flashlight
 
+// ─── Mobile ───────────────────────────────────────────────────────────────────
+
+function MobilePreparationProcedures() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const stepRef = useRef(0);
+  const [step, setStep] = useState(0);
+
+  useLayoutEffect(() => {
+    const section = sectionRef.current;
+    if (!section || section.clientWidth === 0) return;
+
+    const ctx = gsap.context(() => {
+      ScrollTrigger.create({
+        trigger: section,
+        start: "top top",
+        end: "+=200%",
+        pin: true,
+        pinSpacing: true,
+        snap: { snapTo: [0, 0.5, 1], duration: { min: 0.2, max: 0.5 }, ease: "power1.inOut" },
+        onUpdate(self) {
+          const p = self.progress;
+          const newStep = p >= 0.85 ? 2 : p >= 0.45 ? 1 : 0;
+          if (newStep !== stepRef.current) {
+            stepRef.current = newStep;
+            setStep(newStep);
+          }
+        },
+      });
+    }, section);
+
+    return () => ctx.revert();
+  }, []);
+
+  const s = STEPS[step];
+
+  return (
+    <section
+      ref={sectionRef}
+      style={{
+        width: "100%",
+        height: "100svh",
+        backgroundColor: "#000",
+        overflow: "hidden",
+        position: "relative",
+        display: "flex",
+        flexDirection: "column",
+        padding: "0 20px",
+        boxSizing: "border-box",
+      }}
+    >
+      {/* Step indicator — right edge */}
+      <div
+        style={{
+          position: "absolute",
+          right: 16,
+          top: "50%",
+          transform: "translateY(-50%)",
+          zIndex: 20,
+          display: "flex",
+          flexDirection: "column",
+          gap: 6,
+        }}
+      >
+        {STEPS.map((_, i) => (
+          <div
+            key={i}
+            style={{
+              width: 8,
+              height: 8,
+              backgroundColor: i === step ? "#6abf3c" : "rgba(255,255,255,0.25)",
+              transition: "background-color 0.3s ease",
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Heading */}
+      <h2
+        className="font-lockscreen"
+        style={{
+          fontSize: 28,
+          color: "#dbe3ea",
+          margin: "20px 0 0",
+          lineHeight: 1,
+          letterSpacing: "0.01em",
+          flexShrink: 0,
+        }}
+      >
+        PREPARATION PROCEDURES
+      </h2>
+
+      {/* Scroll down — centered */}
+      <div
+        style={{
+          textAlign: "center",
+          padding: "16px 0",
+          flexShrink: 0,
+        }}
+      >
+        <span className="font-mono-frag" style={{ fontSize: 13, color: "#dbe3ea", letterSpacing: "0.12em" }}>
+          (scroll down)
+        </span>
+      </div>
+
+      {/* Images */}
+      <div style={{ flex: 1, position: "relative", minHeight: 0 }}>
+        {STEPS.map((st, i) => (
+          <div key={i} style={{ position: "absolute", inset: 0, opacity: i === step ? 1 : 0, transition: "opacity 0.5s ease" }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={st.src}
+              alt={st.name}
+              style={{ width: "100%", height: "100%", objectFit: "contain", display: "block", userSelect: "none", pointerEvents: "none" }}
+            />
+          </div>
+        ))}
+      </div>
+
+      {/* Step label + description */}
+      <div
+        style={{
+          flexShrink: 0,
+          textAlign: "center",
+          paddingBottom: 28,
+        }}
+      >
+        <div className="font-mono-frag" style={{ fontSize: 18, color: "#dbe3ea", letterSpacing: "0.18em", lineHeight: 1.6 }}>
+          STEP {s.num}
+        </div>
+        <div className="font-mono-frag" style={{ fontSize: 18, color: "#dbe3ea", letterSpacing: "0.18em", lineHeight: 1.6, marginBottom: 10 }}>
+          {s.name}
+        </div>
+        <p className="font-mono-frag" style={{ fontSize: 14, color: "#dbe3ea", lineHeight: 1.6, whiteSpace: "pre-line", margin: 0 }}>
+          {s.description}
+        </p>
+      </div>
+    </section>
+  );
+}
+
+// ─── Desktop ──────────────────────────────────────────────────────────────────
+
 export default function PreparationProcedures() {
   const sectionRef = useRef<HTMLElement>(null);
   const stepRef = useRef(0);
@@ -88,7 +230,7 @@ export default function PreparationProcedures() {
 
   const s = STEPS[step];
 
-  return (
+  const desktop = (
     <section
       ref={sectionRef}
       onMouseMove={onMouseMove}
@@ -264,5 +406,16 @@ export default function PreparationProcedures() {
         </div>
       ))}
     </section>
+  );
+
+  return (
+    <>
+      <div className="block md:hidden">
+        <MobilePreparationProcedures />
+      </div>
+      <div className="hidden md:block">
+        {desktop}
+      </div>
+    </>
   );
 }
