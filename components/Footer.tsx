@@ -53,7 +53,7 @@ function MobileFooter() {
       <div style={{ flex: 1, marginLeft: 13 }}>
 
         {/* Row 1: Logo + Copyright */}
-        <div style={{ display: "flex", alignItems: "flex-start", borderBottom: hRule }}>
+        <div style={{ display: "flex", alignItems: "flex-start", borderBottom: hRule, paddingBottom: 24 }}>
           {/* Logo */}
           <div style={{ flex: 1, padding: "0 12px 0 0" }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
