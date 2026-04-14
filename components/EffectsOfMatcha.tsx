@@ -141,8 +141,8 @@ function MobileEffectsOfMatcha() {
           Effects of Matcha.
         </h1>
 
-        {/* Effect items — distributed vertically */}
-        <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+        {/* Effect items — stacked at bottom, 16px gap */}
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "flex-end", gap: 16 }}>
           {EFFECTS.map((effect) => (
             <div key={effect.num}>
               {/* Number */}
