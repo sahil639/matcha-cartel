@@ -73,7 +73,7 @@ function MobileFooter() {
 
         {/* Row 2: Behind the Cartels */}
         <div style={{ padding: "0 12px 16px 0", borderBottom: hRule }}>
-          <div className="font-mono-frag" style={{ fontSize: 16, letterSpacing: "0.1em", color: INK, marginBottom: 12 }}>
+          <div className="font-mono-frag" style={{ fontSize: 21, letterSpacing: "0.1em", color: INK, marginBottom: 12 }}>
             BEHIND THE CARTELS
           </div>
           <p className="font-mono-frag" style={{ fontSize: 12, lineHeight: 1.5, color: INK, margin: "0 0 10px 0" }}>
@@ -86,7 +86,7 @@ function MobileFooter() {
 
         {/* Row 3: The Dealers */}
         <div style={{ padding: "0 12px 0 0" }}>
-          <div className="font-mono-frag" style={{ fontSize: 16, letterSpacing: "0.1em", color: INK, marginBottom: 12 }}>
+          <div className="font-mono-frag" style={{ fontSize: 21, letterSpacing: "0.1em", color: INK, marginBottom: 12 }}>
             THE DEALERS
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
