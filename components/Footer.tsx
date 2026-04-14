@@ -48,8 +48,8 @@ function MobileFooter() {
       {/* Single left grid line — flush with content, no gap */}
       <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: "1px", backgroundColor: INK, opacity: 0.6, zIndex: 110 }} />
 
-      {/* Main content — 1px left margin so text sits right of the line */}
-      <div style={{ flex: 1, position: "relative", zIndex: 20, marginLeft: 1 }}>
+      {/* Main content */}
+      <div style={{ flex: 1, marginLeft: 1 }}>
 
         {/* Row 1: Logo + Copyright */}
         <div style={{ display: "flex", alignItems: "flex-start", borderBottom: hRule }}>
