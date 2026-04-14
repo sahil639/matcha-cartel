@@ -184,7 +184,7 @@ function MobileProductionChain() {
           flexShrink: 0,
         }}
       >
-        Matcha Production Chain.
+        Matcha Production<br />Chain.
       </div>
 
       {/* ── Body: left progress bar + main content ── */}
