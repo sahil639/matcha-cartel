@@ -146,6 +146,15 @@ function MobilePreparationProcedures() {
               alt={st.name}
               style={{ width: "100%", height: "100%", objectFit: "contain", display: "block", userSelect: "none", pointerEvents: "none" }}
             />
+            {/* Radial gradient overlay matching image shape */}
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                background: "radial-gradient(50% 50% at 50% 50%, rgba(0,0,0,0) 60%, #000000 100%)",
+                pointerEvents: "none",
+              }}
+            />
           </div>
         ))}
       </div>
