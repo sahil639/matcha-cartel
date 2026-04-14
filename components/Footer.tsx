@@ -95,7 +95,7 @@ function MobileFooter() {
                 <img
                   src={d.photo}
                   alt={d.name}
-                  style={{ flexShrink: 0, width: 68, height: 84, objectFit: "cover", objectPosition: "top center", display: "block" }}
+                  style={{ flexShrink: 0, width: 68, height: 84, objectFit: "cover", objectPosition: "top center", display: "block", filter: "grayscale(100%) contrast(1.1)", mixBlendMode: "multiply" }}
                 />
                 <div style={{ flex: 1 }}>
                   <div className="font-mono-frag" style={{ fontSize: 12, color: INK, lineHeight: 1.6, marginBottom: 4 }}>
