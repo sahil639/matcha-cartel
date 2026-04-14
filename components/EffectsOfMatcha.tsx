@@ -164,7 +164,7 @@ function MobileEffectsOfMatcha() {
               {/* Subtitle */}
               <p
                 className="font-mono-frag"
-                style={{ fontSize: 13, lineHeight: 1.55, color: "rgba(255,255,255,0.85)", marginBottom: 4 }}
+                style={{ fontSize: 13, lineHeight: 1.1, color: "rgba(255,255,255,0.85)", marginBottom: 8 }}
               >
                 {effect.subtitle}
               </p>
@@ -174,7 +174,7 @@ function MobileEffectsOfMatcha() {
                 <p
                   key={j}
                   className="font-mono-frag"
-                  style={{ fontSize: 13, lineHeight: 1.55, color: "rgba(255,255,255,0.6)", marginTop: j > 0 ? 6 : 0 }}
+                  style={{ fontSize: 13, lineHeight: 1.1, color: "rgba(255,255,255,0.6)", marginTop: j > 0 ? 6 : 0 }}
                 >
                   {line}
                 </p>
