@@ -12,8 +12,7 @@ const EFFECTS = [
     title: "SUSTAINED\nFOCUS",
     subtitle: "Calm alertness without spikes.",
     body: [
-      "Matcha delivers caffeine gradually through naturally occurring compounds.",
-      "A slower release happens. Energy remains steady.",
+      "Matcha delivers caffeine gradually through naturally occurring compounds. A slower release happens. Energy remains steady.",
     ],
   },
   {
