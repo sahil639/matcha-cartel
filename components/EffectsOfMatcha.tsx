@@ -156,7 +156,7 @@ function MobileEffectsOfMatcha() {
               {/* Title */}
               <h2
                 className="font-lockscreen uppercase"
-                style={{ fontSize: 26, lineHeight: 1, color: "#ffffff", letterSpacing: "0.01em", marginBottom: 8, whiteSpace: "pre-line" }}
+                style={{ fontSize: 26, lineHeight: 1, color: "#ffffff", letterSpacing: "0.01em", marginBottom: 16, whiteSpace: "pre-line" }}
               >
                 {effect.title}
               </h2>
@@ -164,7 +164,7 @@ function MobileEffectsOfMatcha() {
               {/* Subtitle */}
               <p
                 className="font-mono-frag"
-                style={{ fontSize: 13, lineHeight: 1.1, color: "rgba(255,255,255,0.85)", marginBottom: 8 }}
+                style={{ fontSize: 13, lineHeight: 1.1, color: "rgba(255,255,255,0.85)", marginBottom: 16 }}
               >
                 {effect.subtitle}
               </p>
