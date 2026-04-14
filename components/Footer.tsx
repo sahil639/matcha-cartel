@@ -3,6 +3,7 @@
 const GREEN = "#8ccc00";
 const INK = "#111111";
 const BORDER = `1px solid ${INK}`;
+const LINE = `0.5px solid rgba(17,17,17,0.35)`;
 
 const DEALERS = [
   {
@@ -23,8 +24,99 @@ const DEALERS = [
   },
 ];
 
-export default function Footer() {
+function MobileFooter() {
   return (
+    <footer
+      style={{
+        width: "100%",
+        backgroundColor: GREEN,
+        color: INK,
+        position: "relative",
+        overflow: "hidden",
+        paddingLeft: 36,
+        paddingRight: 20,
+        paddingTop: 20,
+        paddingBottom: 32,
+        boxSizing: "border-box",
+      }}
+    >
+      {/* Textures */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/images/foot1.png" alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", mixBlendMode: "exclusion", pointerEvents: "none", zIndex: 100 }} />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/images/foot2.png" alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", mixBlendMode: "multiply", opacity: 0.5, pointerEvents: "none", zIndex: 101 }} />
+
+      {/* Single left grid line — same position as Hyperfixation left panel line */}
+      <div style={{ position: "absolute", left: 20, top: 0, bottom: 0, width: "0.5px", backgroundColor: INK, opacity: 0.3, zIndex: 10 }} />
+
+      {/* Logo block */}
+      <div style={{ marginBottom: 32, position: "relative", zIndex: 20 }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/svgs/logo-en.svg" alt="MatchaCartel" style={{ width: "100%", height: "auto", display: "block", filter: "brightness(0)", opacity: 0.85 }} />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/svgs/logo-jp.svg" alt="抹茶カルテル" style={{ width: "42%", height: "auto", display: "block", filter: "brightness(0)", marginTop: 6, opacity: 0.85 }} />
+      </div>
+
+      {/* Behind the Cartels */}
+      <div style={{ marginBottom: 32, position: "relative", zIndex: 20 }}>
+        <div className="font-mono-frag" style={{ fontSize: 20, letterSpacing: "0.12em", color: INK, marginBottom: 14 }}>
+          BEHIND THE CARTELS
+        </div>
+        <p className="font-mono-frag" style={{ fontSize: 13, lineHeight: 1.5, color: INK, margin: "0 0 12px 0" }}>
+          Matcha Cartel began as a shared interest in matcha and an observation of its rapid rise as a global trend. As demand grew, scarcity followed, shifting matcha from ritual ingredient to high-value commodity.
+        </p>
+        <p className="font-mono-frag" style={{ fontSize: 13, lineHeight: 1.5, color: INK, margin: 0 }}>
+          This project reframes matcha through a darker visual language, presenting it as something controlled, traded, and desired rather than purely ceremonial. Familiar wellness aesthetics are replaced with systems of restriction, excess, and spectacle.
+        </p>
+      </div>
+
+      {/* The Dealers */}
+      <div style={{ marginBottom: 32, position: "relative", zIndex: 20 }}>
+        <div className="font-mono-frag" style={{ fontSize: 20, letterSpacing: "0.12em", color: INK, marginBottom: 14 }}>
+          THE DEALERS
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+          {DEALERS.map((d) => (
+            <div key={d.num} style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={d.photo}
+                alt={d.name}
+                style={{ flexShrink: 0, width: 72, height: 88, objectFit: "cover", objectPosition: "top center", display: "block", filter: "grayscale(100%) contrast(1.1)", mixBlendMode: "multiply" }}
+              />
+              <div style={{ flex: 1 }}>
+                <div className="font-mono-frag" style={{ fontSize: 13, color: INK, lineHeight: 1.7, marginBottom: 4 }}>
+                  DEALER {d.num}:<br />{d.name} ({d.role})
+                </div>
+                <p className="font-mono-frag" style={{ fontSize: 13, color: INK, lineHeight: 1.4, margin: "0 0 8px" }}>
+                  {d.bio}
+                </p>
+                <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                  {d.links.map((link) => (
+                    <span key={link} className="font-mono-frag" style={{ fontSize: 12, color: INK, lineHeight: 1.8, cursor: "pointer" }}>
+                      {link}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Copyright */}
+      <div className="font-lockscreen" style={{ fontSize: 13, lineHeight: 1.5, letterSpacing: "0.04em", color: INK, textTransform: "uppercase", position: "relative", zIndex: 20 }}>
+        ©2026 Matcha Cartel.<br />
+        All Rights Reserved.<br />
+        Distributed Under Strict Control.<br />
+        Non-Transferable.
+      </div>
+    </footer>
+  );
+}
+
+export default function Footer() {
+  const desktop = (
     <footer
       style={{
         width: "100%",
@@ -280,5 +372,16 @@ export default function Footer() {
 
 
     </footer>
+  );
+
+  return (
+    <>
+      <div className="block md:hidden">
+        <MobileFooter />
+      </div>
+      <div className="hidden md:block">
+        {desktop}
+      </div>
+    </>
   );
 }
