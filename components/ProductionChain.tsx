@@ -103,6 +103,174 @@ function HudFrame({
   );
 }
 
+// ─── Mobile component ─────────────────────────────────────────────────────────
+
+function MobileProductionChain() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [currentPhase, setCurrentPhase] = useState(0);
+  const phaseRef = useRef(0);
+
+  const phase = PHASES[currentPhase];
+  const displayedTitle = useTypewriter(phase.title, 18);
+  const displayedDesc = useTypewriter(phase.description, 10);
+
+  const PHASE_TOPS = [15, 38, 61, 84];
+  const greenHeight = PHASE_TOPS[currentPhase];
+  const BORDER = "0.5px solid rgba(100,120,130,0.3)";
+
+  useLayoutEffect(() => {
+    const section = sectionRef.current;
+    if (!section || section.clientWidth === 0) return;
+
+    const ctx = gsap.context(() => {
+      ScrollTrigger.create({
+        trigger: section,
+        start: "top top",
+        end: "+=300%",
+        pin: true,
+        pinSpacing: true,
+        scrub: 0.3,
+        anticipatePin: 1,
+        onUpdate: (self) => {
+          const p = self.progress;
+          const v = videoRef.current;
+          if (v && v.duration && isFinite(v.duration)) {
+            v.currentTime = p * v.duration;
+          }
+          const newPhase = Math.min(Math.floor(p * 4), 3);
+          if (newPhase !== phaseRef.current) {
+            phaseRef.current = newPhase;
+            setCurrentPhase(newPhase);
+          }
+        },
+      });
+    }, section);
+
+    return () => ctx.revert();
+  }, []);
+
+  const handleVideoLoad = useCallback(
+    (ref: React.RefObject<HTMLVideoElement | null>) => () => {
+      const v = ref.current;
+      if (v) { v.pause(); v.currentTime = 0; }
+    },
+    []
+  );
+
+  return (
+    <section
+      ref={sectionRef}
+      style={{
+        width: "100%",
+        height: "100svh",
+        backgroundColor: "#ffffff",
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden",
+        borderTop: BORDER,
+      }}
+    >
+      {/* ── Heading ── */}
+      <div
+        className="font-lockscreen"
+        style={{
+          padding: "10px 16px 10px",
+          fontSize: "clamp(28px, 8vw, 52px)",
+          lineHeight: 1,
+          color: "var(--logo-color)",
+          letterSpacing: "-0.01em",
+          borderBottom: BORDER,
+          flexShrink: 0,
+        }}
+      >
+        Matcha Production Chain.
+      </div>
+
+      {/* ── Body: left progress bar + main content ── */}
+      <div style={{ flex: 1, minHeight: 0, display: "flex" }}>
+
+        {/* Left: vertical progress track */}
+        <div style={{ flexShrink: 0, width: 28, position: "relative", borderRight: BORDER }}>
+          {/* Grey track */}
+          <div style={{ position: "absolute", left: 13, top: 0, bottom: 0, width: 1, backgroundColor: "rgba(100,120,130,0.25)" }} />
+          {/* Green fill */}
+          <div style={{ position: "absolute", left: 13, top: 0, width: 1, height: `${greenHeight}%`, backgroundColor: "#6abf3c", transition: "height 0.5s ease" }} />
+          {/* Dots */}
+          {PHASES.map((p, i) => (
+            <div key={p.label} style={{ position: "absolute", top: `${PHASE_TOPS[i]}%`, left: "50%", transform: "translate(-50%, -50%)" }}>
+              <div style={{ width: 8, height: 8, backgroundColor: i === currentPhase ? "#6abf3c" : "rgba(100,120,130,0.3)", transition: "background-color 0.3s ease" }} />
+            </div>
+          ))}
+        </div>
+
+        {/* Right: phase nav + video + content + scroll */}
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
+
+          {/* Phase nav */}
+          <div style={{ flexShrink: 0, padding: "12px 16px", borderBottom: BORDER }}>
+            {PHASES.map((p, i) => {
+              const isActive = i === currentPhase;
+              return (
+                <div key={p.label} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: i < 3 ? 6 : 0 }}>
+                  <span
+                    className="font-mono-frag"
+                    style={{
+                      fontSize: 13,
+                      letterSpacing: "0.06em",
+                      color: isActive ? "var(--logo-color)" : "rgba(100,120,130,0.4)",
+                      fontWeight: isActive ? 700 : 400,
+                      transform: isActive ? "translateX(4px)" : "translateX(0)",
+                      transition: "color 0.3s ease, transform 0.3s ease",
+                    }}
+                  >
+                    {p.label}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Video */}
+          <div style={{ flex: 1, minHeight: 0, display: "flex", alignItems: "center", justifyContent: "center", padding: "8px 0", borderBottom: BORDER }}>
+            <video
+              ref={videoRef}
+              muted
+              playsInline
+              preload="auto"
+              onLoadedMetadata={handleVideoLoad(videoRef)}
+              style={{ width: "70%", height: "100%", objectFit: "contain", display: "block" }}
+              src="/videos/section-3-main.mp4"
+            />
+          </div>
+
+          {/* Phase title + description */}
+          <div style={{ flexShrink: 0, padding: "12px 16px 8px", borderBottom: BORDER }}>
+            <h2
+              className="font-mono-frag"
+              style={{ fontSize: 18, lineHeight: 1.2, color: "var(--logo-color)", letterSpacing: "0.06em", margin: "0 0 8px 0", minHeight: "1.5em" }}
+            >
+              {displayedTitle}
+            </h2>
+            <p
+              className="font-mono-frag"
+              style={{ fontSize: 12, lineHeight: 1.5, color: "var(--text)", margin: 0, minHeight: "4.5em" }}
+            >
+              {displayedDesc}
+            </p>
+          </div>
+
+          {/* Scroll down */}
+          <div style={{ flexShrink: 0, padding: "10px 16px" }}>
+            <ScrollDownText />
+          </div>
+
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // ─── Main component ───────────────────────────────────────────────────────────
 
 export default function ProductionChain() {
@@ -171,7 +339,7 @@ export default function ProductionChain() {
   const PHASE_TOPS = [15, 38, 61, 84];
   const greenHeight = PHASE_TOPS[currentPhase];
 
-  return (
+  const desktop = (
     <section
       ref={sectionRef}
       style={{
@@ -420,4 +588,16 @@ export default function ProductionChain() {
       </div>
     </section>
   );
+
+  return (
+    <>
+      <div className="block md:hidden">
+        <MobileProductionChain />
+      </div>
+      <div className="hidden md:block">
+        {desktop}
+      </div>
+    </>
+  );
 }
+
