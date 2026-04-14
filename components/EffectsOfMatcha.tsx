@@ -174,7 +174,7 @@ function MobileEffectsOfMatcha() {
                 <p
                   key={j}
                   className="font-mono-frag"
-                  style={{ fontSize: 13, lineHeight: 1.1, color: "rgba(255,255,255,0.6)", marginTop: j > 0 ? 6 : 0 }}
+                  style={{ fontSize: 13, lineHeight: 1.2, color: "rgba(255,255,255,0.6)", marginTop: j > 0 ? 6 : 0 }}
                 >
                   {line}
                 </p>
