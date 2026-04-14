@@ -37,6 +37,158 @@ const EFFECTS = [
 const HEADER_WORDS = ["Effects", "of", "Matcha."] as const;
 const BORDER = "0.5px solid rgba(255,255,255,0.15)";
 
+// ─── Mobile ───────────────────────────────────────────────────────────────────
+
+function MobileEffectsOfMatcha() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useLayoutEffect(() => {
+    const section = sectionRef.current;
+    if (!section || section.clientWidth === 0) return;
+
+    const ctx = gsap.context(() => {
+      ScrollTrigger.create({
+        trigger: section,
+        start: "top top",
+        end: "+=300%",
+        pin: true,
+        pinSpacing: true,
+        scrub: 0.3,
+        anticipatePin: 1,
+        onUpdate: (self) => {
+          const v = videoRef.current;
+          if (v && v.duration && isFinite(v.duration)) {
+            v.currentTime = self.progress * v.duration;
+          }
+        },
+      });
+    }, section);
+
+    return () => ctx.revert();
+  }, []);
+
+  const handleVideoLoad = () => {
+    const v = videoRef.current;
+    if (v) { v.pause(); v.currentTime = 0; }
+  };
+
+  return (
+    <section
+      ref={sectionRef}
+      style={{
+        width: "100%",
+        height: "100svh",
+        position: "relative",
+        overflow: "hidden",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      {/* Background video */}
+      <video
+        ref={videoRef}
+        muted
+        playsInline
+        preload="auto"
+        onLoadedMetadata={handleVideoLoad}
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          display: "block",
+          zIndex: 0,
+        }}
+        src="/videos/PourAnimation_6.mp4"
+      />
+
+      {/* Dark gradient overlay */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: "linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.15) 100%)",
+          zIndex: 1,
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* Content */}
+      <div
+        style={{
+          position: "relative",
+          zIndex: 10,
+          display: "flex",
+          flexDirection: "column",
+          height: "100%",
+          padding: "16px 20px 24px",
+        }}
+      >
+        {/* Heading */}
+        <h1
+          className="font-lockscreen"
+          style={{
+            fontSize: 36,
+            lineHeight: 1,
+            color: "#ffffff",
+            letterSpacing: "0.01em",
+            marginBottom: 24,
+            flexShrink: 0,
+          }}
+        >
+          Effects of Matcha.
+        </h1>
+
+        {/* Effect items — distributed vertically */}
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+          {EFFECTS.map((effect) => (
+            <div key={effect.num}>
+              {/* Number */}
+              <div
+                className="font-mono-frag"
+                style={{ fontSize: 13, color: "rgba(255,255,255,0.6)", marginBottom: 4, letterSpacing: "0.04em" }}
+              >
+                {effect.num}
+              </div>
+
+              {/* Title */}
+              <h2
+                className="font-lockscreen uppercase"
+                style={{ fontSize: 26, lineHeight: 1, color: "#ffffff", letterSpacing: "0.01em", marginBottom: 8, whiteSpace: "pre-line" }}
+              >
+                {effect.title}
+              </h2>
+
+              {/* Subtitle */}
+              <p
+                className="font-mono-frag"
+                style={{ fontSize: 13, lineHeight: 1.55, color: "rgba(255,255,255,0.85)", marginBottom: 4 }}
+              >
+                {effect.subtitle}
+              </p>
+
+              {/* Body */}
+              {effect.body.map((line, j) => (
+                <p
+                  key={j}
+                  className="font-mono-frag"
+                  style={{ fontSize: 13, lineHeight: 1.55, color: "rgba(255,255,255,0.6)", marginTop: j > 0 ? 6 : 0 }}
+                >
+                  {line}
+                </p>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── Desktop ──────────────────────────────────────────────────────────────────
+
 export default function EffectsOfMatcha() {
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -74,7 +226,7 @@ export default function EffectsOfMatcha() {
     }
   };
 
-  return (
+  const desktop = (
     <section
       ref={sectionRef}
       style={{
@@ -235,5 +387,16 @@ export default function EffectsOfMatcha() {
         ))}
       </div>
     </section>
+  );
+
+  return (
+    <>
+      <div className="block md:hidden">
+        <MobileEffectsOfMatcha />
+      </div>
+      <div className="hidden md:block">
+        {desktop}
+      </div>
+    </>
   );
 }
