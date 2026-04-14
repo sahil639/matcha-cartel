@@ -37,6 +37,7 @@ function MobileFooter() {
         overflow: "hidden",
         display: "flex",
         boxSizing: "border-box",
+        paddingBottom: 16,
       }}
     >
       {/* Textures */}
@@ -54,14 +55,14 @@ function MobileFooter() {
         {/* Row 1: Logo + Copyright */}
         <div style={{ display: "flex", alignItems: "flex-start", borderBottom: hRule }}>
           {/* Logo */}
-          <div style={{ flex: 1, padding: "12px 12px 10px" }}>
+          <div style={{ flex: 1, padding: "0 12px 0 0" }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/svgs/logo-en.svg" alt="MatchaCartel" style={{ width: "100%", height: "auto", display: "block", filter: "brightness(0)", opacity: 0.85 }} />
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/svgs/logo-jp.svg" alt="抹茶カルテル" style={{ width: "50%", height: "auto", display: "block", filter: "brightness(0)", marginTop: 4, opacity: 0.85 }} />
           </div>
           {/* Copyright */}
-          <div className="font-lockscreen" style={{ flexShrink: 0, padding: "12px 12px 10px", fontSize: 9, lineHeight: 1.5, letterSpacing: "0.03em", color: INK, textTransform: "uppercase", textAlign: "right" }}>
+          <div className="font-lockscreen" style={{ flexShrink: 0, padding: "0 12px 0 0", fontSize: 9, lineHeight: 1.5, letterSpacing: "0.03em", color: INK, textTransform: "uppercase", textAlign: "right" }}>
             ©2026 Matcha Cartel.<br />
             All Rights Reserved.<br />
             Distributed Under<br />
@@ -71,7 +72,7 @@ function MobileFooter() {
         </div>
 
         {/* Row 2: Behind the Cartels */}
-        <div style={{ padding: "14px 12px 16px", borderBottom: hRule }}>
+        <div style={{ padding: "0 12px 0 0", borderBottom: hRule }}>
           <div className="font-mono-frag" style={{ fontSize: 16, letterSpacing: "0.1em", color: INK, marginBottom: 12 }}>
             BEHIND THE CARTELS
           </div>
@@ -84,7 +85,7 @@ function MobileFooter() {
         </div>
 
         {/* Row 3: The Dealers */}
-        <div style={{ padding: "14px 12px 20px" }}>
+        <div style={{ padding: "0 12px 0 0" }}>
           <div className="font-mono-frag" style={{ fontSize: 16, letterSpacing: "0.1em", color: INK, marginBottom: 12 }}>
             THE DEALERS
           </div>
