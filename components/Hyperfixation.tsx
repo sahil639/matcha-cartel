@@ -115,7 +115,129 @@ const BURST = [
   { src: "/images/matchammee.png",       w: 290, h: 208, ix: "-38vw", iy:   "6vh", tx: "-85vw", ty:   "6vh" }, // left
 ];
 
-// ─── Component ────────────────────────────────────────────────────────────────
+// ─── Mobile ───────────────────────────────────────────────────────────────────
+
+function MobileHyperfixation() {
+  const sectionRef     = useRef<HTMLElement>(null);
+  const videoColumnRef = useRef<HTMLDivElement>(null);
+  const activeVideoRef = useRef(0);
+  const [activeVideo, setActiveVideo] = useState(0);
+
+  useLayoutEffect(() => {
+    const section = sectionRef.current;
+    if (!section || section.clientWidth === 0) return;
+
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: "top top",
+          end: "+=400%",
+          pin: true,
+          pinSpacing: true,
+          scrub: 1.2,
+          anticipatePin: 1,
+          onUpdate(self) {
+            const p = self.progress;
+            const vIdx =
+              p >= 0.875 ? 4 :
+              p >= 0.792 ? 3 :
+              p >= 0.708 ? 2 :
+              p >= 0.625 ? 1 :
+              0;
+            if (vIdx !== activeVideoRef.current) {
+              activeVideoRef.current = vIdx;
+              setActiveVideo(vIdx);
+            }
+          },
+        },
+      });
+
+      for (let i = 1; i < VIDEOS.length; i++) {
+        tl.to(videoColumnRef.current, {
+          y: `-${i * 100}%`,
+          duration: 1.5,
+          ease: "power2.inOut",
+        }, (i - 1) * 3);
+      }
+    }, section);
+
+    return () => ctx.revert();
+  }, []);
+
+  const vid = VIDEOS[activeVideo];
+
+  return (
+    <section
+      ref={sectionRef}
+      style={{
+        width: "100%",
+        height: "100svh",
+        backgroundColor: "#000",
+        overflow: "hidden",
+        position: "relative",
+        display: "flex",
+        boxSizing: "border-box",
+      }}
+    >
+      {/* Left grid line */}
+      <div style={{ position: "absolute", left: 12, top: 0, bottom: 0, width: "0.5px", backgroundColor: LIME, opacity: 0.45, zIndex: 10 }} />
+
+      {/* Content */}
+      <div style={{ flex: 1, marginLeft: 13, display: "flex", flexDirection: "column", padding: "16px 16px 24px 0", boxSizing: "border-box" }}>
+
+        {/* Heading + description */}
+        <h2 className="font-lockscreen" style={{ fontSize: 28, color: LIME, lineHeight: 1.1, margin: "0 0 8px 0", letterSpacing: "0.01em" }}>
+          Obsession<br />Archives.
+        </h2>
+        <p className="font-mono-frag" style={{ fontSize: 12, color: LIME, lineHeight: 1.6, margin: 0, flexShrink: 0 }}>
+          A record of unconventional uses and excess consumption, reflecting matcha&apos;s fixation beyond tradition.
+        </p>
+
+        {/* Video — centered, fills remaining space */}
+        <div style={{ flex: 1, position: "relative", overflow: "hidden", margin: "16px 0", minHeight: 0 }}>
+          <div
+            ref={videoColumnRef}
+            style={{ display: "flex", flexDirection: "column", height: "100%", willChange: "transform" }}
+          >
+            {VIDEOS.map((v, i) => (
+              <div
+                key={i}
+                style={{
+                  height: "100%",
+                  flexShrink: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <video
+                  src={v.src}
+                  autoPlay muted loop playsInline
+                  style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain", display: "block" }}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Bottom info */}
+        <div style={{ flexShrink: 0 }}>
+          <div className="font-mono-frag" style={{ fontSize: 14, color: LIME, letterSpacing: "0.04em", lineHeight: 1.3, marginBottom: 8 }}>
+            {vid.title}
+          </div>
+          <div className="font-mono-frag" style={{ fontSize: 12, color: LIME, lineHeight: 2 }}>
+            <div>COURTESY OF: {vid.courtesy}</div>
+            <div style={{ opacity: 0.55 }}>(link to original source)</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  );
+}
+
+// ─── Desktop ──────────────────────────────────────────────────────────────────
 
 export default function Hyperfixation() {
   const sectionRef      = useRef<HTMLElement>(null);
@@ -230,7 +352,7 @@ export default function Hyperfixation() {
     return () => ctx.revert();
   }, []);
 
-  return (
+  const desktop = (
     <section
       ref={sectionRef}
       style={{ width: "100%", height: "100vh", backgroundColor: "#000", overflow: "hidden", position: "relative" }}
@@ -511,5 +633,16 @@ export default function Hyperfixation() {
         </div>
       </div>
     </section>
+  );
+
+  return (
+    <>
+      <div className="block md:hidden">
+        <MobileHyperfixation />
+      </div>
+      <div className="hidden md:block">
+        {desktop}
+      </div>
+    </>
   );
 }
