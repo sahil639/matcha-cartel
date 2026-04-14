@@ -176,7 +176,7 @@ function MobileProductionChain() {
         className="font-lockscreen"
         style={{
           padding: "10px 16px 10px",
-          fontSize: 54,
+          fontSize: 52,
           lineHeight: 1,
           color: "var(--logo-color)",
           letterSpacing: "-0.01em",
