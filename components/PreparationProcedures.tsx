@@ -151,7 +151,7 @@ function MobilePreparationProcedures() {
               style={{
                 position: "absolute",
                 inset: 0,
-                background: "radial-gradient(circle at 50% 50%, rgba(0,0,0,0) 45%, #000000 75%)",
+                background: "radial-gradient(circle at 50% 50%, rgba(0,0,0,0) 25%, rgba(0,0,0,0.6) 55%, #000000 80%)",
                 pointerEvents: "none",
               }}
             />
