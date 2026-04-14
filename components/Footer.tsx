@@ -46,7 +46,7 @@ function MobileFooter() {
       <img src="/images/foot2.png" alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", mixBlendMode: "multiply", opacity: 0.5, pointerEvents: "none", zIndex: 101 }} />
 
       {/* Single left grid line — flush with content, no gap */}
-      <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: "0.5px", backgroundColor: INK, opacity: 0.4, zIndex: 20 }} />
+      <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: "1px", backgroundColor: INK, opacity: 0.6, zIndex: 110 }} />
 
       {/* Main content — 1px left margin so text sits right of the line */}
       <div style={{ flex: 1, position: "relative", zIndex: 20, marginLeft: 1 }}>
