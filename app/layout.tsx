@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import LockScreen from "@/components/LockScreen";
 import GlobalNavDots from "@/components/GlobalNavDots";
+import LenisProvider from "@/components/LenisProvider";
 
 export const metadata: Metadata = {
   title: "Matcha Cartel",
@@ -17,8 +18,10 @@ export default function RootLayout({
     <html lang="en" className="h-full">
       <body className="min-h-full">
         {/* <LockScreen /> */}
-        <GlobalNavDots />
-        {children}
+        <LenisProvider>
+          <GlobalNavDots />
+          {children}
+        </LenisProvider>
       </body>
     </html>
   );
